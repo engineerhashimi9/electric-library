@@ -1,0 +1,65 @@
+# ==========================================
+# Django & Python Core
+# ==========================================
+*.py[cod]
+*$py.class
+__pycache__/
+.Python
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# ==========================================
+# Virtual Environments & Dependencies
+# ==========================================
+venv/
+.venv/
+env/
+.env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ==========================================
+# Environments, Secrets, & Configurations
+# ==========================================
+.env
+.flaskenv
+*.bak
+*.log
+
+# ==========================================
+# Media & Static Files (App-specific)
+# ==========================================
+# Ignore user-uploaded media files in production
+media/
+
+# Ignore gathered static files if using collectstatic locally
+staticfiles/
+static_cdn/
+
+# ==========================================
+# OS & System Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# IDE & Code Editors
+# ==========================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
