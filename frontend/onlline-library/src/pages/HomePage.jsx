@@ -12,6 +12,8 @@ import {
   Heart,
 } from "lucide-react";
 
+import Navbar from "../component/Navbar";
+
 export const HomePage = () => {
   /* 
     ========================================================================
@@ -38,88 +40,10 @@ export const HomePage = () => {
       dir="ltr"
     >
       {/* ========================================================= */}
-      {/* 1. DESKTOP HEADER / NAVIGATION                            */}
+      {/* P HEADER / NAVIGATION                            */}
       {/* ========================================================= */}
-      <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-[#E2E8F0] bg-[#FBF9F5] sticky top-0 z-50">
-        <div className="flex items-center space-x-8">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-[#1A362B] rounded flex items-center justify-center text-white font-bold">
-              B
-            </div>
-            <span className="font-serif text-xl font-bold tracking-tight">
-              Bargin
-            </span>
-          </div>
-          <nav className="flex items-center space-x-6 text-xs font-medium text-[#424844]">
-            <a
-              href="#home"
-              className="text-[#1A362B] font-semibold border-b-2 border-[#1A362B] pb-1"
-            >
-              Home
-            </a>
-            <a href="#explore" className="hover:text-[#1A362B]">
-              Explore Books
-            </a>
-            <a href="#library" className="hover:text-[#1A362B]">
-              My Library
-            </a>
-            <a href="#authors" className="hover:text-[#1A362B]">
-              Authors
-            </a>
-            <a href="#community" className="hover:text-[#1A362B]">
-              Community
-            </a>
-          </nav>
-        </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="relative w-64">
-            <Search
-              className="absolute left-3 top-2.5 text-gray-400"
-              size={16}
-            />
-            <input
-              type="text"
-              placeholder="Search titles, authors..."
-              className="w-full bg-[#F3F4F6] text-xs pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1A362B]"
-            />
-          </div>
-          <div className="flex items-center space-x-3 border-l border-gray-200 pl-4">
-            {/* BACKEND: Get current logged-in user info */}
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-              alt="User Avatar"
-              className="w-8 h-8 rounded-full object-cover border border-[#C86D51]"
-            />
-            <div className="text-left">
-              <p className="text-xs font-semibold">Clara Jensen</p>
-              <p className="text-[10px] text-[#C86D51]">Patron Fellow</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* ========================================================= */}
-      {/* 2. MOBILE HEADER                                          */}
-      {/* ========================================================= */}
-      <div className="md:hidden flex items-center justify-between px-5 py-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 bg-[#1A362B] rounded flex items-center justify-center text-white font-bold text-sm">
-            B 
-          </div>
-          <span className="font-serif text-lg font-bold">Bookora</span>
-        </div>
-        <div className="flex items-center space-x-3">
-          <button className="p-1.5 bg-[#F3F4F6] rounded-lg text-gray-700">
-            <Search size={18} />
-          </button>
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-            alt="User Avatar"
-            className="w-7 h-7 rounded-full object-cover border border-[#C86D51]"
-          />
-        </div>
-      </div>
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-5 md:px-8 space-y-8 md:space-y-12 pt-2 md:pt-6">
         {/* ========================================================= */}
@@ -144,19 +68,20 @@ export const HomePage = () => {
 
         {/* Desktop Hero Banner */}
         <div className="hidden md:grid grid-cols-12 gap-8 items-center bg-[#F4F0E8] p-8 rounded-2xl border border-[#E2E8F0]">
-          <div className="col-span-7 space-y-4">
+          <div className="col-span-7 space-y-7">
             <span className="text-xs font-semibold text-[#C86D51] uppercase tracking-wider">
-              ✦ ARCHIVAL SPOTLIGHT • 2026
+              ✦ GOOD EVENING, CLARA
             </span>
-            <h1 className="font-serif text-4xl text-[#1A202C] leading-tight">
+            <h1 className="font-serif font-bold text-4xl text-[#1A202C] leading-tight">
               Immerse in timeless literature & rare editions
             </h1>
             <p className="text-sm text-[#4A5568] leading-relaxed max-w-lg">
-              Access over 120,000 carefully preserved volumes, from privately
-              bound manuscripts to critical modern masterpieces.
+              Access over 120,000 carefully conserved volumes, from privately
+              bound illuminated folios to critical modern masterpieces.
+              Preserved in archival typographic clarity.
             </p>
             <div className="flex items-center space-x-4 pt-2">
-              <button className="px-6 py-2.5 bg-[#1A362B] text-white text-xs font-medium rounded-lg hover:bg-[#132820]">
+              <button className="px-6 py-2.5 bg-[#07241A] text-white text-xs font-medium rounded-lg hover:bg-[#132820]">
                 Explore Catalog
               </button>
               <button className="px-6 py-2.5 border border-[#1A362B] text-[#1A362B] text-xs font-medium rounded-lg hover:bg-[#1A362B]/5">
