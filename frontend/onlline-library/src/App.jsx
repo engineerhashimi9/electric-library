@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { SignInForm } from "./features/auth/SignInForm";
-import { HomePage } from "./pages/HomePage";
+import { HomePage } from "./pages/Home/HomePage";
 
 function App() {
   return (
