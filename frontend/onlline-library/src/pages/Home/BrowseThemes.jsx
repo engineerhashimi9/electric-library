@@ -10,7 +10,7 @@ export default function BrowseThemes({ themes }) {
           6 Comprehensive Archives
         </span>
       </div>
-      <h3 className="text-[28px]">Browse Themes & Disciplines</h3>
+      <h3 className="text-[28px] mb-3">Browse Themes & Disciplines</h3>
       <div className="flex flex-wrap gap-4">
         {themes.map((t) => (
           <ThemeCard key={t.name} theme={t} />

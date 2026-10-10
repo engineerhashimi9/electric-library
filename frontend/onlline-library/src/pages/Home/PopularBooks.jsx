@@ -8,15 +8,15 @@ export default function PopularBooks({ books }) {
           <h2 className="font-serif text-lg md:text-xl text-[#1A202C]">
             Popular This Week
           </h2>
-          <p className="text-xs text-[#424844]">
+          <p className="text-[14px] text-[#424844]">
             Most circulated volumes across the scholarly fellowship
           </p>
         </div>
         <a
           href="#all"
-          className="text-xs text-[#C86D51] font-medium hover:underline"
+          className="text-[11px] text-[#C86D51]  hover:underline"
         >
-          View All 42+ →
+          View All 48 Ttiles
         </a>
       </div>
 

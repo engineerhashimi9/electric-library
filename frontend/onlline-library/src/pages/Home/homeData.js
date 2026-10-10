@@ -42,27 +42,51 @@ export const popularBooks = [
 
 export const themes = [
   { name: "Literary Fiction", works: "18,400 works", icon: "./litrary.png" },
+  {
+    name: "Philosophy & Ethics",
+    works: "12,150 works",
+    icon: "./philosophy.png",
+  },
+  {
+    name: "Historical Chronicles",
+    works: "15,800 works",
+    icon: "./historical.png",
+  },
+  { name: "Speculative & Sci-Fi", works: "9,420 works", icon: "./sci-fi.png" },
+  { name: "Classics & Poetry", works: "21,050 works", icon: "./poetry.png" },
+  { name: "Art & Architecture", works: "7,300 works", icon: "./art.png" },
 ];
-
 export const authors = [
   {
     name: "Virginia Woolf",
-    works: "12 Works",
-    img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200",
+    title: "Modernist & Bloomsbury",
+    description:
+      "Pioneered stream of consciousness, exploring structural interiority and temporal perception.",
+    works: "18 Works Preserved",
+    image: "./virginia-woolf.png",
   },
   {
-    name: "J. L. Borges",
-    works: "34 Works",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200",
+    name: "Jorge Luis Borges",
+    title: "Philosophical Fantasist",
+    description:
+      "Explored infinity, infinite libraries, labyrinths, mirrors, and metaphysical riddles.",
+    works: "24 Works Preserved",
+    image: "./jorge-luis-borges.png",
   },
   {
-    name: "Gabriel Garcia",
-    works: "18 Works",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200",
+    name: "Gabriel García Márquez",
+    title: "Magical Realism Titan",
+    description:
+      "Wove mythic generational epics set against the vibrant landscapes of Latin America.",
+    works: "14 Works Preserved",
+    image: "./gabriel-garcia-marquez.png",
   },
   {
     name: "Umberto Eco",
-    works: "22 Works",
-    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200",
+    title: "Semiotician & Novelist",
+    description:
+      "Master of medieval scholastic mysteries, literary cryptography, and philosophical satire.",
+    works: "16 Works Preserved",
+    image: "./umberto-eco.png",
   },
 ];
