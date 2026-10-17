@@ -27,11 +27,11 @@ export default function Navbar() {
             <NavLink to="/library" className="hover:text-[#1A362B]">
               My Library
             </NavLink>
-            <NavLink to="/author" href="#authors" className="hover:text-[#1A362B]">
-              Authors
+            <NavLink to="/favorite"  className="hover:text-[#1A362B]">
+              Favorite
             </NavLink>
-            <NavLink  to="/community" className="hover:text-[#1A362B]">
-              Community
+            <NavLink  to="/author" className="hover:text-[#1A362B]">
+              Authors
             </NavLink>
           </nav>
         </div>

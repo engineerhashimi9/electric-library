@@ -1,8 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
 
- body {
-  font-family: "Newsreader", serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
+:root {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #232723;
+  background: #faf9f6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled),
+select {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #a04424;
+  outline-offset: 4px;
+}
+
+.font-editorial {
+  font-family: "Newsreader", Georgia, serif;
+}
+
+::selection {
+  background: #c8eadc;
+  color: #08271d;
 }

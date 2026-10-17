@@ -1,4 +1,3 @@
-
 import MobileGreeting from "./MobileGreeting";
 import HeroBanner from "./Herobanner";
 import MobileSpotlightCard from "./MobileSpotlightCard";
@@ -24,8 +23,6 @@ export const HomePage = () => {
       className="min-h-screen bg-[#FBF9F5] text-[#1A202C] pb-20 md:pb-12"
       dir="ltr"
     >
-      
-
       <main className="max-w-7xl mx-auto px-5 md:px-8 space-y-8 md:space-y-12 pt-2 md:pt-6">
         <MobileGreeting name={user.name} streakDays={user.streakDays} />
         <HeroBanner name={user.name} spotlightBook={spotlightBook} />
@@ -38,8 +35,6 @@ export const HomePage = () => {
         <MasterCurators authors={authors} />
         <BenefitsBanner />
       </main>
-
-  
     </div>
   );
 };
