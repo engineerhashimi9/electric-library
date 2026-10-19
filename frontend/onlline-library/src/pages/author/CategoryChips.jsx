@@ -1,19 +1,24 @@
 export default function CategoryChips({ categories, counts, active, onChange }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {categories.map((c) => {
         const isActive = active === c;
+        const count = counts[c] ?? 0;
         return (
           <button
             key={c}
             onClick={() => onChange(c)}
-            className={`flex items-center gap-2 rounded-full px-4 py-1.5 text-[12px] font-medium transition active:scale-95 ${
-              isActive ? "bg-leaf-900 text-white shadow-md shadow-leaf-900/20" : "bg-leaf-100 text-ink-soft hover:bg-leaf-200 hover:text-leaf-950"
+            aria-pressed={isActive}
+            className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-[14px] font-semibold transition active:scale-95 lg:py-2 lg:text-[13px] lg:font-normal ${
+              isActive
+                ? "bg-[#07241a] text-white shadow-[0_1px_1px_rgba(0,0,0,0.05)]"
+                : "bg-[#efeeeb] text-[#424844] hover:bg-[#e4e2df] lg:bg-white lg:hover:-translate-y-0.5 lg:hover:shadow-sm"
             }`}
           >
             {c}
-            <span className={`rounded-full px-1.5 text-[10px] font-bold ${isActive ? "bg-white/20" : "bg-white/70"}`}>
-              {counts[c] ?? 0}
+            <span className="lg:hidden">({count})</span>
+            <span className={`hidden rounded-full px-2 py-0.5 text-[11px] font-bold tracking-[0.66px] lg:inline-block ${isActive ? "bg-white/20 text-white" : "bg-[#eae8e5] text-[#424844]"}`}>
+              {count}
             </span>
           </button>
         );

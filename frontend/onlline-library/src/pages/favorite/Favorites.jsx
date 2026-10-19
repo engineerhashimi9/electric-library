@@ -7,6 +7,7 @@ import Pagination from "./Pagination";
 import Toast from "@/component/ui/Toast";
 import useFavorites, { PER_PAGE } from "@/hooks/useFavorites";
 import { categories } from "./favorites";
+// import { sans } from "../styles/fonts";
 
 export default function Favorites() {
   const f = useFavorites();
@@ -15,7 +16,10 @@ export default function Favorites() {
   const to = (f.page - 1) * PER_PAGE + f.visible.length;
 
   return (
-    <div className="min-h-screen bg-paper font-sans text-leaf-950">
+    // pb-32 = جا برای تب‌بار پایین موبایل
+    <div className={`min-h-screen bg-[#fbf9f6] pb-32 text-[#1b1c1a] lg:pb-0`}>
+     
+
       <FavoritesHero
         total={f.items.length}
         actions={{
@@ -25,47 +29,30 @@ export default function Favorites() {
           onExport: f.downloadCitations,
           onCreateShelf: () => {},
         }}
-        tabs={{
-          categories,
-          counts: f.categoryCounts,
-          active: f.category,
-          onChange: f.setCategory,
-        }}
+        tabs={{ categories, counts: f.categoryCounts, active: f.category, onChange: f.setCategory }}
       />
 
-      <main className="mx-auto flex max-w-[1440px] flex-col gap-8 px-12 pb-16 pt-8">
+      <main className="mx-auto flex max-w-[1440px] flex-col gap-5 px-5 pb-10 pt-5 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
         <ShelfToolbar
           total={f.items.length}
           sort={f.sort}
           onSort={f.setSort}
           view={f.view}
           onView={f.setView}
+          previewEmpty={f.previewEmpty}
+          onTogglePreview={f.togglePreview}
         />
 
         {isEmpty ? (
-          <EmptyState
-            preview={f.previewEmpty}
-            onExitPreview={f.togglePreview}
-          />
+          <EmptyState preview={f.previewEmpty} onExitPreview={f.togglePreview} />
         ) : (
-          <BookGrid
-            books={f.visible}
-            view={f.view}
-            onRemove={f.removeFavorite}
-          />
+          <BookGrid books={f.visible} view={f.view} onRemove={f.removeFavorite} />
         )}
 
         <QuoteBanner />
 
         {!isEmpty && (
-          <Pagination
-            page={f.page}
-            totalPages={f.totalPages}
-            onPage={f.setPage}
-            from={from}
-            to={to}
-            total={f.filtered.length}
-          />
+          <Pagination page={f.page} totalPages={f.totalPages} onPage={f.setPage} from={from} to={to} total={f.filtered.length} />
         )}
       </main>
 

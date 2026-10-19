@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Search, Heart } from "lucide-react";
 import { NavLink } from "react-router";
 export default function Navbar() {
+  const [selected, setSelected] = useState("Home");
+
   return (
     <>
       <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-[#E2E8F0] bg-[#FBF9F5] sticky top-0 z-50">
@@ -15,24 +17,63 @@ export default function Navbar() {
             </span>
           </div>
           <nav className="flex items-center space-x-6 text-xs font-medium text-[#424844]">
-            <NavLink
-            to="/"
-              className="text-[#1A362B] font-semibold border-b-2 border-[#1A362B] pb-1"
+            <div
+              className={`flex items-center justify-center px-2 py-1 ${selected === "Home" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
             >
-              Home
-            </NavLink>
-            <NavLink to="/explorebooks" className="hover:text-[#1A362B]">
-              Explore Books
-            </NavLink>
-            <NavLink to="/library" className="hover:text-[#1A362B]">
-              My Library
-            </NavLink>
-            <NavLink to="/favorite"  className="hover:text-[#1A362B]">
-              Favorite
-            </NavLink>
-            <NavLink  to="/author" className="hover:text-[#1A362B]">
-              Authors
-            </NavLink>
+              <NavLink
+                onClick={() => setSelected("Home")}
+                to="/"
+                className={`  text-[#1A362B] font-semibold  pb-1`}
+              >
+                Home
+              </NavLink>
+            </div>
+            <div
+              className={`flex items-center justify-center px-2 py-1 ${selected === "explorebooks" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
+            >
+              <NavLink
+                onClick={() => setSelected("explorebooks")}
+                to="/explorebooks"
+                className={`${selected === "explorebook" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
+              >
+                Explore Books
+              </NavLink>
+            </div>
+
+            <div
+              className={`flex items-center justify-center px-2 py-1 ${selected === "mylibrary" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
+            >
+              <NavLink
+                onClick={() => setSelected("mylibrary")}
+                to="/library"
+                className={`${selected === "mylibrary" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
+              >
+                My Library
+              </NavLink>
+            </div>
+            <div
+              className={`flex items-center justify-center px-2 py-1 ${selected === "favorite" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
+            >
+              <NavLink
+                onClick={() => setSelected("favorite")}
+                to="/favorite"
+                className={`${selected === "favorite" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
+              >
+                Favorite
+              </NavLink>
+            </div>
+
+            <div
+              className={`flex items-center justify-center px-2 py-1 ${selected === "author" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
+            >
+              <NavLink
+                onClick={() => setSelected("author")}
+                to="/author"
+                className={`${selected === "author" ? "bg-[#EAE8E5] " : ""} hover:text-[#1A362B]`}
+              >
+                Authors
+              </NavLink>
+            </div>
           </nav>
         </div>
 
@@ -50,10 +91,13 @@ export default function Navbar() {
                 className="w-full bg-[#F3F4F6] text-xs pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1A362B]"
               />
             </div>
-            <Heart size={14}/>
-            <img className="w-3" src="./noticification.png"/>
+            <Heart size={14} />
+            <img className="w-3" src="./noticification.png" />
           </div>
-          <div className="flex items-center space-x-3 border-l border-gray-200 pl-4">
+          <NavLink
+            to="/profile"
+            className="flex items-center space-x-3 border-l border-gray-200 pl-4"
+          >
             {/* BACKEND: Get current logged-in user info */}
             <img
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
@@ -64,7 +108,7 @@ export default function Navbar() {
               <p className="text-xs font-semibold">Clara Jensen</p>
               <p className="text-[10px] text-[#C86D51]">Patron Fellow</p>
             </div>
-          </div>
+          </NavLink>
         </div>
       </header>
       <div className="md:hidden flex items-center justify-between px-5 py-4">

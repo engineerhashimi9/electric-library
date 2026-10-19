@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { favorites as initialFavorites } from "@/pages/favorite/favorites";
-import exportCitations from "../utils/exportCitations";
+import { favorites as initialFavorites } from "../pages/favorite/favorites";
+import exportCitations from "@/utils/exportCitations";
 
 export const PER_PAGE = 8;
 

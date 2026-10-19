@@ -1,15 +1,21 @@
 import { Check, Plus } from "lucide-react";
 
-export default function FollowButton({ following, onToggle, className = "" }) {
+// variant: default (روی پس‌زمینه روشن) | onDark (روی بنر تیره)
+export default function FollowButton({ following, onToggle, variant = "default", className = "" }) {
+  const styles =
+    variant === "onDark"
+      ? following
+        ? "bg-white/10 text-white ring-1 ring-white/20 hover:bg-white/20"
+        : "bg-white text-[#07241a] hover:bg-[#f5f3f0]"
+      : following
+      ? "bg-[#eae8e5] text-[#07241a] hover:bg-[#e0ddd9]"
+      : "bg-[#07241a] text-white hover:bg-[#1e3a2f]";
+
   return (
     <button
       onClick={onToggle}
       aria-pressed={following}
-      className={`group/follow flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-semibold transition active:scale-95 ${
-        following
-          ? "bg-leaf-100 text-leaf-900 hover:bg-leaf-200"
-          : "bg-leaf-800 text-white hover:bg-leaf-700"
-      } ${className}`}
+      className={`group/follow flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-[13px] font-semibold transition active:scale-95 ${styles} ${className}`}
     >
       {following ? (
         <>
