@@ -35,18 +35,18 @@ export const chartData = {
 export const velocityMeta = {
   peakWindow: "22:00 — 01:30 (Late Vigil)",
   formats: [
-    { label: "E-Pub", pct: 60, color: "#10B981" },
-    { label: "Audio", pct: 25, color: "#6B9080" },
-    { label: "Print", pct: 15, color: "#09261C" },
+    { label: "E-Pub", pct: 60, color: "#17A296" },
+    { label: "Audio", pct: 25, color: "#236D64" },
+    { label: "Print", pct: 15, color: "#0E6760" },
   ],
 };
 
 // ---- Thematic distribution ----
 export const genres = [
-  { name: "Dark Academia & Gothic", pct: 35, color: "#09261C", note: "29 volumes read • Donna Tartt, Umberto Eco" },
-  { name: "Literary Fiction", pct: 28, color: "#10B981", note: "23 volumes read • Woolf, Sebald, Calvino" },
-  { name: "Stoic & Ancient Philosophy", pct: 20, color: "#6B9080", note: "17 volumes read • Seneca, Aurelius, Epictetus" },
-  { name: "Historical Chronicles", pct: 17, color: "#52665E", note: "15 volumes read • Mantel, Graves, Yourcenar" },
+  { name: "Dark Academia & Gothic", pct: 35, color: "#0E6760", note: "29 volumes read • Donna Tartt, Umberto Eco" },
+  { name: "Literary Fiction", pct: 28, color: "#17A296", note: "23 volumes read • Woolf, Sebald, Calvino" },
+  { name: "Stoic & Ancient Philosophy", pct: 20, color: "#156B6B", note: "17 volumes read • Seneca, Aurelius, Epictetus" },
+  { name: "Historical Chronicles", pct: 17, color: "#236D64", note: "15 volumes read • Mantel, Graves, Yourcenar" },
 ];
 
 // ---- Honors ----

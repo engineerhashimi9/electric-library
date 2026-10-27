@@ -12,9 +12,9 @@ export default function BookCover({ cover, title, className = "" }) {
   if (failed || !src) {
     return (
       <div
-        className={`flex flex-col items-center justify-center gap-2 bg-[#EAF4F0] border border-[#DDECE6] p-4 text-center text-[14px] text-[#09261C] font-sans font-bold ${className}`}
+        className={`flex flex-col items-center justify-center gap-2 bg-[#E6F4F3] border border-[#D0E8E6] p-4 text-center text-[14px] text-[#0E6760] font-sans font-bold ${className}`}
       >
-        <BookOpen className="h-6 w-6 text-[#10B981] opacity-70" />
+        <BookOpen className="h-6 w-6 text-[#17A296] opacity-70" />
         <span className="line-clamp-3">{title}</span>
       </div>
     );

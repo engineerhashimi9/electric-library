@@ -69,7 +69,7 @@ export default function ActiveFilters({
     <section className="flex flex-col gap-3 pb-2 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex flex-wrap items-center gap-2">
         {chips.length > 0 && (
-          <span className="mr-1 rtl:mr-0 rtl:ml-1 hidden text-[14px] font-bold text-[#09261C] lg:inline">
+          <span className="mr-1 rtl:mr-0 rtl:ml-1 hidden text-[14px] font-bold text-[#0E6760] lg:inline">
             {t("explore.filters.active")}
           </span>
         )}
@@ -78,16 +78,16 @@ export default function ActiveFilters({
             key={chip.label}
             onClick={chip.remove}
             aria-label={`Remove ${chip.label} filter`}
-            className="inline-flex items-center gap-1 rounded-full bg-[#EAF4F0] border border-[#DDECE6] hover:bg-[#DDECE6] px-3 py-1 text-xs font-bold text-[#09261C] sm:text-sm transition-colors"
+            className="inline-flex items-center gap-1 rounded-full bg-[#E6F4F3] border border-[#D0E8E6] hover:bg-[#D0E8E6] px-3 py-1 text-xs font-bold text-[#0E6760] sm:text-sm transition-colors"
           >
             {chip.label}
-            <X size={14} className="text-[#52665E]" />
+            <X size={14} className="text-[#4A6B68]" />
           </button>
         ))}
         {chips.length > 0 && (
           <button
             onClick={onClear}
-            className="px-2 text-xs font-bold text-[#10B981] hover:text-[#09261C] hover:underline hover:underline-offset-4"
+            className="px-2 text-xs font-bold text-[#17A296] hover:text-[#0E6760] hover:underline hover:underline-offset-4"
           >
             {t("explore.filters.clearAll")}
           </button>
@@ -95,7 +95,7 @@ export default function ActiveFilters({
       </div>
 
       <div className="flex items-center justify-between lg:justify-end gap-4">
-        <p className="text-xs text-[#52665E] font-medium sm:text-sm">
+        <p className="text-xs text-[#4A6B68] font-medium sm:text-sm">
           <span className="lg:hidden">
             {t("explore.showingMobile", { total })}
           </span>
@@ -107,7 +107,7 @@ export default function ActiveFilters({
           aria-label={t("explore.sort.label")}
           value={sort}
           onChange={(event) => onSortChange(event.target.value)}
-          className="hidden rounded-xl bg-[#FFFFFF] border border-[#DDECE6] text-[#111C18] px-4 py-3 text-sm font-bold shadow-sm lg:block outline-none focus:border-[#10B981]"
+          className="hidden rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] text-[#0A2E2C] px-4 py-3 text-sm font-bold shadow-sm lg:block outline-none focus:border-[#17A296]"
         >
           <option value="popular">{t("explore.sort.popular")}</option>
           <option value="rating">{t("explore.sort.rating")}</option>

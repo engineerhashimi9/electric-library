@@ -18,7 +18,7 @@ export default function ThematicDistribution() {
   const isFa = i18n.language === "fa";
 
   return (
-    <div className="flex flex-col rounded-2xl bg-[#FFFFFF] border border-[#DDECE6] p-5 shadow-sm sm:p-6 lg:col-span-4 lg:p-8 text-[#111C18]">
+    <div className="flex flex-col rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] p-5 shadow-sm sm:p-6 lg:col-span-4 lg:p-8 text-[#0A2E2C]">
       <SectionHeading eyebrow="CANON AFFINITY" title={t("profile.thematic.title")} />
 
       <div className="flex flex-1 flex-col gap-6 pt-6" onMouseLeave={() => setHover(null)}>
@@ -34,23 +34,23 @@ export default function ThematicDistribution() {
               <div className="flex items-center justify-between gap-3">
                 <span className="flex min-w-0 items-center gap-2">
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: g.color }} />
-                  <span className="truncate text-[14px] font-medium text-[#09261C] lg:text-[15px] lg:leading-6">{locName}</span>
+                  <span className="truncate text-[14px] font-medium text-[#0E6760] lg:text-[15px] lg:leading-6">{locName}</span>
                 </span>
-                <span className="text-[13px] font-bold tracking-[0.39px] text-[#09261C]">{g.pct}%</span>
+                <span className="text-[13px] font-bold tracking-[0.39px] text-[#0E6760]">{g.pct}%</span>
               </div>
               <ProgressBar percent={g.pct} color={g.color} height="h-2" />
-              <p className="text-[12px] leading-5 text-[#52665E] lg:text-[13px]">{g.note}</p>
+              <p className="text-[12px] leading-5 text-[#4A6B68] lg:text-[13px]">{g.note}</p>
             </div>
           );
         })}
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-3 rounded-xl bg-[#EAF4F0] border border-[#DDECE6] p-4">
-        <span className="flex items-center gap-2.5 text-[11px] font-bold uppercase leading-[14px] tracking-[0.66px] text-[#6B9080]">
-          <Layers className="h-4 w-4 shrink-0 text-[#10B981]" />
+      <div className="mt-6 flex items-center justify-between gap-3 rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] p-4">
+        <span className="flex items-center gap-2.5 text-[11px] font-bold uppercase leading-[14px] tracking-[0.66px] text-[#236D64]">
+          <Layers className="h-4 w-4 shrink-0 text-[#17A296]" />
           {t("profile.thematic.diversityIndex")}
         </span>
-        <span className="text-right rtl:text-left text-[13px] font-bold leading-4 tracking-[0.39px] text-[#09261C]">
+        <span className="text-right rtl:text-left text-[13px] font-bold leading-4 tracking-[0.39px] text-[#0E6760]">
           {t("profile.thematic.diversityScore")}
         </span>
       </div>

@@ -13,7 +13,7 @@ export default function HonorsSection() {
         eyebrow="CURATORIAL DISTINCTIONS"
         title={t("profile.honors.title")}
         right={
-          <a href="#" className="group flex items-center gap-1 text-[13px] font-semibold tracking-[0.39px] text-[#10B981] transition hover:text-[#09261C]">
+          <a href="#" className="group flex items-center gap-1 text-[13px] font-semibold tracking-[0.39px] text-[#17A296] transition hover:text-[#0E6760]">
             {t("profile.honors.viewAll")} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
           </a>
         }

@@ -14,7 +14,7 @@ export default function MobileBottomNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#F6FBF9]/95 backdrop-blur-md border-t border-[#DDECE6] px-2 sm:px-6 py-2 flex justify-around items-center z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#F4FAFA]/95 backdrop-blur-md border-t border-[#D0E8E6] px-2 sm:px-6 py-2 flex justify-around items-center z-50">
       {items.map(({ icon: Icon, label, path }) => (
         <NavLink
           key={path}
@@ -23,8 +23,8 @@ export default function MobileBottomNav() {
           className={({ isActive }) =>
             `flex flex-col items-center justify-center min-w-[56px] py-0.5 transition-colors ${
               isActive
-                ? "text-[#09261C]"
-                : "text-[#52665E] hover:text-[#10B981]"
+                ? "text-[#0E6760]"
+                : "text-[#4A6B68] hover:text-[#17A296]"
             }`
           }
         >
@@ -39,7 +39,7 @@ export default function MobileBottomNav() {
                 {label}
               </span>
               {isActive && (
-                <span className="w-1 h-1 bg-[#10B981] rounded-full mt-0.5" />
+                <span className="w-1 h-1 bg-[#17A296] rounded-full mt-0.5" />
               )}
             </>
           )}

@@ -1,8 +1,8 @@
 import { BookOpen, Tablet, Hand, Headphones } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const dark = "bg-[#10B981] text-[#FFFFFF] hover:bg-[#09261C]";
-const soft = "bg-[#EAF4F0] border border-[#DDECE6] text-[#09261C] hover:bg-[#DDECE6]";
+const dark = "bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760]";
+const soft = "bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#D0E8E6]";
 
 export default function ActionButton({ action, className = "" }) {
   const { i18n } = useTranslation();
@@ -23,7 +23,7 @@ export default function ActionButton({ action, className = "" }) {
       label: isFa ? "امانت کتاب" : "Borrow Volume",
       mobileLabel: isFa ? "امانت" : "Borrow",
       icon: Hand,
-      style: `${soft} sm:bg-[#10B981] sm:text-[#FFFFFF] sm:hover:bg-[#09261C] sm:border-transparent`,
+      style: `${soft} sm:bg-[#17A296] sm:text-[#FFFFFF] sm:hover:bg-[#0E6760] sm:border-transparent`,
     },
     listen: {
       label: isFa ? "شنیدن کتاب" : "Listen Now",

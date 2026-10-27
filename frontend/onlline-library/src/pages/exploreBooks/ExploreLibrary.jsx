@@ -230,7 +230,7 @@ export default function ExploreLibrary() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F6FBF9] text-[#111C18]">
+    <div className="min-h-screen bg-[#F4FAFA] text-[#0A2E2C]">
       <main
         id="catalog"
         className="mx-auto max-w-[1800px] px-4 pb-28 sm:px-6 md:px-8 md:pb-12 lg:px-10 xl:px-16"
@@ -281,7 +281,7 @@ export default function ExploreLibrary() {
                 <div
                   className={`grid gap-3 sm:gap-5 lg:gap-x-5 lg:gap-y-7 ${
                     view === "grid"
-                      ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+                      ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"
                       : "grid-cols-1 md:grid-cols-2"
                   }`}
                 >
@@ -297,12 +297,12 @@ export default function ExploreLibrary() {
                   ))}
                 </div>
               ) : (
-                <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-[#FFFFFF] border border-[#DDECE6] p-6 text-center shadow-sm">
-                  <h2 className="text-2xl font-bold text-[#09261C]">
+                <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-[#FFFFFF] border border-[#D0E8E6] p-6 text-center shadow-sm">
+                  <h2 className="text-2xl font-bold text-[#0E6760]">
                     {t("explore.empty.title")}
                   </h2>
 
-                  <p className="mt-2 text-sm text-[#52665E]">
+                  <p className="mt-2 text-sm text-[#4A6B68]">
                     {t("explore.empty.desc")}
                   </p>
 
@@ -311,7 +311,7 @@ export default function ExploreLibrary() {
                       updateQuery("");
                       clearFilters();
                     }}
-                    className="mt-5 rounded-xl bg-[#10B981] hover:bg-[#09261C] px-5 py-3 text-sm font-bold text-[#FFFFFF] transition-colors shadow-sm"
+                    className="mt-5 rounded-xl bg-[#17A296] hover:bg-[#0E6760] px-5 py-3 text-sm font-bold text-[#FFFFFF] transition-colors shadow-sm"
                   >
                     {t("explore.empty.resetBtn")}
                   </button>
@@ -362,7 +362,7 @@ export default function ExploreLibrary() {
       {notice && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-xl bg-[#09261C] border border-[#163A2E] px-5 py-4 text-sm font-semibold text-[#FFFFFF] shadow-xl lg:bottom-6"
+          className="fixed bottom-24 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-xl bg-[#0E6760] border border-[#156B6B] px-5 py-4 text-sm font-semibold text-[#FFFFFF] shadow-xl lg:bottom-6"
         >
           {notice}
         </div>

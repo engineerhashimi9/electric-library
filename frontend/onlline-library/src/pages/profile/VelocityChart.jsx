@@ -14,7 +14,7 @@ const fmt = (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v);
 
 function RangeSwitch({ range, onRange, isFa }) {
   return (
-    <div className="flex flex-wrap w-fit max-w-full rounded-xl bg-[#EAF4F0] border border-[#DDECE6] p-1 gap-1">
+    <div className="flex flex-wrap w-fit max-w-full rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] p-1 gap-1">
       {chartRanges.map((r) => (
         <button
           key={r}
@@ -22,8 +22,8 @@ function RangeSwitch({ range, onRange, isFa }) {
           aria-pressed={range === r}
           className={`rounded-lg px-2.5 sm:px-3 py-1 text-[11px] sm:text-[12px] transition ${
             range === r
-              ? "bg-[#09261C] font-bold text-[#FFFFFF] shadow-sm"
-              : "text-[#52665E] hover:text-[#09261C]"
+              ? "bg-[#0E6760] font-bold text-[#FFFFFF] shadow-sm"
+              : "text-[#4A6B68] hover:text-[#0E6760]"
           }`}
         >
           {rangeLabels[r] ? (isFa ? rangeLabels[r].fa : rangeLabels[r].en) : r}
@@ -46,15 +46,15 @@ export default function VelocityChart({ range, onRange, series = [] }) {
 
   const barColor = (d, i) =>
     i === peak
-      ? "bg-[#10B981]"
+      ? "bg-[#17A296]"
       : d.state === "current"
-        ? "bg-[#09261C]"
+        ? "bg-[#0E6760]"
         : d.state === "future"
-          ? "bg-[#DDECE6]"
-          : "bg-[#EAF4F0] hover:bg-[#6B9080]/30";
+          ? "bg-[#D0E8E6]"
+          : "bg-[#E6F4F3] hover:bg-[#236D64]/30";
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white border border-[#DDECE6] p-5 shadow-[0_1px_1px_rgba(0,0,0,0.05)] sm:p-6 lg:col-span-8 lg:p-8">
+    <div className="flex flex-col rounded-2xl bg-white border border-[#D0E8E6] p-5 shadow-[0_1px_1px_rgba(0,0,0,0.05)] sm:p-6 lg:col-span-8 lg:p-8">
       <div className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between lg:pb-8">
         <SectionHeading
           eyebrow={isFa ? "سرعت مطالعه" : "READING VELOCITY"}
@@ -85,7 +85,7 @@ export default function VelocityChart({ range, onRange, series = [] }) {
                 />
                 {active === i && (
                   <span
-                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#09261C] px-2 py-0.5 text-[12px] text-white shadow-md sm:text-[14px]"
+                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#0E6760] px-2 py-0.5 text-[12px] text-white shadow-md sm:text-[14px]"
                     style={{ bottom: `calc(${pct}% + 8px)` }}
                   >
                     {fmt(d.value)}
@@ -95,8 +95,8 @@ export default function VelocityChart({ range, onRange, series = [] }) {
               <span
                 className={`mt-2 truncate text-center text-[10px] tracking-[0.5px] sm:text-[11px] ${
                   i === peak || d.state === "current"
-                    ? "font-bold text-[#09261C]"
-                    : "font-medium text-[#52665E]"
+                    ? "font-bold text-[#0E6760]"
+                    : "font-medium text-[#4A6B68]"
                 }`}
               >
                 {d.label}
@@ -107,16 +107,16 @@ export default function VelocityChart({ range, onRange, series = [] }) {
       </div>
 
       {/* footer ribbon */}
-      <div className="mt-6 flex flex-col gap-4 rounded-xl bg-[#EAF4F0] border border-[#DDECE6] p-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+      <div className="mt-6 flex flex-col gap-4 rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] p-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
         <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-[#10B981] shadow-sm">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-[#17A296] shadow-sm">
             <Moon className="h-5 w-5" />
           </span>
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.8px] text-[#6B9080] lg:text-[12px]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.8px] text-[#236D64] lg:text-[12px]">
               {isFa ? "ساعات اوج مطالعه" : "PEAK READING WINDOW"}
             </p>
-            <p className="text-[14px] font-semibold text-[#09261C] sm:text-[15px] lg:text-[16px]">
+            <p className="text-[14px] font-semibold text-[#0E6760] sm:text-[15px] lg:text-[16px]">
               {velocityMeta.peakWindow}
             </p>
           </div>
@@ -124,16 +124,16 @@ export default function VelocityChart({ range, onRange, series = [] }) {
 
         <div className="w-full lg:max-w-[420px]">
           <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 text-[12px]">
-            <span className="font-medium text-[#52665E]">
+            <span className="font-medium text-[#4A6B68]">
               {isFa ? "نسبت فرمت‌های مطالعه" : "Format Ingestion Ratio"}
             </span>
-            <span className="font-semibold text-[#09261C]">
+            <span className="font-semibold text-[#0E6760]">
               {velocityMeta.formats
                 .map((f) => `${f.pct}% ${f.label}`)
                 .join(" • ")}
             </span>
           </div>
-          <div className="flex h-2.5 overflow-hidden rounded-full bg-[#DDECE6]">
+          <div className="flex h-2.5 overflow-hidden rounded-full bg-[#D0E8E6]">
             {velocityMeta.formats.map((f) => (
               <div
                 key={f.label}

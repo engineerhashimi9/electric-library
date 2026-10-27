@@ -14,30 +14,30 @@ import { getLocalized } from "../../utils/langHelper";
 
 const variants = {
   ebook: {
-    badge: "bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46]",
-    genre: "text-[#6B9080]",
+    badge: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64]",
+    genre: "text-[#236D64]",
     infoIcon: NotebookText,
-    infoTone: "text-[#52665E]",
+    infoTone: "text-[#4A6B68]",
     bar: "primary",
-    button: "bg-[#10B981] hover:bg-[#09261C] text-[#FFFFFF]",
+    button: "bg-[#17A296] hover:bg-[#0E6760] text-[#FFFFFF]",
     ctaIcon: BookOpen,
   },
   loan: {
-    badge: "bg-[#09261C] text-[#FFFFFF]",
-    genre: "text-[#6B9080]",
+    badge: "bg-[#0E6760] text-[#FFFFFF]",
+    genre: "text-[#236D64]",
     infoIcon: AlarmClock,
-    infoTone: "text-[#52665E]",
+    infoTone: "text-[#4A6B68]",
     bar: "accent",
-    button: "bg-[#10B981] hover:bg-[#09261C] text-[#FFFFFF]",
+    button: "bg-[#17A296] hover:bg-[#0E6760] text-[#FFFFFF]",
     ctaIcon: BookOpen,
   },
   audio: {
-    badge: "bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46]",
-    genre: "text-[#6B9080]",
+    badge: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64]",
+    genre: "text-[#236D64]",
     infoIcon: Gauge,
-    infoTone: "text-[#52665E]",
+    infoTone: "text-[#4A6B68]",
     bar: "primary",
-    button: "bg-[#10B981] hover:bg-[#09261C] text-[#FFFFFF]",
+    button: "bg-[#17A296] hover:bg-[#0E6760] text-[#FFFFFF]",
     ctaIcon: Play,
   },
 };
@@ -74,10 +74,10 @@ export default function ReadingCard({ book }) {
   const CtaIcon = v.ctaIcon;
 
   return (
-    <article className="group flex w-full flex-col justify-between rounded-xl bg-[#FFFFFF] border border-[#E2EFEA] hover:border-[#10B981] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 p-4 shadow-sm text-[#111C18]">
+    <article className="group flex w-full flex-col justify-between rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] hover:border-[#17A296] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 p-4 shadow-sm text-[#0A2E2C]">
       <div className="space-y-4">
         <div className="flex gap-3.5 sm:gap-4">
-          <div className="relative h-32 w-24 sm:h-36 sm:w-28 overflow-hidden rounded-lg shadow-md border border-[#DDECE6] bg-[#EAF4F0] shrink-0">
+          <div className="relative h-32 w-24 sm:h-36 sm:w-28 overflow-hidden rounded-lg shadow-md border border-[#D0E8E6] bg-[#E6F4F3] shrink-0">
             <img
               src={img(cover)}
               alt={locTitle}
@@ -97,10 +97,10 @@ export default function ReadingCard({ book }) {
               >
                 {locGenre}
               </p>
-              <h3 className="font-sans text-base sm:text-[20px] font-bold leading-snug text-[#111C18] line-clamp-2">
+              <h3 className="font-sans text-base sm:text-[20px] font-bold leading-snug text-[#0A2E2C] line-clamp-2">
                 {locTitle}
               </h3>
-              <p className="text-xs sm:text-[13px] text-[#52665E] truncate">
+              <p className="text-xs sm:text-[13px] text-[#4A6B68] truncate">
                 {locAuthor}
               </p>
             </div>
@@ -108,10 +108,10 @@ export default function ReadingCard({ book }) {
               <p
                 className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide ${v.infoTone}`}
               >
-                <InfoIcon className="h-3 w-3 shrink-0 text-[#10B981]" />{" "}
+                <InfoIcon className="h-3 w-3 shrink-0 text-[#17A296]" />{" "}
                 <span className="truncate">{locInfoPrimary}</span>
               </p>
-              <p className="text-[11px] font-medium tracking-wide text-[#52665E] truncate">
+              <p className="text-[11px] font-medium tracking-wide text-[#4A6B68] truncate">
                 {locInfoSecondary}
               </p>
             </div>
@@ -119,10 +119,10 @@ export default function ReadingCard({ book }) {
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-[11px] tracking-wide">
-            <span className="font-bold text-[#52665E]">{locProgress}</span>
-            <span className="font-semibold text-[#09261C]">{percent}%</span>
+            <span className="font-bold text-[#4A6B68]">{locProgress}</span>
+            <span className="font-semibold text-[#0E6760]">{percent}%</span>
           </div>
-          <ProgressBar percent={percent} tone={v.bar} bgColor="#10B981" />
+          <ProgressBar percent={percent} tone={v.bar} bgColor="#17A296" />
         </div>
       </div>
       <div className="pt-5">

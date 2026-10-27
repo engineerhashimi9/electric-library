@@ -9,16 +9,16 @@ export default function PopularBooks({ books }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg md:text-xl font-bold text-[#09261C]">
+          <h2 className="text-lg md:text-xl font-bold text-[#0E6760]">
             {t("home.popular.title")}
           </h2>
-          <p className="text-[14px] text-[#52665E]">
+          <p className="text-[14px] text-[#4A6B68]">
             {t("home.popular.subtitle")}
           </p>
         </div>
         <Link
           to="/explorebooks"
-          className="text-[11px] font-semibold text-[#10B981] hover:text-[#09261C] hover:underline transition-colors"
+          className="text-[11px] font-semibold text-[#17A296] hover:text-[#0E6760] hover:underline transition-colors"
         >
           {t("home.popular.viewAll")}
         </Link>

@@ -13,7 +13,7 @@ export default function CompletedRecently() {
       <SectionTitle
         icon={BookCheck}
         right={
-          <a href="#" className="flex items-center gap-1 text-[13px] font-semibold tracking-wide text-[#10B981] hover:text-[#09261C] transition-colors">
+          <a href="#" className="flex items-center gap-1 text-[13px] font-semibold tracking-wide text-[#17A296] hover:text-[#0E6760] transition-colors">
             {t("library.actions.archiveIndex")} <ArrowRight className="h-3 w-3 rtl:rotate-180" />
           </a>
         }

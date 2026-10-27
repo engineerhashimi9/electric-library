@@ -12,7 +12,7 @@ export default function IlluminatedMarginalia() {
       <SectionTitle
         icon={PenLine}
         right={
-          <span className="rounded-full bg-[#EAF4F0] border border-[#DDECE6] px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-[#0D5C46]">
+          <span className="rounded-full bg-[#E6F4F3] border border-[#D0E8E6] px-2.5 py-0.5 text-[11px] font-bold tracking-wide text-[#236D64]">
             {t("library.actions.synchronized", { count: 42 })}
           </span>
         }
@@ -25,8 +25,8 @@ export default function IlluminatedMarginalia() {
           <AnnotationCard key={idx} item={a} />
         ))}
 
-        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFFFFF] border border-[#DDECE6] py-3 text-[13px] font-semibold tracking-wide text-[#09261C] hover:bg-[#EAF4F0] hover:border-[#10B981] shadow-sm transition-colors">
-          <FileDown className="h-3.5 w-3.5 text-[#10B981]" /> {t("library.actions.exportNotes")}
+        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] py-3 text-[13px] font-semibold tracking-wide text-[#0E6760] hover:bg-[#E6F4F3] hover:border-[#17A296] shadow-sm transition-colors">
+          <FileDown className="h-3.5 w-3.5 text-[#17A296]" /> {t("library.actions.exportNotes")}
         </button>
       </div>
     </div>

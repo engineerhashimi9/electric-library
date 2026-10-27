@@ -37,7 +37,7 @@ export default function CatalogControls({
             aria-label={t("explore.sort.label")}
             value={sort}
             onChange={(event) => onSortChange(event.target.value)}
-            className="min-w-0 flex-1 sm:flex-none rounded-full bg-[#FFFFFF] border border-[#DDECE6] px-3 py-2.5 text-xs font-bold text-[#09261C] shadow-sm sm:text-sm outline-none"
+            className="min-w-0 flex-1 sm:flex-none rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm outline-none"
           >
             <option value="popular">{t("explore.sort.popular")}</option>
             <option value="rating">{t("explore.sort.rating")}</option>
@@ -45,12 +45,12 @@ export default function CatalogControls({
           </select>
           <button
             onClick={onOpenFilters}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FFFFFF] border border-[#DDECE6] px-3.5 py-2.5 text-xs font-bold text-[#09261C] shadow-sm sm:text-sm"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm"
           >
-            <SlidersHorizontal size={16} className="text-[#10B981]" />
+            <SlidersHorizontal size={16} className="text-[#17A296]" />
             <span>{t("explore.search.filterBtn")}</span>
             {filterCount > 0 && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#10B981] text-[10px] text-[#FFFFFF] font-bold">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#17A296] text-[10px] text-[#FFFFFF] font-bold">
                 {filterCount}
               </span>
             )}
@@ -75,12 +75,12 @@ export default function CatalogControls({
               onClick={() => onGenreChange(itemVal)}
               className={`shrink-0 whitespace-nowrap rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold transition sm:text-sm flex items-center gap-1.5 ${
                 isSelected
-                  ? "bg-[#09261C] border border-[#09261C] text-[#FFFFFF] shadow-sm"
-                  : "bg-[#FFFFFF] border border-[#DDECE6] text-[#52665E] hover:bg-[#EAF4F0] hover:text-[#09261C]"
+                  ? "bg-[#0E6760] border border-[#0E6760] text-[#FFFFFF] shadow-sm"
+                  : "bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760]"
               }`}
             >
               {isSelected && (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#17A296]" />
               )}
               <span>{label}</span>
             </button>

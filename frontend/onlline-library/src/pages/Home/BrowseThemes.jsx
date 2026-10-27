@@ -10,16 +10,16 @@ export default function BrowseThemes({ themes }) {
     <div className="space-y-3">
       <div className="flex justify-between items-center">
         <div>
-          <span className="text-[#6B9080] text-[10px] font-bold uppercase tracking-wider block">
+          <span className="text-[#236D64] text-[10px] font-bold uppercase tracking-wider block">
            ~ {t("home.themes.eyebrow")}
           </span>
-          <h3 className="text-lg md:text-[28px] text-[#09261C] font-bold">
+          <h3 className="text-lg md:text-[28px] text-[#0E6760] font-bold">
             {t("home.themes.title")}
           </h3>
         </div>
         <Link
           to="/explorebooks"
-          className="text-xs text-[#09261C] hover:text-[#10B981] font-bold transition-colors shrink-0"
+          className="text-xs text-[#0E6760] hover:text-[#17A296] font-bold transition-colors shrink-0"
         >
           {t("home.themes.viewAll")}
         </Link>

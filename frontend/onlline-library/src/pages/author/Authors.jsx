@@ -12,7 +12,7 @@ export default function Authors() {
   const to = (a.page - 1) * PER_PAGE + a.visible.length;
 
   return (
-    <div className="min-h-screen bg-[#F6FBF9] pb-28 text-[#111C18] lg:pb-0">
+    <div className="min-h-screen bg-[#F4FAFA] pb-28 text-[#0A2E2C] lg:pb-0">
       <AuthorsHero
         total={authors.length}
         followedCount={a.followed.length}

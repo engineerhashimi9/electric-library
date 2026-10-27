@@ -7,7 +7,7 @@ export default function Pagination({ page, totalPages, onPage, from, to, total }
   const btn = "flex h-9 w-9 items-center justify-center rounded-lg text-[13px] transition active:scale-95";
 
   return (
-    <div className="flex flex-col items-center gap-3 px-2 py-2 text-[13px] text-[#52665E] sm:flex-row sm:justify-between lg:py-4">
+    <div className="flex flex-col items-center gap-3 px-2 py-2 text-[13px] text-[#4A6B68] sm:flex-row sm:justify-between lg:py-4">
       <span>
         {t("favorites.pagination.showing", { from, to, total })}
       </span>
@@ -16,7 +16,7 @@ export default function Pagination({ page, totalPages, onPage, from, to, total }
           onClick={() => onPage(page - 1)}
           disabled={page === 1}
           aria-label="Previous page"
-          className={`${btn} bg-[#FFFFFF] border border-[#DDECE6] text-[#52665E] hover:bg-[#EAF4F0] hover:text-[#09261C] disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`${btn} bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760] disabled:cursor-not-allowed disabled:opacity-40`}
         >
           <ChevronLeft className="h-3.5 w-3.5 rtl:rotate-180" />
         </button>
@@ -27,8 +27,8 @@ export default function Pagination({ page, totalPages, onPage, from, to, total }
             aria-current={page === p ? "page" : undefined}
             className={`${btn} font-semibold ${
               page === p
-                ? "bg-[#09261C] text-[#FFFFFF] shadow-sm"
-                : "bg-[#FFFFFF] border border-[#DDECE6] text-[#52665E] hover:bg-[#EAF4F0] hover:text-[#09261C]"
+                ? "bg-[#0E6760] text-[#FFFFFF] shadow-sm"
+                : "bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760]"
             }`}
           >
             {p}
@@ -38,7 +38,7 @@ export default function Pagination({ page, totalPages, onPage, from, to, total }
           onClick={() => onPage(page + 1)}
           disabled={page === totalPages}
           aria-label="Next page"
-          className={`${btn} bg-[#FFFFFF] border border-[#DDECE6] text-[#52665E] hover:bg-[#EAF4F0] hover:text-[#09261C] disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`${btn} bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760] disabled:cursor-not-allowed disabled:opacity-40`}
         >
           <ChevronRight className="h-3.5 w-3.5 rtl:rotate-180" />
         </button>

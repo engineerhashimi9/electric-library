@@ -16,13 +16,13 @@ export default function Toast({ toast, onClose, onUndo }) {
   return (
     <div
       role="status"
-      className="fixed bottom-28 left-1/2 z-50 flex w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-4 rounded-xl bg-[#09261C] border border-[#163A2E] px-5 py-3 text-[13px] text-[#FFFFFF] shadow-2xl lg:bottom-6"
+      className="fixed bottom-28 left-1/2 z-50 flex w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-4 rounded-xl bg-[#0E6760] border border-[#156B6B] px-5 py-3 text-[13px] text-[#FFFFFF] shadow-2xl lg:bottom-6"
     >
       <span className="min-w-0 truncate">{toast.message}</span>
       {toast.undo && (
         <button
           onClick={onUndo}
-          className="shrink-0 font-bold text-[#10B981] transition hover:underline"
+          className="shrink-0 font-bold text-[#17A296] transition hover:underline"
         >
           {t("common.undo")}
         </button>
@@ -30,7 +30,7 @@ export default function Toast({ toast, onClose, onUndo }) {
       <button
         onClick={onClose}
         aria-label={t("common.close")}
-        className="shrink-0 text-[#A3C1B5] transition hover:text-[#FFFFFF]"
+        className="shrink-0 text-[#B8E2DF] transition hover:text-[#FFFFFF]"
       >
         <X className="h-3.5 w-3.5" />
       </button>

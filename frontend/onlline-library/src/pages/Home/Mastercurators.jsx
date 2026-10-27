@@ -8,12 +8,12 @@ export default function MasterCurators({ authors }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg md:text-xl font-bold text-[#09261C]">
+        <h2 className="text-lg md:text-xl font-bold text-[#0E6760]">
           {t("home.curators.title")}
         </h2>
         <Link
           to="/author"
-          className="text-xs font-semibold text-[#10B981] hover:text-[#09261C] hover:underline transition-colors shrink-0"
+          className="text-xs font-semibold text-[#17A296] hover:text-[#0E6760] hover:underline transition-colors shrink-0"
         >
           {t("home.curators.viewAll")}
         </Link>

@@ -1,9 +1,9 @@
 import { CheckCircle2, Archive, Clock } from "lucide-react";
 
 const tones = {
-  available: { box: "bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46]", icon: CheckCircle2 },
-  low: { box: "bg-[#EAF4F0] border border-[#DDECE6] text-[#52665E]", icon: Archive },
-  audio: { box: "bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46]", icon: Clock },
+  available: { box: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64]", icon: CheckCircle2 },
+  low: { box: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#4A6B68]", icon: Archive },
+  audio: { box: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64]", icon: Clock },
 };
 
 export default function StatusChip({ status, badge }) {

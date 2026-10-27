@@ -27,7 +27,7 @@ function App() {
         <Route
           path="/signin"
           element={
-            <div className="min-h-screen bg-[#F6FBF9] flex items-center justify-center py-12 px-4 sm:px-6">
+            <div className="min-h-screen bg-[#F4FAFA] flex items-center justify-center py-12 px-4 sm:px-6">
               <SignInForm />
             </div>
           }

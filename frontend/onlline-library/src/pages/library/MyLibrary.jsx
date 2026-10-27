@@ -7,7 +7,7 @@ import IlluminatedMarginalia from "./IlluminatedMarginalia";
 
 export default function MyLibrary() {
   return (
-    <div className="min-h-screen bg-[#F6FBF9] font-sans text-[#111C18] pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F4FAFA] font-sans text-[#0A2E2C] pb-24 md:pb-12">
       <main className="mx-auto flex max-w-[1440px] flex-col gap-8 sm:gap-10 px-4 sm:px-8 lg:px-12 py-6 sm:py-10">
         <div className="space-y-6">
           <LibraryHeader />

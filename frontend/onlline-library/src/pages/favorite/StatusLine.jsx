@@ -1,7 +1,7 @@
 const tones = {
-  available: { dot: "bg-[#10B981]", text: "text-[#0D5C46] font-bold" },
-  audio: { dot: "bg-[#6B9080]", text: "text-[#52665E] font-bold" },
-  low: { dot: "bg-[#10B981]", text: "text-[#0D5C46] font-semibold" },
+  available: { dot: "bg-[#17A296]", text: "text-[#236D64] font-bold" },
+  audio: { dot: "bg-[#236D64]", text: "text-[#4A6B68] font-bold" },
+  low: { dot: "bg-[#17A296]", text: "text-[#236D64] font-semibold" },
 };
 
 export default function StatusLine({ status, meta, className = "" }) {
@@ -11,7 +11,7 @@ export default function StatusLine({ status, meta, className = "" }) {
       <span className={`flex items-center gap-1.5 ${t.text}`}>
         <span className={`h-2 w-2 shrink-0 rounded-full ${t.dot}`} /> {status?.label || ""}
       </span>
-      <span className="whitespace-nowrap font-bold text-[#52665E]">{meta}</span>
+      <span className="whitespace-nowrap font-bold text-[#4A6B68]">{meta}</span>
     </div>
   );
 }

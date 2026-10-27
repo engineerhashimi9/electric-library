@@ -29,13 +29,13 @@ export default function ShelfToolbar({
       {/* Mobile Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 md:hidden">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="text-[12px] font-bold uppercase leading-[18px] tracking-[0.6px] text-[#52665E]">
+          <p className="text-[12px] font-bold uppercase leading-[18px] tracking-[0.6px] text-[#4A6B68]">
             {total} {t("favorites.toolbar.savedWorks", "Saved Works")}
           </p>
-          <span className="h-1 w-1 rounded-full bg-[#DDECE6]" />
+          <span className="h-1 w-1 rounded-full bg-[#D0E8E6]" />
           <button
             onClick={onTogglePreview}
-            className="text-left rtl:text-right text-[12px] font-bold leading-[18px] tracking-[0.5px] text-[#10B981] underline decoration-[#10B981]/40 underline-offset-4"
+            className="text-left rtl:text-right text-[12px] font-bold leading-[18px] tracking-[0.5px] text-[#17A296] underline decoration-[#17A296]/40 underline-offset-4"
           >
             {previewEmpty
               ? t("favorites.actions.exitEmpty", "Exit Empty State")
@@ -43,12 +43,12 @@ export default function ShelfToolbar({
           </button>
         </div>
 
-        <label className="relative flex min-w-[140px] flex-1 sm:flex-none items-center gap-2.5 rounded-xl bg-[#FFFFFF] border border-[#DDECE6] px-3.5 py-2 transition shadow-sm">
-          <ArrowDownWideNarrow className="h-4 w-4 shrink-0 text-[#6B9080]" />
-          <span className="flex-1 truncate text-[13px] font-semibold leading-[18px] text-[#09261C]">
+        <label className="relative flex min-w-[140px] flex-1 sm:flex-none items-center gap-2.5 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2 transition shadow-sm">
+          <ArrowDownWideNarrow className="h-4 w-4 shrink-0 text-[#236D64]" />
+          <span className="flex-1 truncate text-[13px] font-semibold leading-[18px] text-[#0E6760]">
             {getSortLabel(sort)}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-[#6B9080]" />
+          <ChevronDown className="h-4 w-4 shrink-0 text-[#236D64]" />
           <select
             value={sort}
             onChange={(e) => onSort(e.target.value)}
@@ -56,7 +56,7 @@ export default function ShelfToolbar({
             className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
           >
             {sortOptions.map((o) => (
-              <option key={o} value={o} className="bg-[#FFFFFF] text-[#09261C]">
+              <option key={o} value={o} className="bg-[#FFFFFF] text-[#0E6760]">
                 {getSortLabel(o)}
               </option>
             ))}
@@ -65,28 +65,28 @@ export default function ShelfToolbar({
       </div>
 
       {/* Tablet & Desktop Toolbar */}
-      <div className="hidden items-center justify-between gap-4 rounded-2xl bg-[#FFFFFF] border border-[#DDECE6] px-5 py-3.5 shadow-sm md:flex">
+      <div className="hidden items-center justify-between gap-4 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] px-5 py-3.5 shadow-sm md:flex">
         <div className="flex min-w-0 items-center gap-3">
-          <h2 className="whitespace-nowrap text-[18px] font-bold leading-7 text-[#09261C] lg:text-[20px]">
+          <h2 className="whitespace-nowrap text-[18px] font-bold leading-7 text-[#0E6760] lg:text-[20px]">
             {t("favorites.toolbar.worksCataloged", { total, defaultValue: `${total} Works Cataloged` })}
           </h2>
-          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#DDECE6]" />
-          <span className="hidden items-center gap-1.5 whitespace-nowrap text-[13px] text-[#52665E] lg:flex">
-            <Cloud className="h-3.5 w-3.5 text-[#10B981]" />
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#D0E8E6]" />
+          <span className="hidden items-center gap-1.5 whitespace-nowrap text-[13px] text-[#4A6B68] lg:flex">
+            <Cloud className="h-3.5 w-3.5 text-[#17A296]" />
             {t("favorites.toolbar.synced", "Synchronized with Oxford Repository")}
           </span>
         </div>
 
         <div className="flex shrink-0 items-center gap-4">
           <label className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-[0.55px] text-[#52665E]">
+            <span className="text-[11px] font-bold uppercase tracking-[0.55px] text-[#4A6B68]">
               {t("favorites.toolbar.sortBy", "SORT BY:")}
             </span>
             <span className="relative">
               <select
                 value={sort}
                 onChange={(e) => onSort(e.target.value)}
-                className="cursor-pointer appearance-none rounded-lg bg-[#EAF4F0] border border-[#DDECE6] py-1.5 pl-3 pr-8 rtl:pr-3 rtl:pl-8 text-[13px] font-semibold text-[#09261C] outline-none transition hover:bg-[#DDECE6] focus:border-[#10B981]"
+                className="cursor-pointer appearance-none rounded-lg bg-[#E6F4F3] border border-[#D0E8E6] py-1.5 pl-3 pr-8 rtl:pr-3 rtl:pl-8 text-[13px] font-semibold text-[#0E6760] outline-none transition hover:bg-[#D0E8E6] focus:border-[#17A296]"
               >
                 {sortOptions.map((o) => (
                   <option key={o} value={o}>
@@ -94,13 +94,13 @@ export default function ShelfToolbar({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-2.5 rtl:right-auto rtl:left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#52665E]" />
+              <ChevronDown className="pointer-events-none absolute right-2.5 rtl:right-auto rtl:left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#4A6B68]" />
             </span>
           </label>
 
-          <span className="h-5 w-px bg-[#DDECE6]" />
+          <span className="h-5 w-px bg-[#D0E8E6]" />
 
-          <div className="flex rounded-lg bg-[#EAF4F0] border border-[#DDECE6] p-0.5">
+          <div className="flex rounded-lg bg-[#E6F4F3] border border-[#D0E8E6] p-0.5">
             {[
               ["grid", LayoutGrid],
               ["list", Rows3],
@@ -111,8 +111,8 @@ export default function ShelfToolbar({
                 aria-label={`${k} view`}
                 className={`rounded-md p-1.5 transition ${
                   view === k
-                    ? "bg-[#09261C] text-[#FFFFFF] shadow-sm"
-                    : "text-[#52665E] hover:text-[#09261C]"
+                    ? "bg-[#0E6760] text-[#FFFFFF] shadow-sm"
+                    : "text-[#4A6B68] hover:text-[#0E6760]"
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />

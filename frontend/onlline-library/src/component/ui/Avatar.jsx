@@ -22,7 +22,7 @@ export default function Avatar({ name, photo, className = "" }) {
   if (failed || !src) {
     return (
       <span
-        className={`flex items-center justify-center bg-[#EAF4F0] border border-[#DDECE6] font-bold text-[#09261C] ${className}`}
+        className={`flex items-center justify-center bg-[#E6F4F3] border border-[#D0E8E6] font-bold text-[#0E6760] ${className}`}
       >
         {getInitials(name)}
       </span>

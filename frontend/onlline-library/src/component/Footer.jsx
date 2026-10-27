@@ -43,7 +43,7 @@ export default function Footer({ className = "" }) {
   ];
 
   return (
-    <footer className={`${className} bg-[#09261C] border-t border-[#163A2E] px-5 py-6 sm:px-12 sm:py-7 text-[#A3C1B5]`}>
+    <footer className={`${className} bg-[#0E6760] border-t border-[#156B6B] px-5 py-6 sm:px-12 sm:py-7 text-[#B8E2DF]`}>
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {columns.map((col) => (
           <nav key={col.title} aria-label={col.title}>
@@ -55,7 +55,7 @@ export default function Footer({ className = "" }) {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-[10.5px] leading-normal text-[#A3C1B5] hover:text-[#10B981] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981] transition-colors"
+                    className="text-[10.5px] leading-normal text-[#B8E2DF] hover:text-[#17A296] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17A296] transition-colors"
                   >
                     {link}
                   </a>
@@ -69,7 +69,7 @@ export default function Footer({ className = "" }) {
           <h3 className="mb-3.5 text-[15px] font-bold text-[#FFFFFF]">
             {t("footer.legalTitle")}
           </h3>
-          <p className="text-[10.5px] leading-normal text-[#A3C1B5]">
+          <p className="text-[10.5px] leading-normal text-[#B8E2DF]">
             {t("footer.legalDesc")}
           </p>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -77,7 +77,7 @@ export default function Footer({ className = "" }) {
               <a
                 key={link}
                 href="#"
-                className="text-[9.5px] font-bold leading-normal text-[#A3C1B5] hover:text-[#10B981] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981] transition-colors"
+                className="text-[9.5px] font-bold leading-normal text-[#B8E2DF] hover:text-[#17A296] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17A296] transition-colors"
               >
                 {link}
               </a>
@@ -86,11 +86,11 @@ export default function Footer({ className = "" }) {
         </div>
       </div>
 
-      <div className="mx-auto mt-9 flex max-w-[1200px] flex-col items-start justify-between gap-4 text-[9.5px] text-[#A3C1B5]/80 border-t border-[#163A2E] pt-5 sm:flex-row sm:items-center">
+      <div className="mx-auto mt-9 flex max-w-[1200px] flex-col items-start justify-between gap-4 text-[9.5px] text-[#B8E2DF]/80 border-t border-[#156B6B] pt-5 sm:flex-row sm:items-center">
         <p>
           {t("footer.copyright")}
         </p>
-        <p className="text-[8.5px] font-bold tracking-[0.04em] text-[#10B981]">
+        <p className="text-[8.5px] font-bold tracking-[0.04em] text-[#17A296]">
           {t("footer.edition")}
         </p>
       </div>

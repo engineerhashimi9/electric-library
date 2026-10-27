@@ -5,8 +5,8 @@ import ProgressBar from "@/component/ui/ProgressBar";
 
 const SplitFooter = ({ left, right }) => (
   <div className="flex items-center justify-between text-[11px] tracking-wide">
-    <span className="font-bold text-[#52665E]">{left}</span>
-    <span className="font-semibold text-[#09261C]">{right}</span>
+    <span className="font-bold text-[#4A6B68]">{left}</span>
+    <span className="font-semibold text-[#0E6760]">{right}</span>
   </div>
 );
 
@@ -22,9 +22,9 @@ export default function StatsRow() {
         unit={t("library.stats.journeyUnit")}
         footer={
           <div className="space-y-1.5">
-            <ProgressBar percent={80} bgColor="#10B981" />
-            <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#52665E]">
-              <TrendingUp className="h-3 w-3 text-[#10B981]" /> {t("library.stats.journeyPace")}
+            <ProgressBar percent={80} bgColor="#17A296" />
+            <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#4A6B68]">
+              <TrendingUp className="h-3 w-3 text-[#17A296]" /> {t("library.stats.journeyPace")}
             </p>
           </div>
         }
@@ -47,8 +47,8 @@ export default function StatsRow() {
         value="142"
         unit={t("library.stats.immersionUnit")}
         footer={
-          <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#52665E]">
-            <Clock className="h-3 w-3 text-[#10B981]" /> {t("library.stats.immersionAccrued")}
+          <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#4A6B68]">
+            <Clock className="h-3 w-3 text-[#17A296]" /> {t("library.stats.immersionAccrued")}
           </p>
         }
       />

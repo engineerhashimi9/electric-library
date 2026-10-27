@@ -16,7 +16,7 @@ export default function Favorites() {
   const to = (f.page - 1) * PER_PAGE + f.visible.length;
 
   return (
-    <div className="min-h-screen bg-[#F6FBF9] pb-24 text-[#111C18] md:pb-0">
+    <div className="min-h-screen bg-[#F4FAFA] pb-24 text-[#0A2E2C] md:pb-0">
       <FavoritesHero
         total={f.items.length}
         actions={{

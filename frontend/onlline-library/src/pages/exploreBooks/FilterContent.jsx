@@ -24,36 +24,36 @@ export function FilterContent({ filters, onChange, onReset }) {
   return (
     <>
       <div className="mb-8 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-[#09261C]">
-          <SlidersHorizontal size={21} className="text-[#10B981]" />
+        <h2 className="flex items-center gap-2 text-xl font-bold text-[#0E6760]">
+          <SlidersHorizontal size={21} className="text-[#17A296]" />
           {t("explore.filters.title")}
         </h2>
 
         <button
           onClick={onReset}
-          className="shrink-0 text-xs font-bold text-[#10B981] hover:text-[#09261C] hover:underline"
+          className="shrink-0 text-xs font-bold text-[#17A296] hover:text-[#0E6760] hover:underline"
         >
           {t("explore.filters.reset")}
         </button>
       </div>
 
       <fieldset className="mb-9">
-        <legend className="mb-5 text-xs font-bold uppercase text-[#6B9080]">{t("explore.filters.format")}</legend>
+        <legend className="mb-5 text-xs font-bold uppercase text-[#236D64]">{t("explore.filters.format")}</legend>
 
         <div className="space-y-5">
           {formatOptions.map((option) => (
             <label
               key={option.value}
-              className="flex cursor-pointer items-center gap-3 text-sm text-[#111C18] font-medium"
+              className="flex cursor-pointer items-center gap-3 text-sm text-[#0A2E2C] font-medium"
             >
               <input
                 type="checkbox"
                 checked={filters.formats.includes(option.value)}
                 onChange={() => toggleFormat(option.value)}
-                className="h-4 w-4 accent-[#10B981]"
+                className="h-4 w-4 accent-[#17A296]"
               />
               <span className="flex-1">{isFa && option.labelFa ? option.labelFa : option.label}</span>
-              <span className="rounded-full bg-[#EAF4F0] border border-[#DDECE6] px-2 py-0.5 text-xs font-bold text-[#52665E]">
+              <span className="rounded-full bg-[#E6F4F3] border border-[#D0E8E6] px-2 py-0.5 text-xs font-bold text-[#4A6B68]">
                 {option.count}
               </span>
             </label>
@@ -62,11 +62,11 @@ export function FilterContent({ filters, onChange, onReset }) {
       </fieldset>
 
       <fieldset className="mb-9">
-        <legend className="mb-5 text-xs font-bold uppercase text-[#6B9080]">
+        <legend className="mb-5 text-xs font-bold uppercase text-[#236D64]">
           {t("explore.filters.circulation")}
         </legend>
 
-        <label className="mb-4 flex cursor-pointer items-center gap-3 text-sm text-[#111C18] font-medium">
+        <label className="mb-4 flex cursor-pointer items-center gap-3 text-sm text-[#0A2E2C] font-medium">
           <input
             type="checkbox"
             checked={filters.availableOnly}
@@ -76,13 +76,13 @@ export function FilterContent({ filters, onChange, onReset }) {
                 availableOnly: event.target.checked,
               })
             }
-            className="h-4 w-4 accent-[#10B981]"
+            className="h-4 w-4 accent-[#17A296]"
           />
-          <span className="h-2 w-2 rounded-full bg-[#10B981]" />
+          <span className="h-2 w-2 rounded-full bg-[#17A296]" />
           {t("explore.filters.available")}
         </label>
 
-        <label className="flex cursor-pointer items-center gap-3 text-sm text-[#111C18] font-medium">
+        <label className="flex cursor-pointer items-center gap-3 text-sm text-[#0A2E2C] font-medium">
           <input
             type="checkbox"
             checked={filters.reserveOnly}
@@ -92,15 +92,15 @@ export function FilterContent({ filters, onChange, onReset }) {
                 reserveOnly: event.target.checked,
               })
             }
-            className="h-4 w-4 accent-[#10B981]"
+            className="h-4 w-4 accent-[#17A296]"
           />
-          <span className="h-2 w-2 rounded-full bg-[#6B9080]" />
+          <span className="h-2 w-2 rounded-full bg-[#236D64]" />
           {t("explore.filters.reserve")}
         </label>
       </fieldset>
 
       <fieldset className="mb-9">
-        <legend className="mb-5 text-xs font-bold uppercase text-[#6B9080]">
+        <legend className="mb-5 text-xs font-bold uppercase text-[#236D64]">
           {t("explore.filters.length")}
         </legend>
 
@@ -108,14 +108,14 @@ export function FilterContent({ filters, onChange, onReset }) {
           {lengthOptions.map((option) => (
             <label
               key={option.value}
-              className="flex cursor-pointer items-center gap-3 text-sm text-[#111C18] font-medium"
+              className="flex cursor-pointer items-center gap-3 text-sm text-[#0A2E2C] font-medium"
             >
               <input
                 type="radio"
                 name="volume-length"
                 checked={filters.length === option.value}
                 onChange={() => onChange({ ...filters, length: option.value })}
-                className="h-4 w-4 accent-[#10B981]"
+                className="h-4 w-4 accent-[#17A296]"
               />
               {option.label}
             </label>
@@ -124,7 +124,7 @@ export function FilterContent({ filters, onChange, onReset }) {
       </fieldset>
 
       <fieldset className="mb-9">
-        <legend className="mb-4 text-xs font-bold uppercase text-[#6B9080]">{t("explore.filters.languages")}</legend>
+        <legend className="mb-4 text-xs font-bold uppercase text-[#236D64]">{t("explore.filters.languages")}</legend>
 
         <div className="flex flex-wrap gap-2">
           {languages.map(({ label, count }) => (
@@ -140,8 +140,8 @@ export function FilterContent({ filters, onChange, onReset }) {
               }
               className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${
                 filters.language === label
-                  ? "bg-[#09261C] text-[#FFFFFF]"
-                  : "bg-[#EAF4F0] border border-[#DDECE6] text-[#52665E] hover:bg-[#DDECE6] hover:text-[#09261C]"
+                  ? "bg-[#0E6760] text-[#FFFFFF]"
+                  : "bg-[#E6F4F3] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#D0E8E6] hover:text-[#0E6760]"
               }`}
             >
               {label} ({count})
@@ -150,25 +150,25 @@ export function FilterContent({ filters, onChange, onReset }) {
         </div>
       </fieldset>
 
-      <label className="mb-8 flex cursor-pointer items-center gap-3 text-sm text-[#111C18] font-medium">
+      <label className="mb-8 flex cursor-pointer items-center gap-3 text-sm text-[#0A2E2C] font-medium">
         <input
           type="checkbox"
           checked={filters.highRating}
           onChange={(event) =>
             onChange({ ...filters, highRating: event.target.checked })
           }
-          className="h-4 w-4 accent-[#10B981]"
+          className="h-4 w-4 accent-[#17A296]"
         />
         {t("explore.filters.highRating")}
       </label>
 
-      <div className="rounded-2xl bg-[#EAF4F0] border border-[#DDECE6] p-4">
-        <h3 className="flex items-center gap-2 text-sm font-bold text-[#09261C]">
-          <MonitorCheck size={18} className="text-[#10B981]" />
+      <div className="rounded-2xl bg-[#E6F4F3] border border-[#D0E8E6] p-4">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-[#0E6760]">
+          <MonitorCheck size={18} className="text-[#17A296]" />
           {t("explore.filters.marginaliaSync")}
         </h3>
 
-        <p className="mt-3 text-sm leading-6 text-[#52665E]">
+        <p className="mt-3 text-sm leading-6 text-[#4A6B68]">
           {t("explore.filters.marginaliaSyncDesc")}
         </p>
       </div>

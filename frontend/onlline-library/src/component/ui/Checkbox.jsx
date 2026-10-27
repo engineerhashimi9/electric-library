@@ -6,13 +6,13 @@ export const Checkbox = ({ label, id, className = "", ...props }) => {
       <input
         type="checkbox"
         id={id}
-        className="h-4 w-4 rounded border-[#DDECE6] bg-[#FFFFFF] text-[#10B981] accent-[#10B981] focus:ring-[#10B981] cursor-pointer"
+        className="h-4 w-4 rounded border-[#D0E8E6] bg-[#FFFFFF] text-[#17A296] accent-[#17A296] focus:ring-[#17A296] cursor-pointer"
         {...props}
       />
       {label && (
         <label
           htmlFor={id}
-          className="text-xs text-[#111C18] font-medium select-none cursor-pointer"
+          className="text-xs text-[#0A2E2C] font-medium select-none cursor-pointer"
         >
           {label}
         </label>
