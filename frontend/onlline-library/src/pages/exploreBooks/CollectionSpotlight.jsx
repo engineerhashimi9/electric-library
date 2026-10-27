@@ -1,53 +1,52 @@
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-export function CollectionSpotlight({ onExplore }) {
+export default function CollectionSpotlight({ onExplore }) {
+  const { t } = useTranslation();
+
   return (
-    <section className="overflow-hidden rounded-2xl bg-[#f2f1ed] p-5 lg:rounded-[28px] lg:bg-[#1d392d] lg:p-10 lg:shadow-lg">
+    <section className="overflow-hidden rounded-2xl bg-[#09261C] border border-[#163A2E] p-5 lg:rounded-[28px] lg:p-10 lg:shadow-md">
       <div className="flex items-center justify-between gap-4 lg:gap-10">
         <div className="min-w-0 flex-1">
-          <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#a04424] lg:text-[#ffd7c4]">
-            <Sparkles size={18} className="hidden lg:block" />
-            <span className="lg:hidden">Curator&apos;s Salon</span>
-            <span className="hidden lg:inline">Archival Spotlight</span>
+          <p className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-[#10B981]">
+            <Sparkles size={18} className="text-[#10B981] hidden lg:block" />
+            <span className="lg:hidden">{t("explore.spotlight.eyebrowMobile")}</span>
+            <span className="hidden lg:inline">{t("explore.spotlight.eyebrow")}</span>
           </p>
 
-          <h2 className="font-editorial text-xl font-semibold leading-tight text-[#08271d] sm:text-2xl lg:text-4xl lg:text-white">
-            <span className="hidden lg:inline">Curator’s Salon: </span>
-            Fall Translation Series
+          <h2 className="text-xl font-bold leading-tight text-[#FFFFFF] sm:text-2xl lg:text-4xl">
+            {t("explore.spotlight.title")}
           </h2>
 
-          <p className="mt-3 text-xs leading-6 text-[#555c57] sm:text-sm lg:mt-5 lg:max-w-[850px] lg:text-base lg:leading-8 lg:text-[#94afa1]">
+          <p className="mt-3 text-xs leading-6 text-[#A3C1B5] sm:text-sm lg:mt-5 lg:max-w-[850px] lg:text-base lg:leading-8">
             <span className="lg:hidden">
-              Seven profound philosophical essays translated into English for
-              the modern reader.
+              {t("explore.spotlight.descMobile")}
             </span>
             <span className="hidden lg:inline">
-              Ten newly transcribed folios translated directly from medieval
-              Catalan and High Renaissance Italian dialects, illuminated with
-              critical apparatus by our Cambridge scholars.
+              {t("explore.spotlight.desc")}
             </span>
           </p>
 
           <button
             onClick={onExplore}
-            className={` mt-4 px-3 py-2 text-xs sm:text-sm lg:hidden`}
+            className="mt-4 flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-[#10B981] hover:text-[#FFFFFF] sm:text-sm lg:hidden transition-colors"
           >
-            Explore Series
-            <ArrowRight size={17} />
+            {t("explore.spotlight.ctaMobile")}
+            <ArrowRight size={17} className="rtl:rotate-180" />
           </button>
         </div>
 
         <img
           src="/images/collection.jpg"
           alt="A collection of antique books"
-          className="h-28 w-20 shrink-0 rounded-xl object-cover shadow-md sm:h-36 sm:w-24 lg:hidden"
+          className="h-28 w-20 shrink-0 rounded-xl object-cover shadow-md sm:h-36 sm:w-24 border border-[#163A2E] lg:hidden"
         />
 
         <button
           onClick={onExplore}
-          className="hidden shrink-0 rounded-xl bg-[#a04424] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#8f3a1f] lg:block"
+          className="hidden shrink-0 rounded-xl bg-[#10B981] hover:bg-[#FFFFFF] hover:text-[#09261C] px-6 py-4 text-sm font-bold text-[#FFFFFF] transition-colors lg:block"
         >
-          Explore Collection
+          {t("explore.spotlight.cta")}
         </button>
       </div>
     </section>

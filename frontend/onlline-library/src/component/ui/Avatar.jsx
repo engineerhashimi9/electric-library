@@ -1,18 +1,40 @@
 import { useState } from "react";
 
+const getInitials = (name) => {
+  if (!name || typeof name !== "string") return "A";
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+};
 
-
-const initials = (name) => name.split(" ").map((w) => w[0]).slice(0, 2).join("");
-
-// اگر عکس لود نشد، حروف اول اسم نمایش داده می‌شود
 export default function Avatar({ name, photo, className = "" }) {
   const [failed, setFailed] = useState(false);
-  return failed ? (
-    <span className={`flex items-center justify-center bg-[#eae8e5] font-semibold text-[#07241a]  ${className}`}>
-      {initials(name)}
-    </span>
-  ) : (
-    // <img src={img(photo)} alt={name} onError={() => setFailed(true)} className={`object-cover ${className}`} />
-    ""
+  const src = photo
+    ? photo.startsWith("/") || photo.startsWith("http")
+      ? photo
+      : `/${photo}`
+    : "";
+
+  if (failed || !src) {
+    return (
+      <span
+        className={`flex items-center justify-center bg-[#EAF4F0] border border-[#DDECE6] font-bold text-[#09261C] ${className}`}
+      >
+        {getInitials(name)}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={typeof name === "string" ? name : "Avatar"}
+      onError={() => setFailed(true)}
+      className={`object-cover ${className}`}
+    />
   );
 }

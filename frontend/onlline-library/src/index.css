@@ -1,34 +1,78 @@
-@import url("https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 :root {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  color: #232723;
-  background: #faf9f6;
+  font-family: "Manrope", "Vazirmatn", sans-serif;
+  color: #111C18;
+  background-color: #F6FBF9;
+
+  /* Botanical Green & Sage Design System */
+  --color-mint-whisper: #F6FBF9;
+  --color-sage-tint: #EAF4F0;
+  --color-card-surface: #FFFFFF;
+  --color-deep-forest: #09261C;
+  --color-emerald: #10B981;
+  --color-sage-green: #6B9080;
+  --color-charcoal: #111C18;
+  --color-slate-sage: #52665E;
+  --color-border-sage: #DDECE6;
+  --color-card-border: #E2EFEA;
+  --color-badge-text: #0D5C46;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+[dir="rtl"],
+[dir="rtl"] body,
+[dir="rtl"] button,
+[dir="rtl"] select,
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  font-family: "Vazirmatn", "Manrope", sans-serif;
+}
+
+@theme {
+  --font-sans: "Manrope", sans-serif;
+  --font-serif: "Manrope", sans-serif;
+  --color-mint-whisper: #F6FBF9;
+  --color-sage-tint: #EAF4F0;
+  --color-card-surface: #FFFFFF;
+  --color-deep-forest: #09261C;
+  --color-emerald: #10B981;
+  --color-sage-green: #6B9080;
+  --color-charcoal: #111C18;
+  --color-slate-sage: #52665E;
+  --color-border-sage: #DDECE6;
+  --color-card-border: #E2EFEA;
+  --color-badge-text: #0D5C46;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: hidden;
+  background-color: #F6FBF9;
+  color: #111C18;
+  font-family: "Manrope", sans-serif;
 }
 
 button,
 select,
 input {
-  font: inherit;
+  font-family: "Manrope", sans-serif;
 }
 
 button,
-a,
 input {
   -webkit-tap-highlight-color: transparent;
 }
@@ -40,15 +84,15 @@ select {
 
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #a04424;
   outline-offset: 4px;
 }
 
-.font-editorial {
-  font-family: "Newsreader", Georgia, serif;
+.font-editorial,
+.font-serif {
+  font-family: "Manrope", sans-serif !important;
 }
 
 ::selection {
-  background: #c8eadc;
-  color: #08271d;
+  background: #10B981;
+  color: #FFFFFF;
 }

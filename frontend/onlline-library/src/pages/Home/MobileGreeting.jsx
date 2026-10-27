@@ -1,16 +1,20 @@
-export default function MobileGreeting({ name, streakDays }) {
+import { useTranslation } from "react-i18next";
+
+export default function MobileGreeting({ streakDays = 14 }) {
+  const { t } = useTranslation();
+
   return (
-    <div className="md:hidden space-y-1">
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-2xl text-[#1A202C]">
-          Good evening, {name}
+    <div className="md:hidden space-y-2">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-[#09261C] leading-snug">
+          {t("home.hero.title")}
         </h1>
-        <span className="px-2.5 py-1 bg-[#FDF0EC] text-[#C86D51] text-[11px] font-medium rounded-full flex items-center gap-1">
-          🔥 {streakDays}-Day Streak
+        <span className="px-2.5 py-1 bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46] text-[10px] sm:text-[11px] font-bold rounded-full flex items-center gap-1 shrink-0">
+          {streakDays ? `${streakDays} 🔥` : t("home.hero.dailyStreak")}
         </span>
       </div>
-      <p className="text-xs text-[#4A5568]">
-        What will inspire your curiosity tonight?
+      <p className="text-xs text-[#52665E] font-medium leading-relaxed">
+        {t("home.hero.description")}
       </p>
     </div>
   );

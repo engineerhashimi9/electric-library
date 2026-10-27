@@ -1,17 +1,20 @@
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import SectionHeading from "@/component/ui/SectionHeading";
 import HonorCard from "./HonorCard";
 import { honors } from "./profile";
 
 export default function HonorsSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-5 lg:space-y-6 lg:pt-4">
       <SectionHeading
         eyebrow="CURATORIAL DISTINCTIONS"
-        title="Patron Badges & Fellowship Honors"
+        title={t("profile.honors.title")}
         right={
-          <a href="#" className="group flex items-center gap-1 text-[13px] font-semibold tracking-[0.39px] text-[#9a4522] transition hover:text-[#7a361a]">
-            View All Guild Achievements (18) <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+          <a href="#" className="group flex items-center gap-1 text-[13px] font-semibold tracking-[0.39px] text-[#10B981] transition hover:text-[#09261C]">
+            {t("profile.honors.viewAll")} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
           </a>
         }
       />

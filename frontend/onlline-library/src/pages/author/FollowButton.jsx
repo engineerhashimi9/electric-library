@@ -1,15 +1,16 @@
 import { Check, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-// variant: default (روی پس‌زمینه روشن) | onDark (روی بنر تیره)
 export default function FollowButton({ following, onToggle, variant = "default", className = "" }) {
-  const styles =
-    variant === "onDark"
-      ? following
-        ? "bg-white/10 text-white ring-1 ring-white/20 hover:bg-white/20"
-        : "bg-white text-[#07241a] hover:bg-[#f5f3f0]"
-      : following
-      ? "bg-[#eae8e5] text-[#07241a] hover:bg-[#e0ddd9]"
-      : "bg-[#07241a] text-white hover:bg-[#1e3a2f]";
+  const { t } = useTranslation();
+
+  const styles = following
+    ? variant === "onDark"
+      ? "bg-[#163A2E] border border-[#163A2E] text-[#FFFFFF] hover:bg-[#DDECE6] hover:text-[#09261C]"
+      : "bg-[#EAF4F0] border border-[#DDECE6] text-[#09261C] hover:bg-[#DDECE6] hover:text-[#09261C]"
+    : variant === "onDark"
+      ? "bg-[#10B981] hover:bg-[#FFFFFF] hover:text-[#09261C] text-[#FFFFFF] font-bold"
+      : "bg-[#10B981] hover:bg-[#09261C] text-[#FFFFFF] font-bold";
 
   return (
     <button
@@ -19,14 +20,14 @@ export default function FollowButton({ following, onToggle, variant = "default",
     >
       {following ? (
         <>
-          <Check className="h-3.5 w-3.5 group-hover/follow:hidden" />
+          <Check className="h-3.5 w-3.5 group-hover/follow:hidden text-[#10B981]" />
           <Plus className="hidden h-3.5 w-3.5 rotate-45 group-hover/follow:block" />
-          <span className="group-hover/follow:hidden">Following</span>
-          <span className="hidden group-hover/follow:inline">Unfollow</span>
+          <span className="group-hover/follow:hidden">{t("authors.followBtn.following")}</span>
+          <span className="hidden group-hover/follow:inline">{t("authors.followBtn.unfollow")}</span>
         </>
       ) : (
         <>
-          <Plus className="h-3.5 w-3.5" /> Follow
+          <Plus className="h-3.5 w-3.5" /> {t("authors.followBtn.follow")}
         </>
       )}
     </button>

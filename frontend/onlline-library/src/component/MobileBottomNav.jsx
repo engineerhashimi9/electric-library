@@ -1,40 +1,50 @@
-import { Search, Bookmark, BookOpen, Heart } from "lucide-react";
+import { Search, Bookmark, BookOpen, Heart, User } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-const items = [
-  { icon: BookOpen, label: "Home", active: true },
-  { icon: Search, label: "Explore" },
-  { icon: Bookmark, label: "Library" },
-  { icon: Heart, label: "Favorites" },
-];
-
-// بخش ۸: نوار پایین — فقط موبایل
 export default function MobileBottomNav() {
+  const { t } = useTranslation();
+
+  const items = [
+    { icon: BookOpen, label: t("bottomNav.home"), path: "/" },
+    { icon: Search, label: t("bottomNav.explore"), path: "/explorebooks" },
+    { icon: Bookmark, label: t("bottomNav.library"), path: "/library" },
+    { icon: Heart, label: t("bottomNav.favorites"), path: "/favorite" },
+    { icon: User, label: t("bottomNav.profile"), path: "/profile" },
+  ];
+
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#FBF9F5] border-t border-[#E2E8F0] px-6 py-2 flex justify-between items-center z-50">
-      {items.map(({ icon: Icon, label, active }) =>
-        active ? (
-          <button
-            key={label}
-            className="flex flex-col items-center text-[#1A362B]"
-          >
-            <Icon size={20} />
-            <span className="text-[10px] font-semibold mt-1">{label}</span>
-            <span className="w-1 h-1 bg-[#C86D51] rounded-full mt-0.5"></span>
-          </button>
-        ) : (
-          <button
-            key={label}
-            className="flex flex-col items-center text-gray-400 hover:text-[#1A362B]"
-          >
-            <Icon size={20} />
-            <span className="text-[10px] mt-1">{label}</span>
-          </button>
-        ),
-      )}
-      <button className="flex flex-col items-center text-gray-400 hover:text-[#1A362B]">
-        <div className="w-5 h-5 rounded-full bg-gray-300 border border-gray-400" />
-        <span className="text-[10px] mt-1">Profile</span>
-      </button>
-    </div>
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#F6FBF9]/95 backdrop-blur-md border-t border-[#DDECE6] px-2 sm:px-6 py-2 flex justify-around items-center z-50">
+      {items.map(({ icon: Icon, label, path }) => (
+        <NavLink
+          key={path}
+          to={path}
+          end={path === "/"}
+          className={({ isActive }) =>
+            `flex flex-col items-center justify-center min-w-[56px] py-0.5 transition-colors ${
+              isActive
+                ? "text-[#09261C]"
+                : "text-[#52665E] hover:text-[#10B981]"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <Icon size={20} />
+              <span
+                className={`text-[10px] mt-1 truncate max-w-[68px] ${
+                  isActive ? "font-bold" : "font-medium"
+                }`}
+              >
+                {label}
+              </span>
+              {isActive && (
+                <span className="w-1 h-1 bg-[#10B981] rounded-full mt-0.5" />
+              )}
+            </>
+          )}
+        </NavLink>
+      ))}
+    </nav>
   );
 }

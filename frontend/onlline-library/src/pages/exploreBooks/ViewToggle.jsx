@@ -2,7 +2,7 @@ import { Grid2X2, List } from "lucide-react";
 
 export function ViewToggle({ view, onChange }) {
   return (
-    <div className="inline-flex shrink-0 rounded-xl bg-[#eeede9] p-1">
+    <div className="inline-flex shrink-0 rounded-xl bg-[#FFFFFF] border border-[#DDECE6] p-1">
       {[
         { value: "grid", Icon: Grid2X2 },
         { value: "list", Icon: List },
@@ -14,8 +14,8 @@ export function ViewToggle({ view, onChange }) {
           onClick={() => onChange(value)}
           className={`rounded-lg p-2 transition ${
             view === value
-              ? "bg-white text-[#08271d] shadow-sm"
-              : "text-[#555c57] hover:text-[#08271d]"
+              ? "bg-[#09261C] text-[#FFFFFF] shadow-sm"
+              : "text-[#52665E] hover:text-[#09261C]"
           }`}
         >
           <Icon size={21} />

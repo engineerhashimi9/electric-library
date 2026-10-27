@@ -1,58 +1,53 @@
-// Footer.jsx — React + Tailwind CSS
-// فونت‌ها را در index.html (داخل <head>) اضافه کن:
-// <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=Newsreader:wght@500;600&display=swap" rel="stylesheet">
+import { useTranslation } from "react-i18next";
 
-const columns = [
-  {
-    title: "Curated Archives",
-    links: [
-      "First Editions & Manuscripts",
-      "Classical Philosophy Folios",
-      "19th Century Naturalists",
-      "Illuminated Monographs",
-      "Epistolary Collections",
-    ],
-  },
-  {
-    title: "Reader Utilities",
-    links: [
-      "Marginalia Sync Engine",
-      "BibTeX & Zotero Export",
-      "Typography Stacks & Kerning",
-      "Offline Reading Slates",
-      "Reading Pace Diagnostics",
-    ],
-  },
-  {
-    title: "Guild & Charter",
-    links: [
-      "Scholarly Society Charter",
-      "Academic Peer Review",
-      "Curator Residency Grants",
-      "Public Domain Restorations",
-      "Community Guidelines",
-    ],
-  },
-];
+export default function Footer({ className = "" }) {
+  const { t } = useTranslation();
 
-const legalLinks = [
-  "Archive Rights",
-  "Privacy Policy",
-  "Preservation Colophon",
-];
+  const columns = [
+    {
+      title: t("footer.archives"),
+      links: [
+        t("footer.firstEditions"),
+        t("footer.classicalPhilosophy"),
+        t("footer.naturalists"),
+        t("footer.monographs"),
+        t("footer.epistolary"),
+      ],
+    },
+    {
+      title: t("footer.utilities"),
+      links: [
+        t("footer.marginaliaSync"),
+        t("footer.exportTools"),
+        t("footer.typography"),
+        t("footer.offlineSlates"),
+        t("footer.diagnostics"),
+      ],
+    },
+    {
+      title: t("footer.guild"),
+      links: [
+        t("footer.charter"),
+        t("footer.peerReview"),
+        t("footer.grants"),
+        t("footer.restorations"),
+        t("footer.guidelines"),
+      ],
+    },
+  ];
 
-const serif = "font-['Newsreader',Georgia,serif]";
-const sans = "font-['Plus_Jakarta_Sans',sans-serif]";
+  const legalLinks = [
+    t("footer.rights"),
+    t("footer.privacy"),
+    t("footer.colophon"),
+  ];
 
-export default function Footer({className}) {
   return (
-    <footer className={`${sans} ${className} bg-[#f3f2ee] px-5 py-6 sm:px-12 sm:py-7`}>
+    <footer className={`${className} bg-[#09261C] border-t border-[#163A2E] px-5 py-6 sm:px-12 sm:py-7 text-[#A3C1B5]`}>
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {columns.map((col) => (
           <nav key={col.title} aria-label={col.title}>
-            <h3
-              className={`${serif} mb-3.5 text-[15px] font-semibold text-[#1f4a3a]`}
-            >
+            <h3 className="mb-3.5 text-[15px] font-bold text-[#FFFFFF]">
               {col.title}
             </h3>
             <ul className="grid gap-[7px]">
@@ -60,7 +55,7 @@ export default function Footer({className}) {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-[10.5px] leading-normal text-[#55564f] hover:text-[#1f4a3a] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1f4a3a]"
+                    className="text-[10.5px] leading-normal text-[#A3C1B5] hover:text-[#10B981] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981] transition-colors"
                   >
                     {link}
                   </a>
@@ -71,21 +66,18 @@ export default function Footer({className}) {
         ))}
 
         <div>
-          <h3
-            className={`${serif} mb-3.5 text-[15px] font-semibold text-[#1f4a3a]`}
-          >
-            Legal &amp; Colophon
+          <h3 className="mb-3.5 text-[15px] font-bold text-[#FFFFFF]">
+            {t("footer.legalTitle")}
           </h3>
-          <p className="text-[10.5px] leading-normal text-[#55564f]">
-            Set in Newsreader and Plus Jakarta Sans. Preserved for universal
-            scholarly inquiry under digital perpetual heritage custody.
+          <p className="text-[10.5px] leading-normal text-[#A3C1B5]">
+            {t("footer.legalDesc")}
           </p>
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
             {legalLinks.map((link) => (
               <a
                 key={link}
                 href="#"
-                className="text-[9.5px] font-bold leading-normal text-[#2b2c28] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1f4a3a]"
+                className="text-[9.5px] font-bold leading-normal text-[#A3C1B5] hover:text-[#10B981] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10B981] transition-colors"
               >
                 {link}
               </a>
@@ -94,13 +86,12 @@ export default function Footer({className}) {
         </div>
       </div>
 
-      <div className="mx-auto mt-9 flex max-w-[1200px] flex-col items-start justify-between gap-4 text-[9.5px] text-[#55564f] sm:flex-row sm:items-center">
+      <div className="mx-auto mt-9 flex max-w-[1200px] flex-col items-start justify-between gap-4 text-[9.5px] text-[#A3C1B5]/80 border-t border-[#163A2E] pt-5 sm:flex-row sm:items-center">
         <p>
-          © 2024 Lumina Digital Library Foundation. All scholarly rights
-          reserved.
+          {t("footer.copyright")}
         </p>
-        <p className="text-[8.5px] font-bold tracking-[0.04em] text-[#2b2c28]">
-          VOL. IV • EDITION 2024.11
+        <p className="text-[8.5px] font-bold tracking-[0.04em] text-[#10B981]">
+          {t("footer.edition")}
         </p>
       </div>
     </footer>

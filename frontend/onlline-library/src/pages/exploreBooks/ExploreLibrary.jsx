@@ -1,21 +1,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { books } from "./data";
+import { getLocalized } from "@/utils/langHelper";
 
-import { ActiveFilters } from "./ActiveFilters";
+import ActiveFilters from "./ActiveFilters";
 import { BookCard } from "./BookCard";
-import { CatalogControls } from "./CatalogControls";
-import { CatalogHero } from "./CatalogHero";
-import { CatalogPagination } from "./CatalogPagination";
-import { CollectionSpotlight } from "./CollectionSpotlight";
-import { FilterSidebar } from "./FilterSidebar";
-import { MobileFilterDrawer } from "./MobileFilterDrawer";
+import CatalogControls from "./CatalogControls";
+import CatalogHero from "./CatalogHero";
+import CatalogPagination from "./CatalogPagination";
+import CollectionSpotlight from "./CollectionSpotlight";
+import FilterSidebar from "./FilterSidebar";
+import MobileFilterDrawer from "./MobileFilterDrawer";
 
 function createDefaultFilters() {
   return {
     formats: [],
     availableOnly: false,
     reserveOnly: false,
-    highRating: true,
+    highRating: false,
     length: "",
     language: "",
   };
@@ -53,6 +55,9 @@ function useDesktopLayout() {
 }
 
 export default function ExploreLibrary() {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
   const [query, setQuery] = useState("");
   const [genre, setGenre] = useState("All Genres");
   const [sort, setSort] = useState("popular");
@@ -66,7 +71,6 @@ export default function ExploreLibrary() {
 
   const desktop = useDesktopLayout();
   const searchRef = useRef(null);
-  const headerSearchRef = useRef(null);
 
   const perPage = desktop ? desktopPerPage : 6;
 
@@ -77,25 +81,7 @@ export default function ExploreLibrary() {
   }, [desktop]);
 
   useEffect(() => {
-    function handleShortcut(event) {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-
-        if (desktop && headerSearchRef.current) {
-          headerSearchRef.current.focus();
-        } else {
-          searchRef.current?.focus();
-        }
-      }
-    }
-
-    window.addEventListener("keydown", handleShortcut);
-    return () => window.removeEventListener("keydown", handleShortcut);
-  }, [desktop]);
-
-  useEffect(() => {
     if (!notice) return;
-
     const timeout = window.setTimeout(() => setNotice(""), 4000);
     return () => window.clearTimeout(timeout);
   }, [notice]);
@@ -104,11 +90,14 @@ export default function ExploreLibrary() {
     const search = query.trim().toLowerCase();
 
     const result = books.filter((book) => {
-      // The reference changes some formats between desktop and mobile.
       const format = desktop ? book.format : book.mobileFormat;
-      const rating = desktop ? book.rating : book.mobileRating || book.rating;
+      const rating = desktop ? book.rating : (book.mobileRating || book.rating);
 
-      const searchableText = [book.title, book.author, book.detail, book.genre]
+      const titleStr = typeof book.title === "object" ? `${book.title.en} ${book.title.fa}` : book.title;
+      const authorStr = typeof book.author === "object" ? `${book.author.en} ${book.author.fa}` : book.author;
+      const detailStr = typeof book.detail === "object" ? `${book.detail.en} ${book.detail.fa}` : (book.detail || "");
+
+      const searchableText = [titleStr, authorStr, detailStr, book.genre]
         .join(" ")
         .toLowerCase();
 
@@ -120,7 +109,6 @@ export default function ExploreLibrary() {
         return false;
       }
 
-      // Selecting both circulation options includes either status.
       if (filters.availableOnly && !filters.reserveOnly && !book.available) {
         return false;
       }
@@ -151,19 +139,22 @@ export default function ExploreLibrary() {
 
     if (sort === "rating") {
       result.sort((a, b) => {
-        const aRating = desktop ? a.rating : a.mobileRating || a.rating;
-        const bRating = desktop ? b.rating : b.mobileRating || b.rating;
+        const aRating = desktop ? a.rating : (a.mobileRating || a.rating);
+        const bRating = desktop ? b.rating : (b.mobileRating || b.rating);
         return bRating - aRating;
       });
     }
 
     if (sort === "title") {
-      result.sort((a, b) => a.title.localeCompare(b.title));
+      result.sort((a, b) => {
+        const aTitle = getLocalized(a.title, lang);
+        const bTitle = getLocalized(b.title, lang);
+        return String(aTitle).localeCompare(String(bTitle));
+      });
     }
 
-    // "Most Popular" uses the curated order of the supplied demo records.
     return result;
-  }, [query, genre, filters, sort, desktop]);
+  }, [query, genre, filters, sort, desktop, lang]);
 
   const total = filteredBooks.length;
   const pageCount = Math.max(1, Math.ceil(total / perPage));
@@ -220,14 +211,17 @@ export default function ExploreLibrary() {
   }
 
   function handleBookAction(book, format) {
+    const title = getLocalized(book.title, lang);
     const action = !book.available
-      ? "Reservation"
+      ? (lang === "fa" ? "رزرو" : "Reservation")
       : format === "audio"
-        ? "Audio playback"
-        : "Borrowing";
+        ? (lang === "fa" ? "پخش صوتی" : "Audio playback")
+        : (lang === "fa" ? "امانت گرفتن" : "Borrowing");
 
     setNotice(
-      `${action} for “${book.title}” is a demo action. Connect your library API to enable it.`,
+      lang === "fa"
+        ? `عملیات «${action}» برای «${title}» نمایشی است.`
+        : `${action} for “${title}” is a demo action. Connect your library API to enable it.`,
     );
   }
 
@@ -236,13 +230,14 @@ export default function ExploreLibrary() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#232723]">
+    <div className="min-h-screen bg-[#F6FBF9] text-[#111C18]">
       <main
         id="catalog"
-        className="mx-auto max-w-[1800px] px-5 pb-32 sm:px-8 lg:px-10 lg:pb-12 xl:px-16"
+        className="mx-auto max-w-[1800px] px-4 pb-28 sm:px-6 md:px-8 md:pb-12 lg:px-10 xl:px-16"
       >
         <CatalogHero />
-        <div className="order-1 lg:order-2 lg:mt-12">
+
+        <div className="mt-6 lg:mt-10">
           <CatalogControls
             query={query}
             onQueryChange={updateQuery}
@@ -257,7 +252,7 @@ export default function ExploreLibrary() {
             filterCount={filterCount}
           />
 
-          <div className="mb-4 mt-5 lg:mb-0 lg:mt-8">
+          <div className="mb-4 mt-5 lg:mb-6 lg:mt-8">
             <ActiveFilters
               filters={filters}
               onChange={updateFilters}
@@ -272,10 +267,9 @@ export default function ExploreLibrary() {
             />
           </div>
         </div>
-        {/* Mobile: controls before cards.
-            Desktop: controls below cards, as in the reference. */}
+
         <div className="flex flex-col">
-          <div className="order-2 grid items-stretch gap-7 lg:order-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[320px_minmax(0,1fr)] xl:gap-8">
+          <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)] xl:gap-8">
             <FilterSidebar
               filters={filters}
               onChange={updateFilters}
@@ -285,10 +279,10 @@ export default function ExploreLibrary() {
             <section aria-label="Library books" className="min-w-0">
               {visibleBooks.length > 0 ? (
                 <div
-                  className={`grid gap-3 sm:gap-5 lg:gap-x-4 lg:gap-y-7 ${
+                  className={`grid gap-3 sm:gap-5 lg:gap-x-5 lg:gap-y-7 ${
                     view === "grid"
-                      ? "grid-cols-1 lg:grid-cols-3 xl:grid-cols-4"
-                      : "grid-cols-1 xl:grid-cols-2"
+                      ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+                      : "grid-cols-1 md:grid-cols-2"
                   }`}
                 >
                   {visibleBooks.map((book) => (
@@ -303,13 +297,13 @@ export default function ExploreLibrary() {
                   ))}
                 </div>
               ) : (
-                <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-white p-6 text-center shadow-sm">
-                  <h2 className="font-editorial text-2xl text-[#08271d]">
-                    No matching books
+                <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-[#FFFFFF] border border-[#DDECE6] p-6 text-center shadow-sm">
+                  <h2 className="text-2xl font-bold text-[#09261C]">
+                    {t("explore.empty.title")}
                   </h2>
 
-                  <p className="mt-2 text-sm text-[#79817b]">
-                    Try another search or remove some filters.
+                  <p className="mt-2 text-sm text-[#52665E]">
+                    {t("explore.empty.desc")}
                   </p>
 
                   <button
@@ -317,9 +311,9 @@ export default function ExploreLibrary() {
                       updateQuery("");
                       clearFilters();
                     }}
-                    className="mt-5 rounded-xl bg-[#08271d] px-5 py-3 text-sm font-semibold text-white"
+                    className="mt-5 rounded-xl bg-[#10B981] hover:bg-[#09261C] px-5 py-3 text-sm font-bold text-[#FFFFFF] transition-colors shadow-sm"
                   >
-                    Reset Search
+                    {t("explore.empty.resetBtn")}
                   </button>
                 </div>
               )}
@@ -327,16 +321,20 @@ export default function ExploreLibrary() {
           </div>
         </div>
 
-        <div className="mt-6 lg:mt-5">
+        <div className="mt-8 lg:mt-10">
           <CollectionSpotlight
             onExplore={() => {
               updateGenre("Philosophy");
-              setNotice("Showing the philosophy collection.");
+              setNotice(
+                lang === "fa"
+                  ? "مجموعه فلسفه نمایش داده شد."
+                  : "Showing the philosophy collection.",
+              );
             }}
           />
         </div>
 
-        <div className="mt-5 lg:mt-7">
+        <div className="mt-6 lg:mt-8">
           <CatalogPagination
             page={currentPage}
             pageCount={pageCount}
@@ -364,7 +362,7 @@ export default function ExploreLibrary() {
       {notice && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-xl bg-[#232723] px-5 py-4 text-sm text-white shadow-xl lg:bottom-6"
+          className="fixed bottom-24 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-xl bg-[#09261C] border border-[#163A2E] px-5 py-4 text-sm font-semibold text-[#FFFFFF] shadow-xl lg:bottom-6"
         >
           {notice}
         </div>

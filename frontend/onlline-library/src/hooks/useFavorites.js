@@ -31,7 +31,13 @@ export default function useFavorites() {
     if (sort === "Recently Added") list = [...list].sort((a, b) => b.addedAt - a.addedAt);
     if (sort === "Highest Rated") list = [...list].sort((a, b) => b.rating - a.rating);
     if (sort === "Most Reviewed") list = [...list].sort((a, b) => b.votes - a.votes);
-    if (sort === "Title A–Z") list = [...list].sort((a, b) => a.title.localeCompare(b.title));
+    if (sort === "Title A–Z") {
+      list = [...list].sort((a, b) => {
+        const aTitle = typeof a.title === "object" ? (a.title.fa || a.title.en) : a.title;
+        const bTitle = typeof b.title === "object" ? (b.title.fa || b.title.en) : b.title;
+        return String(aTitle).localeCompare(String(bTitle));
+      });
+    }
     return list;
   }, [items, category, sort]);
 
@@ -43,8 +49,10 @@ export default function useFavorites() {
     const index = items.findIndex((b) => b.id === id);
     if (index === -1) return;
     setLastRemoved({ item: items[index], index });
+    const removedItem = items[index];
     setItems((list) => list.filter((b) => b.id !== id));
-    notify(`Removed “${items[index].title}” from favorites`, true);
+    const title = typeof removedItem.title === "object" ? (removedItem.title.fa || removedItem.title.en) : removedItem.title;
+    notify(`Removed “${title}” from favorites`, true);
   };
 
   const undoRemove = () => {

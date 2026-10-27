@@ -1,0 +1,412 @@
+{
+  "nav": {
+    "brand": "Bargin",
+    "home": "Home",
+    "explore": "Explore Books",
+    "library": "My Library",
+    "favorite": "Favorites",
+    "authors": "Authors",
+    "profile": "Profile",
+    "searchPlaceholder": "Search titles, authors...",
+    "userName": "Clara Jensen",
+    "userRole": "Patron Fellow",
+    "notifications": "Notifications",
+    "language": "Language",
+    "langEn": "English",
+    "langFa": "دری"
+  },
+  "bottomNav": {
+    "home": "Home",
+    "explore": "Explore",
+    "library": "Library",
+    "favorites": "Favorites",
+    "profile": "Profile"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Curated Digital Sanctuary",
+      "title": "A Sanctuary for Discerning Readers & Scholarly Minds",
+      "description": "Immerse yourself in rare manuscripts, scholarly monographs, and illuminated editions preserved with archival fidelity.",
+      "exploreBtn": "Explore Library",
+      "readingListBtn": "View Reading List",
+      "statWorks": "Rare Folios",
+      "statAuthors": "Canon Authors",
+      "statScholars": "Active Scholars",
+      "dailyStreak": "14-Day Reading Streak Active"
+    },
+    "spotlight": {
+      "badge": "CURATOR'S SPOTLIGHT",
+      "title": "Speculative Realism & Modernist Thought",
+      "desc": "A foundational examination of human consciousness through late 20th century philosophy.",
+      "borrowBtn": "Borrow Edition",
+      "readBtn": "Read Now"
+    },
+    "popular": {
+      "eyebrow": "CURATED CIRCULATION",
+      "title": "Popular Editions This Season",
+      "subtitle": "Most requested volumes across our research federation.",
+      "viewAll": "View full catalog"
+    },
+    "themes": {
+      "eyebrow": "THEMATIC CODEX",
+      "title": "Browse by Scholarly Discipline",
+      "subtitle": "Discover interconnected domains of thought.",
+      "viewAll": "All Disciplines",
+      "volumes": "volumes"
+    },
+    "curators": {
+      "eyebrow": "CANON FELLOWSHIP",
+      "title": "Master Authors & Curators",
+      "subtitle": "Voices that shaped modern and classical thought.",
+      "viewAll": "All Authors"
+    },
+    "benefits": {
+      "eyebrow": "ENDOWED SCHOLAR ADVANTAGE",
+      "title": "Archival Access Built for Lifelong Learning",
+      "desc": "Experience seamless synchronization across slate devices, lossless typography rendering, and shared scholarly marginalia.",
+      "b1Title": "Synchronized Marginalia",
+      "b1Desc": "Annotations persist across physical e-ink slates and web folios in real time.",
+      "b2Title": "Rare Manuscript Scans",
+      "b2Desc": "Ultra-high resolution facsimiles direct from European library archives.",
+      "b3Title": "Institutional Borrowing",
+      "b3Desc": "Inter-federation lending privileges across Oxford and Bodleian holdings.",
+      "cta": "Request Scholarly Access"
+    }
+  },
+  "explore": {
+    "hero": {
+      "eyebrow": "UNIVERSAL ARCHIVE",
+      "title": "Curated Archival Catalog",
+      "desc": "Explore 40,000+ preserved volumes, peer-reviewed monographs, and rare translations.",
+      "badge1": "Curated Editions",
+      "badge2": "Rare Folios",
+      "badge3": "Scholarly Translations"
+    },
+    "search": {
+      "placeholder": "Search titles, authors, translators, or subject codex...",
+      "filterBtn": "Filters"
+    },
+    "filters": {
+      "title": "Catalog Filters",
+      "reset": "Reset All",
+      "active": "ACTIVE:",
+      "clearAll": "Clear All",
+      "format": "Format",
+      "circulation": "Vault Circulation",
+      "available": "Immediate Access",
+      "reserve": "Reserve Queue",
+      "length": "Volume Length",
+      "allLengths": "All lengths",
+      "short": "Short (< 200 pp)",
+      "standard": "Standard (200–400 pp)",
+      "epic": "Epic Tomes (400+ pp)",
+      "languages": "Languages",
+      "highRating": "Rating 4.5+",
+      "marginaliaSync": "Offline Marginalia Sync",
+      "marginaliaSyncDesc": "Downloaded manuscripts preserve handwritten annotations across e-ink slates and desktop folios.",
+      "showResults": "Show Results"
+    },
+    "sort": {
+      "label": "Sort books",
+      "popular": "Most Popular",
+      "rating": "Highest Rated",
+      "title": "Title A–Z"
+    },
+    "showing": "Showing {{start}}–{{end}} of {{total}} curated titles",
+    "showingMobile": "Showing {{total}} curated titles",
+    "spotlight": {
+      "eyebrow": "Archival Spotlight",
+      "eyebrowMobile": "Curator's Salon",
+      "title": "Fall Translation Series",
+      "desc": "Ten newly transcribed folios translated directly from medieval Catalan and High Renaissance Italian dialects, illuminated with critical apparatus by our Cambridge scholars.",
+      "descMobile": "Seven profound philosophical essays translated into English for the modern reader.",
+      "cta": "Explore Collection",
+      "ctaMobile": "Explore Series"
+    },
+    "empty": {
+      "title": "No volumes found",
+      "desc": "Try loosening your search terms or resetting the selected filters.",
+      "resetBtn": "Reset all filters"
+    },
+    "perPage": "Per page:"
+  },
+  "library": {
+    "header": {
+      "tierBadge": "PATRON CODEX NO. 4082 • ENDOWED SCHOLAR TIER",
+      "title": "My Library & Archive",
+      "desc": "Manage your active digital volumes, synchronized scholarly marginalia, and long-term reading tenure across the Lumina federation.",
+      "searchPlaceholder": "Filter title, author, or shelf...",
+      "ledgerBtn": "Ledger"
+    },
+    "stats": {
+      "journey": "2024 ARCHIVAL JOURNEY",
+      "journeyGoal": "Goal 35",
+      "journeyUnit": "/ 35 titles (80%)",
+      "journeyPace": "2 books ahead of cadence",
+      "streak": "DIALECTICAL STREAK",
+      "streakUnit": "Consecutive Days",
+      "historicalApex": "Historical Apex",
+      "historicalApexVal": "31 Days",
+      "immersion": "ARCHIVAL IMMERSION",
+      "immersionUnit": "Hours Total",
+      "immersionAccrued": "+18.5h accrued this month",
+      "folios": "ENGAGED FOLIOS",
+      "foliosUnit": "Pages",
+      "marginaliaInscribed": "Marginalia Inscribed",
+      "marginaliaInscribedVal": "246 Glosses"
+    },
+    "tabs": {
+      "reading": "Currently Reading",
+      "completed": "Completed Archive",
+      "wishlist": "Want to Read",
+      "annotations": "Highlights & Marginalia",
+      "history": "Loan & Transfer History"
+    },
+    "actions": {
+      "resume": "Resume Reading",
+      "listen": "Listen Now",
+      "completed": "Completed Recently",
+      "archiveIndex": "Archive index",
+      "viewShelf": "View Shelf",
+      "exportNotes": "Export annotations as Markdown or Obsidian Vault",
+      "patronAnnotation": "Patron Annotation:",
+      "edit": "Edit",
+      "synchronized": "{{count}} Synchronized",
+      "wishlistTitle": "16 Volumes on Scholar's Wishlist",
+      "wishlistDesc": "Includes upcoming annotated editions of Borges and Calvino."
+    }
+  },
+  "favorites": {
+    "hero": {
+      "badge": "ARCHIVE REPOSITORY • SHELF VI",
+      "badgeMobile": "ARCHIVE REPOSITORY",
+      "title": "Curated Favorites",
+      "desc": "{{total}} bookmarked editions and rare manuscripts saved in your private sanctuary."
+    },
+    "actions": {
+      "previewEmpty": "Preview Empty State",
+      "exitEmpty": "Exit Empty Preview",
+      "share": "Share Shelf",
+      "export": "Export Citations",
+      "newShelf": "+ Create Custom Shelf",
+      "newShelfMobile": "New Shelf"
+    },
+    "toolbar": {
+      "savedWorks": "Saved Works",
+      "worksCataloged": "{{total}} Works Cataloged",
+      "synced": "Synchronized with Oxford Repository",
+      "sortBy": "SORT BY:",
+      "toggleEmpty": "Toggle Empty State"
+    },
+    "sort": {
+      "recent": "Recently Added",
+      "rating": "Highest Rated",
+      "reviews": "Most Reviewed",
+      "title": "Title A–Z"
+    },
+    "quote": {
+      "eyebrow": "Favorited Quotation",
+      "text": "“We think we tell stories, but stories often tell us.”",
+      "author": "Italo Calvino",
+      "source": "Marginalia Entry from Invisible Cities, Vol. II",
+      "syncLabel": "SANCTUARY SYNC",
+      "syncDesc": "3 Saved Marginalia Excerpts",
+      "cta": "View Highlights"
+    },
+    "empty": {
+      "title": "Your sanctuary is empty",
+      "desc": "Bookmark editions and manuscripts from the catalog and they will be preserved here, synchronized across your devices.",
+      "exploreBtn": "Explore Books",
+      "exitPreview": "Exit preview"
+    },
+    "pagination": {
+      "showing": "Showing {{from}} – {{to}} of {{total}} bookmarked works"
+    }
+  },
+  "authors": {
+    "hero": {
+      "badge": "Scholarship Retrospectives • Canon of Authors",
+      "title": "Master Authors & Curators",
+      "desc": "Follow the voices behind the canon — from modernist pioneers to Persian classics — and receive new folios and annotated editions as they join the archive.",
+      "patronsArchived": "{{total}} Patrons Archived",
+      "following": "Following {{count}}"
+    },
+    "searchPlaceholder": "Search authors by name, discipline, country...",
+    "toolbar": {
+      "showing": "Showing {{shown}} of {{total}} authors",
+      "cataloged": "{{total}} Authors Cataloged",
+      "showingPage": "Showing {{shown}} on this page",
+      "region": "REGION:",
+      "sortBy": "SORT BY:"
+    },
+    "regions": {
+      "all": "All Regions",
+      "latin": "Latin America",
+      "europe": "Western Europe",
+      "middleEast": "Middle East & Persia",
+      "asia": "East Asia",
+      "northAmerica": "North America"
+    },
+    "featured": {
+      "eyebrow": "Most Followed This Season",
+      "preserved": "{{works}} works preserved",
+      "followers": "{{count}} followers",
+      "explore": "Explore Canon"
+    },
+    "card": {
+      "works": "Works",
+      "followers": "Followers",
+      "explore": "Explore Canon"
+    },
+    "followBtn": {
+      "follow": "Follow",
+      "following": "Following",
+      "unfollow": "Unfollow"
+    },
+    "empty": {
+      "title": "No authors match your search",
+      "desc": "Try a different name or clear the active filters.",
+      "reset": "Reset filters"
+    },
+    "pagination": {
+      "showing": "Showing {{from}} – {{to}} of {{total}} authors"
+    }
+  },
+  "profile": {
+    "header": {
+      "dossier": "Curatorial Profile Dossier",
+      "sync": "Archive Online Sync",
+      "lastArchived": "Last archived: {{time}}"
+    },
+    "hero": {
+      "tier": "ENDOWED SCHOLAR TIER",
+      "edit": "Edit Profile",
+      "settings": "Account Settings",
+      "export": "Export Scholarly Dossier"
+    },
+    "stats": {
+      "time": "CUMULATIVE TIME",
+      "timeUnit": "hrs",
+      "volumes": "VOLUMES READ",
+      "volumesUnit": "vols",
+      "streak": "ACTIVE STREAK",
+      "streakUnit": "days",
+      "notes": "MARGINALIA & NOTES",
+      "notesUnit": "notes"
+    },
+    "velocity": {
+      "eyebrow": "READING VELOCITY",
+      "title": "Pages Ingested Over Time",
+      "peakWindow": "PEAK READING WINDOW",
+      "ratio": "Format Ingestion Ratio"
+    },
+    "thematic": {
+      "eyebrow": "CANON AFFINITY",
+      "title": "Thematic Distribution",
+      "diversityIndex": "DIVERSITY INDEX",
+      "diversityVal": "0.86 / 1.0 (High Depth)"
+    },
+    "honors": {
+      "eyebrow": "CURATORIAL DISTINCTIONS",
+      "title": "Patron Badges & Fellowship Honors",
+      "viewAll": "View All Guild Achievements (18)",
+      "toGo": "{{count}} to go"
+    },
+    "settings": {
+      "eyebrow": "CUSTODIANSHIP & SUBSCRIPTION",
+      "title": "Archival Storage & Member Privileges",
+      "activeStatus": "Active Patronage Status",
+      "storageTitle": "Offline Folio Storage",
+      "storageCached": "Cached Reading Volumes",
+      "storageDesc": "42 books available offline with annotated vector margins.",
+      "autoSync": "Marginalia Cloud Auto-Sync",
+      "autoSyncDesc": "Real-time sync to Oxford Vault",
+      "purge": "Purge Local Cached Data (Non-annotated)",
+      "membershipTitle": "Membership & Grant",
+      "tierGrade": "TIER GRADE",
+      "subsidized": "Subsidized",
+      "grantDesc": "Standard $12.00/mo fee sponsored via University Bodleian Library Research Grant #BO-7719.",
+      "review": "Next Annual Review:",
+      "reviewDate": "October 14, 2025",
+      "manageBilling": "Manage Fellowship Billing",
+      "privacyTitle": "Privacy & Scholarly Sharing",
+      "charter": "Review Lumina Institutional Custody Charter"
+    },
+    "modal": {
+      "title": "Edit Profile",
+      "nameLabel": "Display name",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "auth": {
+    "desk": "MEMBER ACCESS Desk",
+    "welcome": "Welcome back to your sanctuary",
+    "desc": "Sign in to access your synchronized library, personal marginalia, and curated reading shelves.",
+    "cloudActive": "Archival Cloud Active",
+    "cloudDesc": "Last session marginalia saved from your Cambridge folio.",
+    "emailLabel": "Email or Lumina Patron ID",
+    "passLabel": "Secret Passphrase",
+    "forgotKey": "Forgot key?",
+    "keepActive": "Keep reading session active",
+    "submit": "Enter Library",
+    "orContinue": "or continue with",
+    "sso": "University & National Library SSO",
+    "google": "Continue with Google",
+    "apple": "Continue with Apple ID",
+    "quote": "\"A library is not a luxury, but one of the necessities of life.\"",
+    "quoteAuthor": "— Henry Ward Beecher",
+    "newMember": "New to the fellowship?",
+    "request": "Request Membership",
+    "encryption": "Protected by Lumina Archival Encryption",
+    "terms": "Privacy & Terms"
+  },
+  "bookCard": {
+    "ebook": "E-BOOK",
+    "audio": "AUDIO",
+    "hardcover": "HARDCOVER",
+    "borrow": "Borrow",
+    "reserve": "Reserve Copy",
+    "listen": "Listen Now",
+    "reserveShort": "Reserve",
+    "listenShort": "Listen",
+    "available": "Available",
+    "onHold": "{{count}} on hold",
+    "reviews": "reviews"
+  },
+  "common": {
+    "undo": "Undo",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "footer": {
+    "archives": "Curated Archives",
+    "firstEditions": "First Editions & Manuscripts",
+    "classicalPhilosophy": "Classical Philosophy Folios",
+    "naturalists": "19th Century Naturalists",
+    "monographs": "Illuminated Monographs",
+    "epistolary": "Epistolary Collections",
+    "utilities": "Reader Utilities",
+    "marginaliaSync": "Marginalia Sync Engine",
+    "exportTools": "BibTeX & Zotero Export",
+    "typography": "Typography Stacks & Kerning",
+    "offlineSlates": "Offline Reading Slates",
+    "diagnostics": "Reading Pace Diagnostics",
+    "guild": "Guild & Charter",
+    "charter": "Scholarly Society Charter",
+    "peerReview": "Academic Peer Review",
+    "grants": "Curator Residency Grants",
+    "restorations": "Public Domain Restorations",
+    "guidelines": "Community Guidelines",
+    "legalTitle": "Legal & Colophon",
+    "legalDesc": "Preserved for universal scholarly inquiry under digital perpetual heritage custody.",
+    "rights": "Archive Rights",
+    "privacy": "Privacy Policy",
+    "colophon": "Preservation Colophon",
+    "copyright": "© 2024 Lumina Digital Library Foundation. All scholarly rights reserved.",
+    "edition": "VOL. IV • EDITION 2024.11"
+  }
+}

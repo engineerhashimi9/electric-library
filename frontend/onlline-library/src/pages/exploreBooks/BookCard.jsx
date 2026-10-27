@@ -1,20 +1,43 @@
-import { ArrowRight, Bookmark, BookOpen, BookOpenCheck, Clock3, Headphones, Heart, PlayCircle, Star } from "lucide-react";
+import {
+  ArrowRight,
+  Bookmark,
+  BookOpen,
+  BookOpenCheck,
+  Clock3,
+  Headphones,
+  Heart,
+  PlayCircle,
+  Star,
+} from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { getLocalized } from "../../utils/langHelper";
 
 export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
   const [imageFailed, setImageFailed] = useState(false);
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
-  const desktopLabel = {
-    ebook: "E-BOOK",
-    audio: "AUDIO",
-    hardcover: "HARDCOVER",
-  }[book.format];
+  const localizedTitle = getLocalized(book.title, lang);
+  const localizedAuthor = getLocalized(book.author, lang);
+  const localizedMobileTitle = getLocalized(
+    book.mobileTitle || book.title,
+    lang
+  );
 
-  const mobileLabel = {
-    ebook: "E-BOOK",
-    audio: "AUDIOBOOK",
-    hardcover: "HARDCOVER",
-  }[book.mobileFormat];
+  const desktopLabel =
+    {
+      ebook: t("bookCard.ebook"),
+      audio: t("bookCard.audio"),
+      hardcover: t("bookCard.hardcover"),
+    }[book.format] || book.format;
+
+  const mobileLabel =
+    {
+      ebook: t("bookCard.ebook"),
+      audio: t("bookCard.audio"),
+      hardcover: t("bookCard.hardcover"),
+    }[book.mobileFormat] || book.mobileFormat;
 
   const ActionIcon = !book.available
     ? Clock3
@@ -23,33 +46,35 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
       : BookOpenCheck;
 
   const desktopAction = !book.available
-    ? "Reserve Copy"
+    ? t("bookCard.reserve")
     : book.format === "audio"
-      ? "Listen Now"
-      : "Borrow";
+      ? t("bookCard.listen")
+      : t("bookCard.borrow");
 
   const mobileAction = !book.available
-    ? "Reserve"
+    ? t("bookCard.reserveShort")
     : book.mobileFormat === "audio"
-      ? "Listen"
-      : "Borrow";
+      ? t("bookCard.listenShort")
+      : t("bookCard.borrow");
 
   return (
     <article
-      className={`flex max-w-60 rounded-2xl bg-white p-3 shadow-sm transition hover:shadow-md sm:p-4 lg:rounded-3xl ${
-        view === "list" ? "flex-row gap-4" : "h-full flex-col"
+      className={`group flex w-full rounded-2xl bg-[#FFFFFF] border border-[#E2EFEA] hover:border-[#10B981] hover:-translate-y-1 hover:shadow-lg p-2.5 sm:p-4 shadow-sm transition-all duration-300 lg:rounded-3xl ${
+        view === "list" ? "flex-row gap-3 sm:gap-4 items-stretch" : "h-full flex-col"
       }`}
     >
       <div
-        className={`relative shrink-0 overflow-hidden rounded-xl bg-[#eeede7] ${
-          view === "list" ? "w-[32%] max-w-[150px]" : "w-full"
+        className={`relative shrink-0 overflow-hidden rounded-xl bg-[#EAF4F0] border border-[#DDECE6] ${
+          view === "list"
+            ? "w-28 sm:w-36 md:w-40"
+            : "w-full"
         }`}
       >
         {imageFailed ? (
-          <div className="flex aspect-[2/3] flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#dbe4dc] to-[#f1eee4] p-4 text-center">
-            <BookOpen size={32} className="text-[#1d392d]" />
-            <span className="font-editorial text-lg text-[#08271d]">
-              {book.title}
+          <div className="flex aspect-[2/3] h-full w-full flex-col items-center justify-center gap-3 bg-[#EAF4F0] p-3 text-center">
+            <BookOpen size={28} className="text-[#6B9080]" />
+            <span className="text-xs sm:text-sm font-bold text-[#09261C] line-clamp-2">
+              {localizedTitle}
             </span>
           </div>
         ) : (
@@ -60,107 +85,108 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
             />
             <img
               src={book.cover}
-              alt={`${book.title} book cover`}
+              alt={`${localizedTitle} book cover`}
               loading="lazy"
               onError={() => setImageFailed(true)}
-              className="aspect-[2/3] w-full object-cover"
+              className="aspect-[2/3] h-full w-full object-cover"
             />
           </picture>
         )}
-
-        <span
-          className={`absolute left-2 top-2 rounded-md px-2 py-2 text-[9px] font-medium text-white sm:text-xs lg:bg-white lg:py-1.5 lg:text-[#08271d] ${
-            book.mobileFormat === "audio" ? "bg-[#704b25]" : "bg-[#344e43]"
-          }`}
-        >
+        <span className="absolute left-2 top-2 rtl:left-auto rtl:right-2 rounded-md px-2 py-1 text-[9px] font-bold text-[#0D5C46] bg-[#EAF4F0] border border-[#DDECE6] backdrop-blur sm:text-xs max-w-[70%] truncate">
           <span className="lg:hidden">{mobileLabel}</span>
           <span className="hidden lg:inline">{desktopLabel}</span>
         </span>
-
         <button
           onClick={() => onToggleFavorite(book.id)}
           aria-label={
             favorite
-              ? `Remove ${book.title} from favorites`
-              : `Add ${book.title} to favorites`
+              ? `Remove ${localizedTitle} from favorites`
+              : `Add ${localizedTitle} to favorites`
           }
           aria-pressed={favorite}
-          className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-[#454b47] shadow-sm sm:h-9 sm:w-9"
+          className="absolute right-2 top-2 rtl:right-auto rtl:left-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] border border-[#DDECE6] text-[#09261C] shadow-sm backdrop-blur sm:h-9 sm:w-9 transition-colors"
         >
           <Heart
-            size={19}
-            className={favorite ? "fill-[#a04424] text-[#a04424]" : ""}
+            size={16}
+            className={
+              favorite
+                ? "fill-[#10B981] text-[#10B981]"
+                : "text-[#52665E] hover:text-[#09261C]"
+            }
           />
         </button>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col pt-3">
-        <div className="mb-2 hidden items-center gap-1.5 text-sm lg:flex">
-          <Star size={15} className="fill-[#ef9b05] text-[#ef9b05]" />
-          <span className="font-semibold">{book.rating}</span>
-          <span className="text-[#79817b]">({book.reviews})</span>
+      <div
+        className={`flex min-w-0 flex-1 flex-col ${
+          view === "list" ? "py-1" : "pt-3"
+        }`}
+      >
+        <div className="mb-1.5 hidden items-center gap-1.5 text-sm lg:flex">
+          <Star size={15} className="fill-[#10B981] text-[#10B981]" />
+          <span className="font-bold text-[#111C18]">{book.rating}</span>
+          <span className="text-[#52665E]">({book.reviews})</span>
         </div>
 
-        <h3 className="font-editorial truncate text-[clamp(1rem,2.7vw,1.4rem)] font-semibold leading-snug text-[#08271d] lg:text-xl">
-          <span className="lg:hidden">{book.mobileTitle || book.title}</span>
-          <span className="hidden lg:inline">{book.title}</span>
+        <h3 className="truncate text-sm sm:text-base font-bold leading-snug text-[#111C18] lg:text-lg">
+          <span className="lg:hidden">{localizedMobileTitle}</span>
+          <span className="hidden lg:inline">{localizedTitle}</span>
         </h3>
 
-        <p className="mt-2 truncate text-xs text-[#536075] sm:text-sm lg:text-[#454b47]">
-          {book.author}
+        <p className="mt-1 truncate text-xs text-[#52665E] font-medium sm:text-sm">
+          {localizedAuthor}
         </p>
 
-        <div className="mt-4 flex items-center gap-1 text-xs sm:text-sm lg:hidden">
-          <Star size={15} className="fill-[#ffad80] text-[#ffad80]" />
-          <span className="font-semibold">
+        <div className="mt-2 flex items-center gap-1 text-xs sm:text-sm lg:hidden">
+          <Star size={13} className="fill-[#10B981] text-[#10B981]" />
+          <span className="font-bold text-[#111C18]">
             {book.mobileRating || book.rating}
           </span>
-          <span className="text-[10px] text-[#79817b] sm:text-xs">
+          <span className="text-[10px] text-[#52665E] sm:text-xs">
             ({book.mobileReviews})
           </span>
         </div>
 
-        <p className="mt-1 hidden min-h-10 text-xs font-semibold leading-5 tracking-wide text-[#79817b] lg:block">
-          {book.duration || `${book.pages} pages`}{" "}
-          <span className="px-1">•</span> {book.detail}
+        <p className="mt-1 hidden min-h-10 text-xs font-medium leading-5 tracking-wide text-[#52665E] lg:block">
+          {book.duration ||
+            (book.pages
+              ? `${book.pages} ${lang === "fa" ? "صفحه" : "pages"}`
+              : "")}{" "}
+          {book.detail && (
+            <>
+              <span className="px-1 text-[#6B9080]">•</span>{" "}
+              {getLocalized(book.detail, lang)}
+            </>
+          )}
         </p>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-6 lg:hidden">
-          <span
-            className={`rounded-full px-3 py-2 text-[10px] font-semibold sm:text-xs ${
-              book.available
-                ? "bg-[#c8eadc] text-[#365247]"
-                : "bg-[#e4e2df] text-[#555c57]"
-            }`}
-          >
-            {book.available ? "Available" : `${book.holds} on hold`}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-1.5 pt-3 lg:hidden">
+          <span className="rounded-full px-2.5 py-1 text-[9px] font-bold bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46] sm:text-xs truncate">
+            {book.available
+              ? t("bookCard.available")
+              : t("bookCard.onHold", { count: book.holds })}
           </span>
-
           <button
             onClick={() => onAction(book, book.mobileFormat)}
-            className={`inline-flex items-center gap-1 text-[10px] font-semibold sm:text-xs ${
-              book.available ? "text-[#08271d]" : "text-[#a04424]"
-            }`}
+            className="inline-flex items-center gap-1 text-[10px] font-bold text-[#09261C] hover:text-[#10B981] sm:text-xs transition-colors shrink-0"
           >
             {mobileAction}
             {!book.available ? (
-              <Bookmark size={15} />
+              <Bookmark size={14} />
             ) : book.mobileFormat === "audio" ? (
-              <PlayCircle size={15} />
+              <PlayCircle size={14} />
             ) : (
-              <ArrowRight size={15} />
+              <ArrowRight size={14} className="rtl:rotate-180" />
             )}
           </button>
         </div>
 
         <button
           onClick={() => onAction(book, book.format)}
-          className={`mt-auto hidden w-full items-center justify-center gap-2 rounded-xl px-2 py-2 text-sm font-semibold transition hover:opacity-90 lg:flex ${
+          className={`mt-auto hidden w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition lg:flex ${
             !book.available
-              ? "bg-[#efeeeb] text-[#08271d]"
-              : book.format === "audio"
-                ? "bg-[#a04424] text-white"
-                : "bg-[#08271d] text-white"
+              ? "bg-[#EAF4F0] border border-[#DDECE6] text-[#09261C] hover:bg-[#DDECE6]"
+              : "bg-[#10B981] text-[#FFFFFF] hover:bg-[#09261C]"
           }`}
         >
           <ActionIcon size={18} />

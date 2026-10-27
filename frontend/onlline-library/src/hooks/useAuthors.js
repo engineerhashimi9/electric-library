@@ -3,6 +3,14 @@ import { authors } from "../pages/author/authors";
 
 export const PER_PAGE = 8;
 
+function extractSearchable(val) {
+  if (!val) return "";
+  if (typeof val === "object") {
+    return `${val.en || ""} ${val.fa || ""}`.toLowerCase();
+  }
+  return String(val).toLowerCase();
+}
+
 export default function useAuthors() {
   const [query, setQueryState] = useState("");
   const [category, setCategoryState] = useState("All Authors");
@@ -34,14 +42,20 @@ export default function useAuthors() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = authors.filter((a) => {
-      const okQuery = !q || [a.name, a.role, a.bio, a.country].some((s) => s.toLowerCase().includes(q));
+      const okQuery = !q || [a.name, a.role, a.bio, a.country].some((s) => extractSearchable(s).includes(q));
       const okCategory = category === "All Authors" || a.categories.includes(category);
       const okRegion = region === "All Regions" || a.region === region;
       return okQuery && okCategory && okRegion;
     });
     if (sort === "Most Works") list = [...list].sort((a, b) => b.works - a.works);
     if (sort === "Most Followed") list = [...list].sort((a, b) => b.followers - a.followers);
-    if (sort === "Name A–Z") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    if (sort === "Name A–Z") {
+      list = [...list].sort((a, b) => {
+        const aName = typeof a.name === "object" ? (a.name.fa || a.name.en) : a.name;
+        const bName = typeof b.name === "object" ? (b.name.fa || b.name.en) : b.name;
+        return String(aName).localeCompare(String(bName));
+      });
+    }
     if (sort === "Birth Year") list = [...list].sort((a, b) => a.born - b.born);
     return list;
   }, [query, category, region, sort]);

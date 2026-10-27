@@ -1,61 +1,68 @@
 import { TrendingUp, Flame, Timer, BookOpen, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import StatCard from "./StatCard";
 import ProgressBar from "@/component/ui/ProgressBar";
 
 const SplitFooter = ({ left, right }) => (
   <div className="flex items-center justify-between text-[11px] tracking-wide">
-    <span className="font-bold text-ink-soft">{left}</span>
-    <span className="font-semibold text-leaf-950">{right}</span>
+    <span className="font-bold text-[#52665E]">{left}</span>
+    <span className="font-semibold text-[#09261C]">{right}</span>
   </div>
 );
 
 export default function StatsRow() {
+  const { t } = useTranslation();
+
   return (
-    <section className="flex gap-4">
+    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard
-        label="2024 ARCHIVAL JOURNEY"
-        badge="Goal 35"
+        label={t("library.stats.journey")}
+        badge={t("library.stats.journeyGoal")}
         value="28"
-        textColor="#07241A"
-        unit="/ 35 titles (80%)"
+        unit={t("library.stats.journeyUnit")}
         footer={
           <div className="space-y-1.5">
-            <ProgressBar bgColor="#1E3A2F" percent={80} />
-            <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-leaf-950">
-              <TrendingUp className="h-3 w-3" /> 2 books ahead of cadence
+            <ProgressBar percent={80} bgColor="#10B981" />
+            <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#52665E]">
+              <TrendingUp className="h-3 w-3 text-[#10B981]" /> {t("library.stats.journeyPace")}
             </p>
           </div>
         }
       />
       <StatCard
-        label="DIALECTICAL STREAK"
+        label={t("library.stats.streak")}
         icon={Flame}
         value="14"
-        iconColor="#9A4522"
-        textColor="#9A4522"
-        valueTone="text-leaf-600"
-        unit="Consecutive Days"
-        footer={<SplitFooter left="Historical Apex" right="31 Days" />}
+        unit={t("library.stats.streakUnit")}
+        footer={
+          <SplitFooter
+            left={t("library.stats.historicalApex")}
+            right={t("library.stats.historicalApexVal")}
+          />
+        }
       />
       <StatCard
-        label="ARCHIVAL IMMERSION"
+        label={t("library.stats.immersion")}
         icon={Timer}
         value="142"
-        unit="Hours Total"
-        textColor="#07241A"
+        unit={t("library.stats.immersionUnit")}
         footer={
-          <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-leaf-700">
-            <Clock className="h-3 w-3" /> +18.5h accrued this month
+          <p className="flex items-center gap-1 text-[11px] font-bold tracking-wide text-[#52665E]">
+            <Clock className="h-3 w-3 text-[#10B981]" /> {t("library.stats.immersionAccrued")}
           </p>
         }
       />
       <StatCard
-        label="ENGAGED FOLIOS"
+        label={t("library.stats.folios")}
         icon={BookOpen}
         value="18,450"
-        textColor="#07241A"
-        unit="Pages"
-        footer={<SplitFooter left="Marginalia Inscribed" right="246 Glosses" />}
+        unit={t("library.stats.foliosUnit")}
+        footer={
+          <SplitFooter
+            left={t("library.stats.marginaliaInscribed")}
+            right={t("library.stats.marginaliaInscribedVal")}
+          />
+        }
       />
     </section>
   );

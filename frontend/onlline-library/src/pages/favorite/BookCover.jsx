@@ -1,16 +1,31 @@
 import { useState } from "react";
-// import { img } from "../../data/img";
-// import { serif } from "../../styles/fonts";
+import { BookOpen } from "lucide-react";
 
-// اگر عکس لود نشد، یک کاور ساده با عنوان نمایش داده می‌شود
 export default function BookCover({ cover, title, className = "" }) {
   const [failed, setFailed] = useState(false);
-  return failed ? (
-    <div className={`flex items-center justify-center bg-gradient-to-br from-[#1e3a2f] to-[#07241a] p-4 text-center text-[16px] text-[#fbf9f6]  ${className}`}>
-      {title}
-    </div>
-  ) : (
-    // <img src={img(cover)} alt={title} onError={() => setFailed(true)} className={`object-cover ${className}`} />
-    ""
+  const src = cover
+    ? cover.startsWith("/") || cover.startsWith("http")
+      ? cover
+      : `/${cover}`
+    : "";
+
+  if (failed || !src) {
+    return (
+      <div
+        className={`flex flex-col items-center justify-center gap-2 bg-[#EAF4F0] border border-[#DDECE6] p-4 text-center text-[14px] text-[#09261C] font-sans font-bold ${className}`}
+      >
+        <BookOpen className="h-6 w-6 text-[#10B981] opacity-70" />
+        <span className="line-clamp-3">{title}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={typeof title === "string" ? title : "Book cover"}
+      onError={() => setFailed(true)}
+      className={`h-full w-full object-cover ${className}`}
+    />
   );
 }

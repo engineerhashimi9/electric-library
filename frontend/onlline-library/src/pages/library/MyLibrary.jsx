@@ -7,19 +7,17 @@ import IlluminatedMarginalia from "./IlluminatedMarginalia";
 
 export default function MyLibrary() {
   return (
-    <div className="min-h-screen bg-paper font-sans text-leaf-950">
-      <main className="mx-auto flex max-w-[1440px] flex-col gap-10 px-12 py-10">
+    <div className="min-h-screen bg-[#F6FBF9] font-sans text-[#111C18] pb-24 md:pb-12">
+      <main className="mx-auto flex max-w-[1440px] flex-col gap-8 sm:gap-10 px-4 sm:px-8 lg:px-12 py-6 sm:py-10">
         <div className="space-y-6">
           <LibraryHeader />
           <StatsRow />
         </div>
-
         <div className="space-y-6">
           <LibraryTabs />
           <CurrentlyReading />
         </div>
-
-        <div className="grid grid-cols-2 items-start gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-8 lg:gap-10">
           <CompletedRecently />
           <IlluminatedMarginalia />
         </div>

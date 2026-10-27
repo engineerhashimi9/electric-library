@@ -1,19 +1,32 @@
+// src/pages/home/BrowseThemes.jsx
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import ThemeCard from "./ThemeCard";
 
 export default function BrowseThemes({ themes }) {
+  const { t } = useTranslation();
+
   return (
-    <div className="hidden md:block">
-      <div className="flex justify-between">
-        <span className="text-[#9A4522] text-[10px]">CLASSIFICATION</span>
-    
-        <span className="text-[10px] text-[#1E3A2F]">
-          6 Comprehensive Archives
-        </span>
+    <div className="space-y-3">
+      <div className="flex justify-between items-center">
+        <div>
+          <span className="text-[#6B9080] text-[10px] font-bold uppercase tracking-wider block">
+           ~ {t("home.themes.eyebrow")}
+          </span>
+          <h3 className="text-lg md:text-[28px] text-[#09261C] font-bold">
+            {t("home.themes.title")}
+          </h3>
+        </div>
+        <Link
+          to="/explorebooks"
+          className="text-xs text-[#09261C] hover:text-[#10B981] font-bold transition-colors shrink-0"
+        >
+          {t("home.themes.viewAll")}
+        </Link>
       </div>
-      <h3 className="text-[28px] mb-3">Browse Themes & Disciplines</h3>
-      <div className="flex flex-wrap gap-4">
-        {themes.map((t) => (
-          <ThemeCard key={t.name} theme={t} />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        {themes.map((tItem, idx) => (
+          <ThemeCard key={idx} theme={tItem} />
         ))}
       </div>
     </div>

@@ -6,10 +6,10 @@ export default function StarRating({ value, max = 5 }) {
       {Array.from({ length: max }).map((_, i) => (
         <Star
           key={i}
-          className={`h-3 w-3 ${i < value ? "fill-[#E9831A] " : "fill-leaf-100 "}`}
+          className={`h-3 w-3 ${i < value ? "fill-[#10B981] text-[#10B981]" : "fill-transparent text-[#DDECE6]"}`}
         />
       ))}
-      <span className="pl-1 text-[11px] font-semibold tracking-wide text-leaf-950">{value.toFixed(1)}</span>
+      <span className="pl-1 text-[11px] font-bold tracking-wide text-[#111C18]">{value.toFixed(1)}</span>
     </div>
   );
 }

@@ -1,41 +1,44 @@
 import React from "react";
 import { Mail, Lock, Eye, ArrowRight, ShieldCheck, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/component/ui/Input";
 import { Button } from "@/component/ui/Button";
 import { Checkbox } from "@/component/ui/Checkbox";
+import { LanguageSwitcher } from "../../component/LanguageSwitcher";
 
 export const SignInForm = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="w-full max-w-md mx-auto p-4 space-y-6 text-right" dir="ltr">
+    <div className="w-full max-w-md mx-auto p-4 space-y-6 text-[#111C18]">
       {/* Banner / Top Badge */}
-      <div className="flex items-center justify-between text-xs text-[#718096]">
-        <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[#2D3748] font-medium">
-          MEMBER ACCESS Desk
+      <div className="flex items-center justify-between text-xs text-[#52665E]">
+        <span className="px-2.5 py-1 bg-[#EAF4F0] border border-[#DDECE6] rounded-full text-[#0D5C46] font-bold">
+          {t("auth.desk")}
         </span>
-        <span className="font-serif italic">EN ▾</span>
+        <LanguageSwitcher />
       </div>
 
       {/* Main Heading */}
       <div className="space-y-2">
-        <span className="text-xs font-semibold text-[#C86D51] tracking-wider uppercase">
+        <span className="text-xs font-bold text-[#6B9080] tracking-wider uppercase">
           Bargin Fellowship
         </span>
-        <h1 className="text-2xl font-serif text-[#1A202C]">
-          Welcome back to your sanctuary
+        <h1 className="text-2xl font-sans text-[#09261C] font-extrabold">
+          {t("auth.welcome")}
         </h1>
-        <p className="text-xs text-[#4A5568] leading-relaxed">
-          Sign in to access your synchronized library, personal marginalia, and
-          curated reading shelves.
+        <p className="text-xs text-[#52665E] leading-relaxed">
+          {t("auth.desc")}
         </p>
       </div>
 
       {/* Status Alert Card */}
-      <div className="bg-[#F3F4F6] p-3.5 rounded-xl flex items-start space-x-3 space-x-reverse text-xs text-[#2D3748]">
-        <ShieldCheck className="text-[#1A362B] shrink-0 mt-0.5" size={18} />
+      <div className="bg-[#EAF4F0] border border-[#DDECE6] p-3.5 rounded-xl flex items-start gap-3 text-xs text-[#09261C]">
+        <ShieldCheck className="text-[#10B981] shrink-0 mt-0.5" size={18} />
         <div className="space-y-0.5">
-          <p className="font-semibold text-[#1A202C]">Archival Cloud Active</p>
-          <p className="text-[#4A5568]">
-            Last session marginalia saved from your Cambridge folio.
+          <p className="font-bold text-[#09261C]">{t("auth.cloudActive")}</p>
+          <p className="text-[#52665E]">
+            {t("auth.cloudDesc")}
           </p>
         </div>
       </div>
@@ -43,7 +46,7 @@ export const SignInForm = () => {
       {/* Input Fields */}
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
         <Input
-          label="Email or Lumina Patron ID"
+          label={t("auth.emailLabel")}
           helperText="e.g. #LUM-8842"
           placeholder="clara.vane@lumina.org"
           icon={Mail}
@@ -51,8 +54,8 @@ export const SignInForm = () => {
         />
 
         <Input
-          label="Secret Passphrase"
-          helperText="Forgot key?"
+          label={t("auth.passLabel")}
+          helperText={t("auth.forgotKey")}
           type="password"
           placeholder="••••••••••••"
           icon={Lock}
@@ -63,24 +66,24 @@ export const SignInForm = () => {
         <div className="flex items-center justify-between pt-1">
           <Checkbox
             id="keep-active"
-            label="Keep reading session active"
+            label={t("auth.keepActive")}
             defaultChecked
           />
-          <Info size={14} className="text-gray-400" />
+          <Info size={14} className="text-[#6B9080]" />
         </div>
 
-        <Button variant="primary" fullWidth className="mt-2">
-          <span>Enter Library</span>
-          <ArrowRight size={16} className="ml-2" />
+        <Button variant="primary" fullWidth className="mt-2 font-bold flex items-center justify-center gap-2">
+          <span>{t("auth.submit")}</span>
+          <ArrowRight size={16} className="rtl:rotate-180" />
         </Button>
       </form>
 
       {/* Social / SSO Logins */}
       <div className="space-y-3 pt-2">
         <div className="relative flex items-center justify-center">
-          <div className="border-t border-gray-200 w-full" />
-          <span className="bg-[#FBF9F5] px-3 text-[10px] text-gray-400 uppercase tracking-wider absolute">
-            or continue with
+          <div className="border-t border-[#DDECE6] w-full" />
+          <span className="bg-[#F6FBF9] px-3 text-[10px] text-[#52665E] uppercase tracking-wider absolute">
+            {t("auth.orContinue")}
           </span>
         </div>
 
@@ -90,54 +93,54 @@ export const SignInForm = () => {
             fullWidth
             className="justify-between text-xs"
           >
-            <span className="bg-gray-200 text-gray-700 text-[10px] px-1.5 py-0.5 rounded">
+            <span className="bg-[#EAF4F0] border border-[#DDECE6] text-[#0D5C46] text-[10px] px-1.5 py-0.5 rounded font-bold">
               EduID
             </span>
-            <span>University & National Library SSO</span>
+            <span>{t("auth.sso")}</span>
           </Button>
           <Button
             variant="outline"
             fullWidth
             className="justify-between text-xs"
           >
-            <span className="text-gray-400">›</span>
-            <span>Continue with Google</span>
+            <span className="text-[#10B981] font-bold">›</span>
+            <span>{t("auth.google")}</span>
           </Button>
           <Button
             variant="outline"
             fullWidth
             className="justify-between text-xs"
           >
-            <span className="text-gray-400">›</span>
-            <span>Continue with Apple ID</span>
+            <span className="text-[#10B981] font-bold">›</span>
+            <span>{t("auth.apple")}</span>
           </Button>
         </div>
       </div>
 
       {/* Quote Banner */}
-      <div className="bg-[#F3F4F6] p-4 rounded-xl text-center space-y-1">
-        <p className="font-serif italic text-xs text-[#2D3748]">
-          "A library is not a luxury, but one of the necessities of life."
+      <div className="bg-[#09261C] border border-[#163A2E] p-4 rounded-xl text-center space-y-1">
+        <p className="font-sans italic text-xs text-[#FFFFFF]">
+          {t("auth.quote")}
         </p>
-        <p className="text-[10px] text-[#718096]">— Henry Ward Beecher</p>
+        <p className="text-[10px] text-[#10B981]">{t("auth.quoteAuthor")}</p>
       </div>
 
       {/* Footer Links */}
       <div className="text-center space-y-2 pt-2 text-xs">
-        <p className="text-[#4A5568]">
-          New to the fellowship?{" "}
+        <p className="text-[#52665E]">
+          {t("auth.newMember")}{" "}
           <a
             href="#request"
-            className="text-[#C86D51] font-medium hover:underline"
+            className="text-[#10B981] font-bold hover:underline"
           >
-            Request Membership
+            {t("auth.request")}
           </a>
         </p>
-        <div className="text-[10px] text-[#718096] flex items-center justify-center space-x-2">
-          <span>Protected by Lumina Archival Encryption</span>
+        <div className="text-[10px] text-[#52665E] flex items-center justify-center gap-2">
+          <span>{t("auth.encryption")}</span>
           <span>•</span>
-          <a href="#terms" className="hover:underline">
-            Privacy & Terms
+          <a href="#terms" className="hover:text-[#09261C] hover:underline">
+            {t("auth.terms")}
           </a>
         </div>
       </div>

@@ -1,19 +1,26 @@
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import AuthorCard from "./AuthorCard";
 
-    export default function MasterCurators({ authors }) {
+export default function MasterCurators({ authors }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="font-serif text-lg md:text-xl text-[#1A202C]">
-          Master Curators
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-lg md:text-xl font-bold text-[#09261C]">
+          {t("home.curators.title")}
         </h2>
-        <a href="#archived" className="text-xs text-[#718096] hover:underline">
-          Archived Catalog
-        </a>
+        <Link
+          to="/author"
+          className="text-xs font-semibold text-[#10B981] hover:text-[#09261C] hover:underline transition-colors shrink-0"
+        >
+          {t("home.curators.viewAll")}
+        </Link>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-6">
-        {authors.map((a) => (
-          <AuthorCard key={a.name} author={a} />
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        {authors.map((a, idx) => (
+          <AuthorCard key={idx} author={a} />
         ))}
       </div>
     </div>

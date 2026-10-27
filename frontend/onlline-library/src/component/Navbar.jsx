@@ -1,135 +1,130 @@
-import React, { useState } from "react";
+import React from "react";
 import { Search, Heart } from "lucide-react";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
+
 export default function Navbar() {
-  const [selected, setSelected] = useState("Home");
+  const { t } = useTranslation();
+
+  const navItems = [
+    { label: t("nav.home"), to: "/" },
+    { label: t("nav.explore"), to: "/explorebooks" },
+    { label: t("nav.library"), to: "/library" },
+    { label: t("nav.favorite"), to: "/favorite" },
+    { label: t("nav.authors"), to: "/author" },
+  ];
 
   return (
     <>
-      <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-[#E2E8F0] bg-[#FBF9F5] sticky top-0 z-50">
-        <div className="flex items-center space-x-8">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-[#1A362B] rounded flex items-center justify-center text-white font-bold">
+      <header className="hidden md:flex items-center justify-between gap-4 px-4 lg:px-8 py-4.5 border-b border-[#DDECE6] bg-[#F6FBF9]/85 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-4 lg:gap-8 min-w-0">
+          <NavLink to="/" className="flex items-center gap-2 shrink-0">
+            <div className="w-8 h-8 bg-[#09261C] rounded flex items-center justify-center text-[#FFFFFF] font-bold">
               B
             </div>
-            <span className="font-serif text-xl font-bold tracking-tight">
-              Bargin
+            <span className="text-lg lg:text-xl font-bold tracking-tight text-[#09261C]">
+              {t("nav.brand")}
             </span>
-          </div>
-          <nav className="flex items-center space-x-6 text-xs font-medium text-[#424844]">
-            <div
-              className={`flex items-center justify-center px-2 py-1 ${selected === "Home" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
-            >
-              <NavLink
-                onClick={() => setSelected("Home")}
-                to="/"
-                className={`  text-[#1A362B] font-semibold  pb-1`}
-              >
-                Home
-              </NavLink>
-            </div>
-            <div
-              className={`flex items-center justify-center px-2 py-1 ${selected === "explorebooks" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
-            >
-              <NavLink
-                onClick={() => setSelected("explorebooks")}
-                to="/explorebooks"
-                className={`${selected === "explorebook" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
-              >
-                Explore Books
-              </NavLink>
-            </div>
+          </NavLink>
 
-            <div
-              className={`flex items-center justify-center px-2 py-1 ${selected === "mylibrary" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
-            >
+          <nav className="flex items-center gap-1 lg:gap-3 text-xs font-semibold overflow-x-auto no-scrollbar">
+            {navItems.map((item) => (
               <NavLink
-                onClick={() => setSelected("mylibrary")}
-                to="/library"
-                className={`${selected === "mylibrary" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  `px-2.5 py-1.5 rounded-[6px] whitespace-nowrap transition-colors ${
+                    isActive
+                      ? "bg-[#EAF4F0] text-[#09261C] font-bold"
+                      : "text-[#52665E] hover:text-[#10B981]"
+                  }`
+                }
               >
-                My Library
+                {item.label}
               </NavLink>
-            </div>
-            <div
-              className={`flex items-center justify-center px-2 py-1 ${selected === "favorite" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
-            >
-              <NavLink
-                onClick={() => setSelected("favorite")}
-                to="/favorite"
-                className={`${selected === "favorite" ? "bg-[#EAE8E5]" : ""} hover:text-[#1A362B]`}
-              >
-                Favorite
-              </NavLink>
-            </div>
-
-            <div
-              className={`flex items-center justify-center px-2 py-1 ${selected === "author" ? "bg-[#EAE8E5]  rounded-[6px]" : ""}`}
-            >
-              <NavLink
-                onClick={() => setSelected("author")}
-                to="/author"
-                className={`${selected === "author" ? "bg-[#EAE8E5] " : ""} hover:text-[#1A362B]`}
-              >
-                Authors
-              </NavLink>
-            </div>
+            ))}
           </nav>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center gap-4">
-            <div className="relative w-64">
+        <div className="flex items-center gap-2.5 lg:gap-4 shrink-0">
+          <div className="flex items-center gap-2.5 lg:gap-3">
+            <div className="relative w-36 lg:w-56 xl:w-64">
               <Search
-                className="absolute left-3 top-2.5 text-gray-400"
-                size={16}
+                className="absolute left-3 rtl:left-auto rtl:right-3 top-2.5 text-[#6B9080]"
+                size={15}
               />
-
               <input
                 type="text"
-                placeholder="Search titles, authors..."
-                className="w-full bg-[#F3F4F6] text-xs pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1A362B]"
+                placeholder={t("nav.searchPlaceholder")}
+                className="w-full bg-[#FFFFFF] border border-[#DDECE6] text-[#111C18] placeholder-[#52665E]/70 text-xs pl-9 pr-3 rtl:pl-3 rtl:pr-9 py-2 rounded-lg focus:outline-none focus:border-[#10B981] shadow-sm transition-colors"
               />
             </div>
-            <Heart size={14} />
-            <img className="w-3" src="./noticification.png" />
+
+            <NavLink to="/favorite" className="hidden sm:inline-flex">
+              <Heart
+                size={16}
+                className="text-[#6B9080] hover:text-[#10B981] cursor-pointer transition-colors"
+              />
+            </NavLink>
+            <img
+              className="w-3.5 opacity-90 hidden lg:block"
+              src="./noticification.png"
+              alt={t("nav.notifications")}
+            />
           </div>
+
+          <LanguageSwitcher compact />
+
           <NavLink
             to="/profile"
-            className="flex items-center space-x-3 border-l border-gray-200 pl-4"
+            className="flex items-center gap-2.5 border-l rtl:border-l-0 rtl:border-r border-[#DDECE6] pl-3 rtl:pl-0 rtl:pr-3"
           >
-            {/* BACKEND: Get current logged-in user info */}
             <img
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
               alt="User Avatar"
-              className="w-8 h-8 rounded-full object-cover border border-[#C86D51]"
+              className="w-8 h-8 rounded-full object-cover border border-[#DDECE6] shrink-0"
             />
-            <div className="text-left">
-              <p className="text-xs font-semibold">Clara Jensen</p>
-              <p className="text-[10px] text-[#C86D51]">Patron Fellow</p>
+            <div className="hidden xl:block text-left rtl:text-right">
+              <p className="text-xs font-bold text-[#09261C] leading-tight">
+                {t("nav.userName")}
+              </p>
+              <p className="text-[10px] text-[#52665E] font-medium">
+                {t("nav.userRole")}
+              </p>
             </div>
           </NavLink>
         </div>
       </header>
-      <div className="md:hidden flex items-center justify-between px-5 py-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 bg-[#1A362B] rounded flex items-center justify-center text-white font-bold text-sm">
+
+      <header className="md:hidden sticky top-0 z-50 flex items-center justify-between px-4 py-3.5 bg-[#F6FBF9]/90 backdrop-blur-md border-b border-[#DDECE6]">
+        <NavLink to="/" className="flex items-center gap-2">
+          <div className="w-7 h-7 bg-[#09261C] rounded flex items-center justify-center text-[#FFFFFF] font-bold text-sm">
             B
           </div>
-          <span className="font-serif text-lg font-bold">Bookora</span>
-        </div>
-        <div className="flex items-center space-x-3">
-          <button className="p-1.5 bg-[#F3F4F6] rounded-lg text-gray-700">
+          <span className="text-lg font-bold text-[#09261C]">
+            {t("nav.brand")}
+          </span>
+        </NavLink>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher compact />
+          <NavLink
+            to="/explorebooks"
+            className="p-1.5 bg-[#FFFFFF] border border-[#DDECE6] rounded-lg text-[#09261C]"
+            aria-label="Search"
+          >
             <Search size={18} />
-          </button>
-
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-            alt="User Avatar"
-            className="w-7 h-7 rounded-full object-cover border border-[#C86D51]"
-          />
+          </NavLink>
+          <NavLink to="/profile">
+            <img
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+              alt="User Avatar"
+              className="w-7 h-7 rounded-full object-cover border border-[#DDECE6]"
+            />
+          </NavLink>
         </div>
-      </div>
+      </header>
     </>
   );
 }

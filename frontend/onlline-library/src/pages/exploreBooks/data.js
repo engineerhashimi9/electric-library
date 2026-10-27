@@ -1,8 +1,8 @@
 export const books = [
   {
     id: "kafka",
-    title: "Kafka on the Shore",
-    author: "Haruki Murakami",
+    title: { en: "Kafka on the Shore", fa: "کافکا در کرانه" },
+    author: { en: "Haruki Murakami", fa: "هاروکی موراکامی" },
     format: "ebook",
     mobileFormat: "ebook",
     rating: 4.8,
@@ -18,8 +18,8 @@ export const books = [
   },
   {
     id: "meditations",
-    title: "Meditations",
-    author: "Marcus Aurelius",
+    title: { en: "Meditations", fa: "تأملات" },
+    author: { en: "Marcus Aurelius", fa: "مارکوس اورلیوس" },
     format: "audio",
     mobileFormat: "audio",
     rating: 4.9,
@@ -36,9 +36,9 @@ export const books = [
   },
   {
     id: "babel",
-    title: "Babel: Or the Necessity of Violence",
-    mobileTitle: "Babel: An Arcane...",
-    author: "R.F. Kuang",
+    title: { en: "Babel: Or the Necessity of Violence", fa: "بابل: یا ضرورت خشونت" },
+    mobileTitle: { en: "Babel: An Arcane...", fa: "بابل..." },
+    author: { en: "R.F. Kuang", fa: "آر. اف. کوآنگ" },
     format: "hardcover",
     mobileFormat: "hardcover",
     rating: 4.7,
@@ -55,8 +55,8 @@ export const books = [
   },
   {
     id: "normal-people",
-    title: "Normal People",
-    author: "Sally Rooney",
+    title: { en: "Normal People", fa: "مردم عادی" },
+    author: { en: "Sally Rooney", fa: "سالی رونی" },
     format: "ebook",
     mobileFormat: "ebook",
     rating: 4.6,
@@ -72,9 +72,9 @@ export const books = [
   },
   {
     id: "drive-your-plow",
-    title: "Drive Your Plow",
-    mobileTitle: "Drive Your Plow...",
-    author: "Olga Tokarczuk",
+    title: { en: "Drive Your Plow Over the Bones of the Dead", fa: "بر استخوان‌های مردگان شیار بزن" },
+    mobileTitle: { en: "Drive Your Plow...", fa: "شیار بر استخوان..." },
+    author: { en: "Olga Tokarczuk", fa: "اولگا توکارچوک" },
     format: "ebook",
     mobileFormat: "audio",
     rating: 4.7,
@@ -91,8 +91,8 @@ export const books = [
   },
   {
     id: "secret-history",
-    title: "The Secret History",
-    author: "Donna Tartt",
+    title: { en: "The Secret History", fa: "تاریخ مخفی" },
+    author: { en: "Donna Tartt", fa: "دونا تارت" },
     format: "audio",
     mobileFormat: "ebook",
     rating: 4.9,
@@ -107,23 +107,22 @@ export const books = [
     cover: "/images/secret-history.jpg",
     mobileCover: "/images/secret-history-mobile.jpg",
   },
- 
 ];
 
 export const genres = [
-  "All Genres",
-  "Literary Fiction",
-  "Dark Academia",
-  "Philosophy",
-  "Sci-Fi & Speculative",
-  "Historical",
-  "Poetry",
+  { en: "All Genres", fa: "همه ژانرها" },
+  { en: "Literary Fiction", fa: "ادبیات داستانی" },
+  { en: "Dark Academia", fa: "آکادمی تاریک" },
+  { en: "Philosophy", fa: "فلسفه" },
+  { en: "Sci-Fi & Speculative", fa: "علمی تخیلی" },
+  { en: "Historical", fa: "تاریخی" },
+  { en: "Poetry", fa: "شعر" },
 ];
 
 export const formatOptions = [
-  { value: "ebook", label: "E-Books", count: "84,200" },
-  { value: "audio", label: "Unabridged Audio", count: "32,150" },
-  { value: "hardcover", label: "Deluxe Hardcover", count: "12,400" },
+  { value: "ebook", label: "E-Books", labelFa: "کتاب الکترونیک", count: "84,200" },
+  { value: "audio", label: "Unabridged Audio", labelFa: "کتاب صوتی کامل", count: "32,150" },
+  { value: "hardcover", label: "Deluxe Hardcover", labelFa: "جلد سخت نفیس", count: "12,400" },
 ];
 
 export const languages = [
@@ -133,37 +132,4 @@ export const languages = [
   { label: "German", count: 7 },
   { label: "Italian", count: 4 },
   { label: "Latin", count: 2 },
-];
-
-export const footerGroups = [
-  {
-    title: "Curated Archives",
-    links: [
-      "First Editions & Manuscripts",
-      "Classical Philosophy Folios",
-      "19th Century Naturalists",
-      "Illuminated Monographs",
-      "Epistolary Collections",
-    ],
-  },
-  {
-    title: "Reader Utilities",
-    links: [
-      "Marginalia Sync Engine",
-      "BibTeX & Zotero Export",
-      "Typography Stacks & Kerning",
-      "Offline Reading Slates",
-      "Reading Pace Diagnostics",
-    ],
-  },
-  {
-    title: "Guild & Charter",
-    links: [
-      "Scholarly Society Charter",
-      "Academic Peer Review",
-      "Curator Residency Grants",
-      "Public Domain Restorations",
-      "Community Guidelines",
-    ],
-  },
 ];
