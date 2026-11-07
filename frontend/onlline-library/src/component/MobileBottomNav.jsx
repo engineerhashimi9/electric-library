@@ -1,4 +1,4 @@
-import { Search, Bookmark, BookOpen, Heart, User } from "lucide-react";
+import { Search, BookOpen, Heart, Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -6,11 +6,10 @@ export default function MobileBottomNav() {
   const { t } = useTranslation();
 
   const items = [
-    { icon: BookOpen, label: t("bottomNav.home"), path: "/" },
-    { icon: Search, label: t("bottomNav.explore"), path: "/explorebooks" },
-    { icon: Bookmark, label: t("bottomNav.library"), path: "/library" },
-    { icon: Heart, label: t("bottomNav.favorites"), path: "/favorite" },
-    { icon: User, label: t("bottomNav.profile"), path: "/profile" },
+    { icon: BookOpen, label: t("bottomNav.home", "Home"), path: "/" },
+    { icon: Search, label: t("bottomNav.explore", "Explore"), path: "/explorebooks" },
+    { icon: Heart, label: t("bottomNav.favorites", "Favorites"), path: "/favorite" },
+    { icon: Users, label: t("bottomNav.authors", t("nav.authors", "Authors")), path: "/author" },
   ];
 
   return (

@@ -10,7 +10,6 @@ export default function Navbar() {
   const navItems = [
     { label: t("nav.home"), to: "/" },
     { label: t("nav.explore"), to: "/explorebooks" },
-    { label: t("nav.library"), to: "/library" },
     { label: t("nav.favorite"), to: "/favorite" },
     { label: t("nav.authors"), to: "/author" },
   ];
@@ -77,8 +76,7 @@ export default function Navbar() {
 
           <LanguageSwitcher compact />
 
-          <NavLink
-            to="/profile"
+          <div
             className="flex items-center gap-2.5 border-l rtl:border-l-0 rtl:border-r border-[#D0E8E6] pl-3 rtl:pl-0 rtl:pr-3"
           >
             <img
@@ -94,7 +92,7 @@ export default function Navbar() {
                 {t("nav.userRole")}
               </p>
             </div>
-          </NavLink>
+          </div>
         </div>
       </header>
 
@@ -116,13 +114,11 @@ export default function Navbar() {
           >
             <Search size={18} />
           </NavLink>
-          <NavLink to="/profile">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-              alt="User Avatar"
-              className="w-7 h-7 rounded-full object-cover border border-[#D0E8E6]"
-            />
-          </NavLink>
+          <img
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+            alt="User Avatar"
+            className="w-7 h-7 rounded-full object-cover border border-[#D0E8E6]"
+          />
         </div>
       </header>
     </>

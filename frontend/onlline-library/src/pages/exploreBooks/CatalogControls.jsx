@@ -1,5 +1,4 @@
 // src/pages/exploreBooks/CatalogControls.jsx
-import { SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SearchField } from "./SearchFeild";
 import { ViewToggle } from "./ViewToggle";
@@ -16,8 +15,6 @@ export default function CatalogControls({
   onViewChange,
   genre,
   onGenreChange,
-  onOpenFilters,
-  filterCount,
 }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -32,30 +29,16 @@ export default function CatalogControls({
       />
 
       <div className="flex flex-wrap items-center justify-between gap-2 lg:hidden">
-        <div className="flex flex-1 items-center gap-2 min-w-0">
-          <select
-            aria-label={t("explore.sort.label")}
-            value={sort}
-            onChange={(event) => onSortChange(event.target.value)}
-            className="min-w-0 flex-1 sm:flex-none rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm outline-none"
-          >
-            <option value="popular">{t("explore.sort.popular")}</option>
-            <option value="rating">{t("explore.sort.rating")}</option>
-            <option value="title">{t("explore.sort.title")}</option>
-          </select>
-          <button
-            onClick={onOpenFilters}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm"
-          >
-            <SlidersHorizontal size={16} className="text-[#17A296]" />
-            <span>{t("explore.search.filterBtn")}</span>
-            {filterCount > 0 && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#17A296] text-[10px] text-[#FFFFFF] font-bold">
-                {filterCount}
-              </span>
-            )}
-          </button>
-        </div>
+        <select
+          aria-label={t("explore.sort.label")}
+          value={sort}
+          onChange={(event) => onSortChange(event.target.value)}
+          className="min-w-0 flex-1 sm:flex-none rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm outline-none"
+        >
+          <option value="popular">{t("explore.sort.popular")}</option>
+          <option value="rating">{t("explore.sort.rating")}</option>
+          <option value="title">{t("explore.sort.title")}</option>
+        </select>
         <ViewToggle view={view} onChange={onViewChange} />
       </div>
 

@@ -25,7 +25,7 @@ export default function HeroBanner({ spotlightBook }) {
             {t("home.hero.exploreBtn")}
           </Link>
           <Link
-            to="/library"
+            to="/favorite"
             className="px-6 py-2.5 bg-[#FFFFFF] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#E6F4F3] text-xs font-semibold rounded-lg transition-all shadow-sm"
           >
             {t("home.hero.readingListBtn")}

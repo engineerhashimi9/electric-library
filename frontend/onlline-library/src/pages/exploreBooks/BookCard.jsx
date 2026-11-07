@@ -1,12 +1,7 @@
 import {
-  ArrowRight,
-  Bookmark,
   BookOpen,
-  BookOpenCheck,
-  Clock3,
-  Headphones,
+  Download,
   Heart,
-  PlayCircle,
   Star,
 } from "lucide-react";
 import { useState } from "react";
@@ -39,27 +34,9 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
       hardcover: t("bookCard.hardcover"),
     }[book.mobileFormat] || book.mobileFormat;
 
-  const ActionIcon = !book.available
-    ? Clock3
-    : book.format === "audio"
-      ? Headphones
-      : BookOpenCheck;
-
-  const desktopAction = !book.available
-    ? t("bookCard.reserve")
-    : book.format === "audio"
-      ? t("bookCard.listen")
-      : t("bookCard.borrow");
-
-  const mobileAction = !book.available
-    ? t("bookCard.reserveShort")
-    : book.mobileFormat === "audio"
-      ? t("bookCard.listenShort")
-      : t("bookCard.borrow");
-
   return (
     <article
-      className={`group flex w-full rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6]  hover:-translate-y-1 hover:shadow-lg p-2.5 sm:p-4 shadow-sm transition-all duration-300 lg:rounded-3xl ${
+      className={`group flex w-full rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] hover:border-[#17A296] hover:-translate-y-1 hover:shadow-lg p-2.5 sm:p-4 shadow-sm transition-all duration-300 lg:rounded-3xl ${
         view === "list" ? "flex-row gap-3 sm:gap-4 items-stretch" : "h-full flex-col"
       }`}
     >
@@ -167,30 +144,20 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
               : t("bookCard.onHold", { count: book.holds })}
           </span>
           <button
-            onClick={() => onAction(book, book.mobileFormat)}
-            className="inline-flex items-center gap-1 text-[10px] font-bold text-[#0E6760] hover:text-[#17A296] sm:text-xs transition-colors shrink-0"
+            onClick={() => onAction(book)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760] text-xs font-bold transition-all shadow-sm shrink-0 active:scale-95"
           >
-            {mobileAction}
-            {!book.available ? (
-              <Bookmark size={14} />
-            ) : book.mobileFormat === "audio" ? (
-              <PlayCircle size={14} />
-            ) : (
-              <ArrowRight size={14} className="rtl:rotate-180" />
-            )}
+            <Download size={14} />
+            <span>{t("bookCard.download", "Download")}</span>
           </button>
         </div>
 
         <button
-          onClick={() => onAction(book, book.format)}
-          className={`mt-auto hidden w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition lg:flex ${
-            !book.available
-              ? "bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#D0E8E6]"
-              : "bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760]"
-          }`}
+          onClick={() => onAction(book)}
+          className="mt-auto hidden w-full items-center justify-center gap-2 rounded-xl bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760] px-3 py-2.5 text-sm font-bold transition-all shadow-sm active:scale-95 lg:flex"
         >
-          <ActionIcon size={18} />
-          {desktopAction}
+          <Download size={18} />
+          <span>{t("bookCard.download", "Download")}</span>
         </button>
       </div>
     </article>

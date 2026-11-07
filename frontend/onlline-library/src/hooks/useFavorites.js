@@ -81,11 +81,16 @@ export default function useFavorites() {
     notify(`Exported ${items.length} citations`);
   };
 
+  const downloadBook = (book) => {
+    const title = typeof book?.title === "object" ? (book.title.fa || book.title.en) : (book?.title || "");
+    notify(`دانلود «${title}» آغاز شد.`);
+  };
+
   return {
     items, filtered, visible, categoryCounts,
     category, setCategory, sort, setSort, view, setView,
     page: safePage, setPage, totalPages,
-    removeFavorite, undoRemove,
+    removeFavorite, undoRemove, downloadBook,
     previewEmpty, togglePreview: () => setPreviewEmpty((v) => !v),
     shareShelf, downloadCitations,
     toast, closeToast,

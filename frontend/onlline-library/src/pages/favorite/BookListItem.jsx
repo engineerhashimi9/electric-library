@@ -6,11 +6,11 @@ import ActionButton from "./ActionButton";
 import { formatVotes } from "../../utils/formatters";
 import { getLocalized } from "../../utils/langHelper";
 
-export default function BookListItem({ book, onRemove }) {
+export default function BookListItem({ book, onRemove, onDownload }) {
   const { i18n } = useTranslation();
   const lang = i18n.language;
 
-  const { title, author, format, rating, votes, badge, note, status, meta, action, cover } = book;
+  const { title, author, format, rating, votes, badge, note, status, meta, cover } = book;
 
   const locTitle = getLocalized(title, lang);
   const locAuthor = getLocalized(author, lang);
@@ -49,7 +49,7 @@ export default function BookListItem({ book, onRemove }) {
         <StatusLine status={status} meta={meta} />
       </div>
 
-      <ActionButton action={action} className="w-full sm:w-[160px] sm:shrink-0" />
+      <ActionButton onClick={() => onDownload && onDownload(book)} className="w-full sm:w-[160px] sm:shrink-0" />
     </article>
   );
 }

@@ -7,11 +7,11 @@ import ActionButton from "./ActionButton";
 import { getLocalized } from "../../utils/langHelper";
 import { formatVotes } from "../../utils/formatters";
 
-export default function BookCard({ book, onRemove }) {
+export default function BookCard({ book, onRemove, onDownload }) {
   const { i18n } = useTranslation();
   const lang = i18n.language;
 
-  const { title, author, format, rating, votes, badge, note, status, meta, action, cover } = book;
+  const { title, author, format, rating, votes, badge, note, status, meta, cover } = book;
 
   const locTitle = getLocalized(title, lang);
   const locAuthor = getLocalized(author, lang);
@@ -74,7 +74,7 @@ export default function BookCard({ book, onRemove }) {
 
         <div className="mt-auto space-y-3 sm:pt-3">
           <StatusLine status={status} meta={meta} className="hidden sm:flex" />
-          <ActionButton action={action} className="w-full" />
+          <ActionButton onClick={() => onDownload && onDownload(book)} className="w-full" />
         </div>
       </div>
     </article>

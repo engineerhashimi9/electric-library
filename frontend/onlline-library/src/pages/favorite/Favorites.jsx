@@ -53,6 +53,7 @@ export default function Favorites() {
             books={f.visible}
             view={f.view}
             onRemove={f.removeFavorite}
+            onDownload={f.downloadBook}
           />
         )}
         <QuoteBanner />
