@@ -2,16 +2,17 @@
 @import "tailwindcss";
 
 :root {
-  font-family: "Manrope", "Vazirmatn", sans-serif;
+  font-family: "Manrope", "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #0A2E2C;
   background-color: #F4FAFA;
 
-  /* Modern Deep Teal & Sea Green Design System */
+  /* Modern Deep Teal & Sea Green Design System Tokens */
   --color-mint-whisper: #F4FAFA;
   --color-sage-tint: #E6F4F3;
   --color-card-surface: #FFFFFF;
   --color-deep-forest: #0E6760;
   --color-emerald: #17A296;
+  --color-emerald-dark: #128379;
   --color-teal-slate: #156B6B;
   --color-sage-green: #236D64;
   --color-charcoal: #0A2E2C;
@@ -26,23 +27,53 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Persian / Dari RTL Typography Enhancements */
 [dir="rtl"],
 [dir="rtl"] body,
 [dir="rtl"] button,
 [dir="rtl"] select,
 [dir="rtl"] input,
 [dir="rtl"] textarea {
-  font-family: "Vazirmatn", "Manrope", sans-serif;
+  font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] button,
+[dir="rtl"] a,
+[dir="rtl"] label {
+  /* Prevent letter-spacing from breaking Arabic script ligatures */
+  letter-spacing: 0 !important;
+  word-spacing: normal;
+}
+
+[dir="rtl"] .leading-tight {
+  line-height: 1.35 !important;
+}
+
+[dir="rtl"] .leading-snug {
+  line-height: 1.45 !important;
+}
+
+[dir="rtl"] .leading-normal {
+  line-height: 1.6 !important;
 }
 
 @theme {
-  --font-sans: "Manrope", sans-serif;
-  --font-serif: "Manrope", sans-serif;
+  --font-sans: "Manrope", "Vazirmatn", sans-serif;
+  --font-serif: "Manrope", "Vazirmatn", sans-serif;
   --color-mint-whisper: #F4FAFA;
   --color-sage-tint: #E6F4F3;
   --color-card-surface: #FFFFFF;
   --color-deep-forest: #0E6760;
   --color-emerald: #17A296;
+  --color-emerald-dark: #128379;
   --color-teal-slate: #156B6B;
   --color-sage-green: #236D64;
   --color-charcoal: #0A2E2C;
@@ -58,6 +89,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;
@@ -71,11 +106,7 @@ body {
 button,
 select,
 input {
-  font-family: "Manrope", sans-serif;
-}
-
-button,
-input {
+  font-family: inherit;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -84,14 +115,45 @@ select {
   cursor: pointer;
 }
 
-button:focus-visible,
-a:focus-visible {
-  outline-offset: 4px;
+/* Accessibility Focus States */
+:focus-visible {
+  outline: 2px solid #17A296;
+  outline-offset: 3px;
 }
 
-.font-editorial,
-.font-serif {
-  font-family: "Manrope", sans-serif !important;
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #17A296;
+  outline-offset: 2px;
+}
+
+/* Utility to hide scrollbars smoothly */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Polished Elevation Shadows */
+.shadow-library-sm {
+  box-shadow: 0 1px 3px rgba(14, 103, 96, 0.05), 0 1px 2px rgba(14, 103, 96, 0.03);
+}
+
+.shadow-library {
+  box-shadow: 0 4px 16px -2px rgba(14, 103, 96, 0.07), 0 2px 6px -1px rgba(14, 103, 96, 0.04);
+}
+
+.shadow-library-hover {
+  box-shadow: 0 12px 28px -6px rgba(14, 103, 96, 0.12), 0 4px 10px -2px rgba(14, 103, 96, 0.06);
+}
+
+.shadow-library-lg {
+  box-shadow: 0 18px 36px -8px rgba(14, 103, 96, 0.14), 0 6px 16px -4px rgba(14, 103, 96, 0.08);
 }
 
 ::selection {

@@ -12,10 +12,10 @@ export default function BookCover({ cover, title, className = "" }) {
   if (failed || !src) {
     return (
       <div
-        className={`flex flex-col items-center justify-center gap-2 bg-[#E6F4F3] border border-[#D0E8E6] p-4 text-center text-[14px] text-[#0E6760] font-sans font-bold ${className}`}
+        className={`flex flex-col items-center justify-center gap-2 bg-[#E6F4F3] border border-[#D0E8E6] p-4 text-center text-xs sm:text-sm text-[#0E6760] font-bold ${className}`}
       >
-        <BookOpen className="h-6 w-6 text-[#17A296] opacity-70" />
-        <span className="line-clamp-3">{title}</span>
+        <BookOpen className="h-6 w-6 text-[#17A296] opacity-80" aria-hidden="true" />
+        <span className="line-clamp-2">{typeof title === "string" ? title : "Cover"}</span>
       </div>
     );
   }
@@ -25,6 +25,7 @@ export default function BookCover({ cover, title, className = "" }) {
       src={src}
       alt={typeof title === "string" ? title : "Book cover"}
       onError={() => setFailed(true)}
+      loading="lazy"
       className={`h-full w-full object-cover ${className}`}
     />
   );

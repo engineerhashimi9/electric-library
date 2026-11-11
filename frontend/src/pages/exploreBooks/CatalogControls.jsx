@@ -1,5 +1,3 @@
-// src/pages/exploreBooks/CatalogControls.jsx
-import { SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SearchField } from "./SearchFeild";
 import { ViewToggle } from "./ViewToggle";
@@ -16,14 +14,12 @@ export default function CatalogControls({
   onViewChange,
   genre,
   onGenreChange,
-  onOpenFilters,
-  filterCount,
 }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   return (
-    <section className="space-y-4 sm:space-y-5">
+    <section aria-label="Catalog Filters and Controls" className="space-y-4 sm:space-y-5">
       <SearchField
         value={query}
         onChange={onQueryChange}
@@ -31,36 +27,24 @@ export default function CatalogControls({
         placeholder={t("explore.search.placeholder")}
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-2 lg:hidden">
-        <div className="flex flex-1 items-center gap-2 min-w-0">
+      <div className="flex flex-wrap items-center justify-between gap-3 lg:hidden">
+        <label className="relative min-w-0 flex-1 sm:flex-none">
           <select
             aria-label={t("explore.sort.label")}
             value={sort}
             onChange={(event) => onSortChange(event.target.value)}
-            className="min-w-0 flex-1 sm:flex-none rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm outline-none"
+            className="w-full rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 text-xs sm:text-sm font-bold text-[#0E6760] shadow-library-sm outline-none focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20 transition-all"
           >
             <option value="popular">{t("explore.sort.popular")}</option>
             <option value="rating">{t("explore.sort.rating")}</option>
             <option value="title">{t("explore.sort.title")}</option>
           </select>
-          <button
-            onClick={onOpenFilters}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 text-xs font-bold text-[#0E6760] shadow-sm sm:text-sm"
-          >
-            <SlidersHorizontal size={16} className="text-[#17A296]" />
-            <span>{t("explore.search.filterBtn")}</span>
-            {filterCount > 0 && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#17A296] text-[10px] text-[#FFFFFF] font-bold">
-                {filterCount}
-              </span>
-            )}
-          </button>
-        </div>
+        </label>
         <ViewToggle view={view} onChange={onViewChange} />
       </div>
 
       <div
-        className="flex gap-2 sm:gap-3 overflow-x-auto pb-1 lg:flex-wrap"
+        className="flex gap-2 sm:gap-2.5 overflow-x-auto pb-1.5 lg:flex-wrap no-scrollbar"
         aria-label="Genre filters"
       >
         {genres.map((item, idx) => {
@@ -71,16 +55,17 @@ export default function CatalogControls({
           return (
             <button
               key={idx}
+              type="button"
               aria-pressed={isSelected}
               onClick={() => onGenreChange(itemVal)}
-              className={`shrink-0 whitespace-nowrap rounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold transition sm:text-sm flex items-center gap-1.5 ${
+              className={`shrink-0 whitespace-nowrap rounded-xl px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-all flex items-center gap-2 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
                 isSelected
-                  ? "bg-[#0E6760] border border-[#0E6760] text-[#FFFFFF] shadow-sm"
-                  : "bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760]"
+                  ? "bg-[#0E6760] border border-[#0E6760] text-[#FFFFFF] shadow-library-sm"
+                  : "bg-[#FFFFFF] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#E6F4F3] hover:text-[#0E6760] hover:border-[#17A296]/50"
               }`}
             >
               {isSelected && (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#17A296]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#17A296]" aria-hidden="true" />
               )}
               <span>{label}</span>
             </button>

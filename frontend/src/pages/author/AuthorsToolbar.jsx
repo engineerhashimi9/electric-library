@@ -20,13 +20,18 @@ const sortNames = {
 };
 
 const MobileSelect = ({ icon: Icon, value, onChange, options, label, isFa, map }) => (
-  <label className="relative flex min-w-0 flex-1 items-center gap-2.5 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2.5 transition">
-    <Icon className="h-4 w-4 shrink-0 text-[#236D64]" />
-    <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-[#0E6760]">
+  <label className="relative flex min-w-0 flex-1 items-center gap-2 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3 py-2.5 shadow-library-sm transition-all focus-within:border-[#17A296] focus-within:ring-2 focus-within:ring-[#17A296]/20">
+    <Icon className="h-4 w-4 shrink-0 text-[#236D64]" aria-hidden="true" />
+    <span className="min-w-0 flex-1 truncate text-xs sm:text-sm font-bold text-[#0E6760]">
       {map[value] ? (isFa ? map[value].fa : map[value].en) : value}
     </span>
-    <ChevronDown className="h-4 w-4 shrink-0 text-[#236D64]" />
-    <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={label} className="absolute inset-0 h-full w-full cursor-pointer opacity-0">
+    <ChevronDown className="h-4 w-4 shrink-0 text-[#236D64]" aria-hidden="true" />
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label={label}
+      className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+    >
       {options.map((o) => (
         <option key={o} value={o} className="bg-[#FFFFFF] text-[#0E6760]">
           {map[o] ? (isFa ? map[o].fa : map[o].en) : o}
@@ -38,12 +43,13 @@ const MobileSelect = ({ icon: Icon, value, onChange, options, label, isFa, map }
 
 const DesktopSelect = ({ label, value, onChange, options, isFa, map }) => (
   <label className="flex items-center gap-2">
-    <span className="text-[11px] font-bold uppercase tracking-[0.55px] text-[#236D64]">{label}</span>
+    <span className="text-xs font-bold uppercase tracking-wider text-[#236D64]">{label}</span>
     <span className="relative">
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="cursor-pointer appearance-none rounded-lg bg-[#E6F4F3] border border-[#D0E8E6] py-1.5 pl-3 pr-9 rtl:pr-3 rtl:pl-9 text-[13px] text-[#0E6760] outline-none transition hover:border-[#17A296] focus:border-[#17A296]"
+        aria-label={label}
+        className="cursor-pointer appearance-none rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] py-2 pl-3.5 pr-9 rtl:pr-3.5 rtl:pl-9 text-xs sm:text-sm font-bold text-[#0E6760] outline-none transition-all hover:border-[#17A296] focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20"
       >
         {options.map((o) => (
           <option key={o} value={o} className="bg-[#FFFFFF] text-[#0E6760]">
@@ -51,7 +57,7 @@ const DesktopSelect = ({ label, value, onChange, options, isFa, map }) => (
           </option>
         ))}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-2.5 rtl:right-auto rtl:left-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-[#236D64]" />
+      <ChevronDown className="pointer-events-none absolute right-2.5 rtl:right-auto rtl:left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#236D64]" aria-hidden="true" />
     </span>
   </label>
 );
@@ -63,7 +69,7 @@ export default function AuthorsToolbar({ shown, total, sort, onSort, region, onR
   return (
     <>
       <div className="space-y-3 md:hidden">
-        <p className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#4A6B68]">
+        <p className="text-xs font-bold uppercase tracking-wider text-[#4A6B68]">
           {t("authors.toolbar.showing", { shown, total })}
         </p>
         <div className="flex gap-2">
@@ -72,13 +78,13 @@ export default function AuthorsToolbar({ shown, total, sort, onSort, region, onR
         </div>
       </div>
 
-      <div className="hidden items-center justify-between gap-4 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] px-5 py-3 shadow-sm md:flex">
+      <div className="hidden items-center justify-between gap-4 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] px-5 py-3.5 shadow-library-sm md:flex">
         <div className="flex min-w-0 items-center gap-3">
-          <h2 className="whitespace-nowrap text-[20px] leading-7 text-[#0E6760] font-sans font-bold">
+          <h2 className="whitespace-nowrap text-base lg:text-lg text-[#0E6760] font-extrabold leading-snug">
             {t("authors.toolbar.cataloged", { total })}
           </h2>
-          <span className="h-1 w-1 shrink-0 rounded-full bg-[#D0E8E6]" />
-          <span className="hidden whitespace-nowrap text-[13px] text-[#4A6B68] lg:inline">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#D0E8E6]" />
+          <span className="hidden whitespace-nowrap text-xs sm:text-sm text-[#4A6B68] font-medium lg:inline">
             {t("authors.toolbar.showingPage", { shown })}
           </span>
         </div>
@@ -86,16 +92,18 @@ export default function AuthorsToolbar({ shown, total, sort, onSort, region, onR
         <div className="flex shrink-0 items-center gap-4">
           <DesktopSelect label={t("authors.toolbar.region")} value={region} onChange={onRegion} options={regions} isFa={isFa} map={regionNames} />
           <DesktopSelect label={t("authors.toolbar.sortBy")} value={sort} onChange={onSort} options={sortOptions} isFa={isFa} map={sortNames} />
-          <span className="h-5 w-px bg-[#D0E8E6]" />
-          <div className="flex rounded-lg bg-[#E6F4F3] border border-[#D0E8E6] p-0.5">
-            {[["grid", LayoutGrid], ["list", Rows3]].map(([k, Icon]) => (
+          <span className="h-6 w-px bg-[#D0E8E6]" />
+          <div role="group" aria-label="Layout switch" className="flex rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] p-1">
+            {[["grid", LayoutGrid, "Grid layout"], ["list", Rows3, "List layout"]].map(([k, Icon, label]) => (
               <button
                 key={k}
+                type="button"
                 onClick={() => onView(k)}
-                aria-label={`${k} view`}
-                className={`rounded-md p-1.5 transition ${view === k ? "bg-[#0E6760] text-[#FFFFFF] shadow-sm" : "text-[#4A6B68] hover:text-[#0E6760]"}`}
+                aria-label={label}
+                aria-pressed={view === k}
+                className={`rounded-lg p-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${view === k ? "bg-[#0E6760] text-[#FFFFFF] shadow-sm" : "text-[#4A6B68] hover:text-[#0E6760]"}`}
               >
-                <Icon className="h-3.5 w-3.5" />
+                <Icon className="h-4 w-4" aria-hidden="true" />
               </button>
             ))}
           </div>

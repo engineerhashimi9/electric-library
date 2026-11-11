@@ -1,26 +1,26 @@
-const resolveStr = (val) => {
-  if (!val) return "";
-  if (typeof val === "string") return val;
-  if (typeof val === "object") return val.en || val.fa || Object.values(val)[0] || "";
-  return String(val);
-};
+import { getLocalized } from "./langHelper";
 
-// خروجی ساده‌ی ارجاعات به‌صورت فایل متنی
-export default function exportCitations(items) {
-  if (!Array.isArray(items)) return;
+export default function exportCitations(items, lang = "en") {
+  if (!Array.isArray(items) || items.length === 0) return;
+
   const text = items
     .map((b, i) => {
-      const author = resolveStr(b.author);
-      const title = resolveStr(b.title);
-      const badge = resolveStr(b.badge);
-      const format = resolveStr(b.format).toLowerCase();
-      return `${i + 1}. ${author}. ${title}. ${badge}. ${format}.`;
+      const author = getLocalized(b.author, lang);
+      const title = getLocalized(b.title, lang);
+      const badge = getLocalized(b.badge, lang);
+      const format = getLocalized(b.format, lang);
+      return `${i + 1}. ${author}. "${title}". ${badge ? `[${badge}] ` : ""}${format}.`;
     })
-    .join("\n");
-  const url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+    .join("\n\n");
+
+  // Add UTF-8 BOM so text files with Persian/Arabic script display correctly in Windows Notepad and other tools
+  const blob = new Blob(["\uFEFF" + text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "favorites-citations.txt";
+  a.download = `bargin-citations-${new Date().toISOString().slice(0, 10)}.txt`;
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }

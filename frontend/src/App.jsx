@@ -4,11 +4,9 @@ import { HomePage } from "./pages/Home/HomePage";
 import Footer from "./component/Footer";
 import MobileBottomNav from "./component/MobileBottomNav";
 import Navbar from "./component/Navbar";
-import MyLibrary from "./pages/library/MyLibrary.jsx";
 import ExploreLibrary from "./pages/exploreBooks/ExploreLibrary.jsx";
 import Authors from "./pages/author/Authors.jsx";
 import Favorites from "./pages/favorite/Favorites.jsx";
-import Profile from "./pages/profile/Profile.jsx";
 
 function App() {
   return (
@@ -19,11 +17,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/explorebooks" element={<ExploreLibrary />} />
         <Route path="/explore" element={<Navigate to="/explorebooks" replace />} />
-        <Route path="/library" element={<MyLibrary />} />
         <Route path="/favorite" element={<Favorites />} />
         <Route path="/favorites" element={<Navigate to="/favorite" replace />} />
         <Route path="/author" element={<Authors />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/authors" element={<Navigate to="/author" replace />} />
         <Route
           path="/signin"
           element={

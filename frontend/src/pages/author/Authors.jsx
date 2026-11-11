@@ -12,7 +12,7 @@ export default function Authors() {
   const to = (a.page - 1) * PER_PAGE + a.visible.length;
 
   return (
-    <div className="min-h-screen bg-[#F4FAFA] pb-28 text-[#0A2E2C] lg:pb-0">
+    <div className="min-h-screen bg-[#F4FAFA] pb-28 text-[#0A2E2C] md:pb-16">
       <AuthorsHero
         total={authors.length}
         followedCount={a.followed.length}
@@ -25,7 +25,7 @@ export default function Authors() {
         }}
       />
 
-      <main className="mx-auto flex max-w-[1440px] flex-col gap-5 px-5 pb-10 pt-5 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
+      <main className="mx-auto flex max-w-[1440px] flex-col gap-6 px-4 sm:px-6 pb-12 pt-6 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
         <AuthorsToolbar
           shown={a.visible.length}
           total={a.filtered.length}

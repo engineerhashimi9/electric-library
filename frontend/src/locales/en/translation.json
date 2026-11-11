@@ -18,9 +18,9 @@
   "bottomNav": {
     "home": "Home",
     "explore": "Explore",
-    "library": "Library",
     "favorites": "Favorites",
-    "profile": "Profile"
+    "authors": "Authors",
+    "author": "Authors"
   },
   "home": {
     "hero": {
@@ -38,7 +38,7 @@
       "badge": "CURATOR'S SPOTLIGHT",
       "title": "Speculative Realism & Modernist Thought",
       "desc": "A foundational examination of human consciousness through late 20th century philosophy.",
-      "borrowBtn": "Borrow Edition",
+      "borrowBtn": "Download Edition",
       "readBtn": "Read Now"
     },
     "popular": {
@@ -365,7 +365,8 @@
     "ebook": "E-BOOK",
     "audio": "AUDIO",
     "hardcover": "HARDCOVER",
-    "borrow": "Borrow",
+    "borrow": "Download",
+    "download": "Download",
     "reserve": "Reserve Copy",
     "listen": "Listen Now",
     "reserveShort": "Reserve",

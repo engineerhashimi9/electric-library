@@ -1,38 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { books } from "./data";
 import { getLocalized } from "@/utils/langHelper";
 
-import ActiveFilters from "./ActiveFilters";
 import { BookCard } from "./BookCard";
 import CatalogControls from "./CatalogControls";
 import CatalogHero from "./CatalogHero";
 import CatalogPagination from "./CatalogPagination";
 import CollectionSpotlight from "./CollectionSpotlight";
-import FilterSidebar from "./FilterSidebar";
-import MobileFilterDrawer from "./MobileFilterDrawer";
-
-function createDefaultFilters() {
-  return {
-    formats: [],
-    availableOnly: false,
-    reserveOnly: false,
-    highRating: false,
-    length: "",
-    language: "",
-  };
-}
-
-function createEmptyFilters() {
-  return {
-    formats: [],
-    availableOnly: false,
-    reserveOnly: false,
-    highRating: false,
-    length: "",
-    language: "",
-  };
-}
+import { ViewToggle } from "./ViewToggle";
+import { CheckCircle2 } from "lucide-react";
 
 function useDesktopLayout() {
   const [desktop, setDesktop] = useState(() =>
@@ -62,9 +39,7 @@ export default function ExploreLibrary() {
   const [genre, setGenre] = useState("All Genres");
   const [sort, setSort] = useState("popular");
   const [view, setView] = useState("grid");
-  const [filters, setFilters] = useState(createDefaultFilters);
   const [favorites, setFavorites] = useState([]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [desktopPerPage, setDesktopPerPage] = useState(8);
   const [notice, setNotice] = useState("");
@@ -73,12 +48,6 @@ export default function ExploreLibrary() {
   const searchRef = useRef(null);
 
   const perPage = desktop ? desktopPerPage : 6;
-
-  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
-
-  useEffect(() => {
-    if (desktop) setDrawerOpen(false);
-  }, [desktop]);
 
   useEffect(() => {
     if (!notice) return;
@@ -90,9 +59,6 @@ export default function ExploreLibrary() {
     const search = query.trim().toLowerCase();
 
     const result = books.filter((book) => {
-      const format = desktop ? book.format : book.mobileFormat;
-      const rating = desktop ? book.rating : (book.mobileRating || book.rating);
-
       const titleStr = typeof book.title === "object" ? `${book.title.en} ${book.title.fa}` : book.title;
       const authorStr = typeof book.author === "object" ? `${book.author.en} ${book.author.fa}` : book.author;
       const detailStr = typeof book.detail === "object" ? `${book.detail.en} ${book.detail.fa}` : (book.detail || "");
@@ -104,35 +70,6 @@ export default function ExploreLibrary() {
       if (search && !searchableText.includes(search)) return false;
 
       if (genre !== "All Genres" && book.genre !== genre) return false;
-
-      if (filters.formats.length > 0 && !filters.formats.includes(format)) {
-        return false;
-      }
-
-      if (filters.availableOnly && !filters.reserveOnly && !book.available) {
-        return false;
-      }
-
-      if (filters.reserveOnly && !filters.availableOnly && book.available) {
-        return false;
-      }
-
-      if (filters.highRating && rating < 4.5) return false;
-
-      if (filters.language && book.language !== filters.language) {
-        return false;
-      }
-
-      if (filters.length === "short" && book.pages >= 200) return false;
-
-      if (
-        filters.length === "standard" &&
-        (book.pages < 200 || book.pages > 400)
-      ) {
-        return false;
-      }
-
-      if (filters.length === "epic" && book.pages <= 400) return false;
 
       return true;
     });
@@ -154,74 +91,58 @@ export default function ExploreLibrary() {
     }
 
     return result;
-  }, [query, genre, filters, sort, desktop, lang]);
+  }, [query, genre, sort, desktop, lang]);
 
   const total = filteredBooks.length;
   const pageCount = Math.max(1, Math.ceil(total / perPage));
   const currentPage = Math.min(page, pageCount);
 
-  const visibleBooks = filteredBooks.slice(
-    (currentPage - 1) * perPage,
-    currentPage * perPage,
-  );
-
   const start = total === 0 ? 0 : (currentPage - 1) * perPage + 1;
   const end = Math.min(currentPage * perPage, total);
 
-  const filterCount =
-    filters.formats.length +
-    Number(filters.availableOnly) +
-    Number(filters.reserveOnly) +
-    Number(filters.highRating) +
-    Number(Boolean(filters.length)) +
-    Number(Boolean(filters.language));
+  const visibleBooks = useMemo(() => {
+    const startIndex = (currentPage - 1) * perPage;
+    return filteredBooks.slice(startIndex, startIndex + perPage);
+  }, [filteredBooks, currentPage, perPage]);
 
   function updateQuery(value) {
     setQuery(value);
     setPage(1);
   }
 
-  function updateGenre(value) {
-    setGenre(value);
+  function updateGenre(nextGenre) {
+    setGenre(nextGenre);
     setPage(1);
   }
 
-  function updateSort(value) {
-    setSort(value);
-    setPage(1);
-  }
-
-  function updateFilters(value) {
-    setFilters(value);
-    setPage(1);
-  }
-
-  function clearFilters() {
-    setFilters(createEmptyFilters());
-    setGenre("All Genres");
+  function updateSort(nextSort) {
+    setSort(nextSort);
     setPage(1);
   }
 
   function toggleFavorite(id) {
-    setFavorites((previous) =>
-      previous.includes(id)
-        ? previous.filter((item) => item !== id)
-        : [...previous, id],
-    );
+    setFavorites((prev) => {
+      const isFav = prev.includes(id);
+      const next = isFav ? prev.filter((item) => item !== id) : [...prev, id];
+      const targetBook = books.find((b) => b.id === id);
+      const title = targetBook ? getLocalized(targetBook.title, lang) : "";
+
+      setNotice(
+        isFav
+          ? (lang === "fa" ? `«${title}» از علاقه‌مندی‌ها حذف شد.` : `Removed "${title}" from favorites.`)
+          : (lang === "fa" ? `«${title}» به علاقه‌مندی‌ها اضافه شد.` : `Added "${title}" to favorites.`),
+      );
+
+      return next;
+    });
   }
 
-  function handleBookAction(book, format) {
+  function handleBookAction(book) {
     const title = getLocalized(book.title, lang);
-    const action = !book.available
-      ? (lang === "fa" ? "رزرو" : "Reservation")
-      : format === "audio"
-        ? (lang === "fa" ? "پخش صوتی" : "Audio playback")
-        : (lang === "fa" ? "امانت گرفتن" : "Borrowing");
-
     setNotice(
       lang === "fa"
-        ? `عملیات «${action}» برای «${title}» نمایشی است.`
-        : `${action} for “${title}” is a demo action. Connect your library API to enable it.`,
+        ? `دانلود «${title}» آغاز شد.`
+        : `Download started for "${title}".`,
     );
   }
 
@@ -233,11 +154,11 @@ export default function ExploreLibrary() {
     <div className="min-h-screen bg-[#F4FAFA] text-[#0A2E2C]">
       <main
         id="catalog"
-        className="mx-auto max-w-[1800px] px-4 pb-28 sm:px-6 md:px-8 md:pb-12 lg:px-10 xl:px-16"
+        className="mx-auto max-w-[1440px] px-4 pb-28 sm:px-6 md:px-8 md:pb-16 xl:px-12"
       >
         <CatalogHero />
 
-        <div className="mt-6 lg:mt-10">
+        <div className="mt-6 lg:mt-8">
           <CatalogControls
             query={query}
             onQueryChange={updateQuery}
@@ -248,80 +169,82 @@ export default function ExploreLibrary() {
             onViewChange={setView}
             genre={genre}
             onGenreChange={updateGenre}
-            onOpenFilters={() => setDrawerOpen(true)}
-            filterCount={filterCount}
           />
 
-          <div className="mb-4 mt-5 lg:mb-6 lg:mt-8">
-            <ActiveFilters
-              filters={filters}
-              onChange={updateFilters}
-              onClear={clearFilters}
-              total={total}
-              start={start}
-              end={end}
-              sort={sort}
-              onSortChange={updateSort}
-              view={view}
-              onViewChange={setView}
-            />
-          </div>
-        </div>
+          {/* Catalog Toolbar */}
+          <div className="mb-4 mt-6 flex flex-wrap items-center justify-between gap-4 lg:mb-6 lg:mt-8">
+            <p className="text-xs sm:text-sm text-[#4A6B68] font-bold">
+              <span className="lg:hidden">
+                {t("explore.showingMobile", { total })}
+              </span>
+              <span className="hidden lg:inline">
+                {t("explore.showing", { start, end, total })}
+              </span>
+            </p>
 
-        <div className="flex flex-col">
-          <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)] xl:gap-8">
-            <FilterSidebar
-              filters={filters}
-              onChange={updateFilters}
-              onReset={clearFilters}
-            />
-
-            <section aria-label="Library books" className="min-w-0">
-              {visibleBooks.length > 0 ? (
-                <div
-                  className={`grid gap-3 sm:gap-5 lg:gap-x-5 lg:gap-y-7 ${
-                    view === "grid"
-                      ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3"
-                      : "grid-cols-1 md:grid-cols-2"
-                  }`}
+            <div className="hidden lg:flex items-center gap-3">
+              <label className="relative">
+                <select
+                  aria-label={t("explore.sort.label")}
+                  value={sort}
+                  onChange={(event) => updateSort(event.target.value)}
+                  className="rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] text-[#0A2E2C] px-4 py-2.5 text-xs sm:text-sm font-bold shadow-library-sm outline-none focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20 transition-all cursor-pointer"
                 >
-                  {visibleBooks.map((book) => (
-                    <BookCard
-                      key={book.id}
-                      book={book}
-                      favorite={favorites.includes(book.id)}
-                      onToggleFavorite={toggleFavorite}
-                      onAction={handleBookAction}
-                      view={view}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-[#FFFFFF] border border-[#D0E8E6] p-6 text-center shadow-sm">
-                  <h2 className="text-2xl font-bold text-[#0E6760]">
-                    {t("explore.empty.title")}
-                  </h2>
-
-                  <p className="mt-2 text-sm text-[#4A6B68]">
-                    {t("explore.empty.desc")}
-                  </p>
-
-                  <button
-                    onClick={() => {
-                      updateQuery("");
-                      clearFilters();
-                    }}
-                    className="mt-5 rounded-xl bg-[#17A296] hover:bg-[#0E6760] px-5 py-3 text-sm font-bold text-[#FFFFFF] transition-colors shadow-sm"
-                  >
-                    {t("explore.empty.resetBtn")}
-                  </button>
-                </div>
-              )}
-            </section>
+                  <option value="popular">{t("explore.sort.popular")}</option>
+                  <option value="rating">{t("explore.sort.rating")}</option>
+                  <option value="title">{t("explore.sort.title")}</option>
+                </select>
+              </label>
+              <ViewToggle view={view} onChange={setView} />
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 lg:mt-10">
+        <section aria-label="Library books" className="min-w-0">
+          {visibleBooks.length > 0 ? (
+            <div
+              className={`grid gap-3.5 sm:gap-5 lg:gap-6 ${
+                view === "grid"
+                  ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                  : "grid-cols-1 md:grid-cols-2"
+              }`}
+            >
+              {visibleBooks.map((book) => (
+                <BookCard
+                  key={book.id}
+                  book={book}
+                  favorite={favorites.includes(book.id)}
+                  onToggleFavorite={toggleFavorite}
+                  onAction={handleBookAction}
+                  view={view}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl bg-[#FFFFFF] border border-[#D0E8E6] p-8 text-center shadow-library-sm">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#0E6760]">
+                {t("explore.empty.title")}
+              </h2>
+
+              <p className="mt-2 text-xs sm:text-sm text-[#4A6B68] max-w-md">
+                {t("explore.empty.desc")}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => {
+                  updateQuery("");
+                  updateGenre("All Genres");
+                }}
+                className="mt-5 rounded-xl bg-[#17A296] hover:bg-[#0E6760] px-5 py-2.5 text-xs sm:text-sm font-bold text-[#FFFFFF] transition-all shadow-library-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+              >
+                {t("explore.empty.resetBtn")}
+              </button>
+            </div>
+          )}
+        </section>
+
+        <div className="mt-10 lg:mt-14">
           <CollectionSpotlight
             onExplore={() => {
               updateGenre("Philosophy");
@@ -334,7 +257,7 @@ export default function ExploreLibrary() {
           />
         </div>
 
-        <div className="mt-6 lg:mt-8">
+        <div className="mt-8 lg:mt-10">
           <CatalogPagination
             page={currentPage}
             pageCount={pageCount}
@@ -351,21 +274,15 @@ export default function ExploreLibrary() {
         </div>
       </main>
 
-      <MobileFilterDrawer
-        open={drawerOpen}
-        onClose={closeDrawer}
-        filters={filters}
-        onChange={updateFilters}
-        onReset={clearFilters}
-      />
-
       {notice && (
-        <div
+        <aside
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 rounded-xl bg-[#0E6760] border border-[#156B6B] px-5 py-4 text-sm font-semibold text-[#FFFFFF] shadow-xl lg:bottom-6"
+          aria-live="polite"
+          className="fixed bottom-24 left-1/2 z-[70] flex w-auto max-w-[calc(100vw-2rem)] sm:max-w-md -translate-x-1/2 items-center gap-3 rounded-2xl bg-[#0E6760] border border-[#156B6B] px-4 py-3 text-xs sm:text-sm font-semibold text-[#FFFFFF] shadow-library-lg lg:bottom-8 animate-in fade-in"
         >
-          {notice}
-        </div>
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#17A296]" />
+          <span>{notice}</span>
+        </aside>
       )}
     </div>
   );

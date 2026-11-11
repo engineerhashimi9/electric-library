@@ -1,0 +1,11 @@
+* [33mc8a89a2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m refactor: remove profile-related components and data from the online library
+[31m|[m * [33mc0605ae[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: add profile settings panel and related components
+[31m|[m * [33m8351d46[m restructure the project
+[31m|[m[31m/[m  
+* [33md26a34a[m style: update color scheme and styling for profile components
+* [33m71a1f28[m feat: Enhance profile settings and statistics with localization support
+* [33md0ed6b5[m feat(profile): add profile components and functionalities
+* [33m45979ad[m feat: add QuoteBanner, ShelfToolbar, and StatusLine components for favorites page
+* [33m174f6a0[m feat: Add new images and implement Footer, Navbar, and MobileBottomNav components in the Home Page
+* [33mc51447c[m feat: Implement Home Page components including AuthorCard, BookCard, BenefitsBanner, and more
+* [33m15bfc7d[m Refactor Django settings and URL configurations; add initial API view for book listing

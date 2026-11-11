@@ -1,11 +1,18 @@
-export default function SectionHeading({ eyebrow, title, right }) {
+export default function SectionHeading({ eyebrow, title, right, className = "" }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div className="space-y-1">
-        <p className="text-[12px] font-bold uppercase tracking-[1.2px] text-[#236D64] lg:text-[14px] lg:tracking-[1.6px]">{eyebrow}</p>
-        <h2 className="text-[24px] font-bold leading-8 tracking-[-0.28px] text-[#0E6760] lg:text-[28px] lg:leading-9">{title}</h2>
+    <div className={`flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between ${className}`}>
+      <div className="space-y-1.5">
+        {eyebrow && (
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#236D64]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#17A296] shrink-0" aria-hidden="true" />
+            {eyebrow}
+          </p>
+        )}
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-[#0E6760] leading-snug">
+          {title}
+        </h2>
       </div>
-      {right}
+      {right && <div className="shrink-0">{right}</div>}
     </div>
   );
 }

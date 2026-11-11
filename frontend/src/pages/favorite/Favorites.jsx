@@ -1,4 +1,3 @@
-// src/pages/favorite/Favorites.jsx
 import FavoritesHero from "./FavoritesHero";
 import ShelfToolbar from "./ShelfToolbar";
 import BookGrid from "./BookGrid";
@@ -16,7 +15,7 @@ export default function Favorites() {
   const to = (f.page - 1) * PER_PAGE + f.visible.length;
 
   return (
-    <div className="min-h-screen bg-[#F4FAFA] pb-24 text-[#0A2E2C] md:pb-0">
+    <div className="min-h-screen bg-[#F4FAFA] pb-28 text-[#0A2E2C] md:pb-16">
       <FavoritesHero
         total={f.items.length}
         actions={{
@@ -33,7 +32,7 @@ export default function Favorites() {
           onChange: f.setCategory,
         }}
       />
-      <main className="mx-auto flex max-w-[1440px] flex-col gap-5 px-4 sm:px-5 pb-10 pt-5 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
+      <main className="mx-auto flex max-w-[1440px] flex-col gap-6 px-4 sm:px-6 pb-12 pt-6 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
         <ShelfToolbar
           total={f.items.length}
           sort={f.sort}
@@ -53,6 +52,7 @@ export default function Favorites() {
             books={f.visible}
             view={f.view}
             onRemove={f.removeFavorite}
+            onDownload={f.downloadBook}
           />
         )}
         <QuoteBanner />

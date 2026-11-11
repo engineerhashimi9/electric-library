@@ -19,30 +19,29 @@ export default function AuthorCard({ author, following, onToggleFollow }) {
   const locCountry = getLocalized(country, lang);
 
   return (
-    <article className="group flex flex-col items-center gap-2 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#17A296] hover:shadow-lg sm:gap-3 sm:p-6 text-[#0A2E2C]">
-      <div className="overflow-hidden rounded-full ring-4 ring-[#E6F4F3] transition duration-300 group-hover:ring-[#17A296]">
+    <article className="group flex flex-col items-center gap-2.5 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] p-4 sm:p-6 text-center shadow-library-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#17A296] hover:shadow-library-hover text-[#0A2E2C]">
+      <div className="overflow-hidden rounded-full ring-4 ring-[#E6F4F3] transition-all duration-300 group-hover:ring-[#17A296]">
         <Avatar
           name={locName}
           photo={photo}
-          className="h-16 w-16 transition duration-500 group-hover:scale-110 sm:h-20 sm:w-20"
+          className="h-16 w-16 sm:h-20 sm:w-20 transition duration-500 group-hover:scale-105"
         />
       </div>
 
       <div className="space-y-0.5">
-        <h3
-          className="text-[17px] leading-[22px] text-[#0E6760] font-sans font-bold sm:text-[20px] sm:leading-[26px]"
-        >
+        <h3 className="text-base sm:text-lg text-[#0E6760] font-extrabold leading-snug">
           {locName}
         </h3>
-        <p className="text-[11px] tracking-[0.3px] text-[#4A6B68]">
+        <p className="text-xs text-[#4A6B68] font-medium">
           {formatLife(author, isFa)} • {locCountry}
         </p>
       </div>
-      <p className="min-h-[28px] text-[11px] font-bold leading-[14px] text-[#17A296] sm:text-[12px]">
+
+      <p className="min-h-[28px] text-xs font-bold leading-normal text-[#17A296] sm:text-sm">
         {locRole}
       </p>
 
-      <p className="line-clamp-3 hidden text-[12px] leading-relaxed text-[#4A6B68] sm:block">
+      <p className="line-clamp-3 hidden text-xs leading-relaxed text-[#4A6B68] sm:block">
         {locBio}
       </p>
 
@@ -50,34 +49,35 @@ export default function AuthorCard({ author, following, onToggleFollow }) {
         {categories.map((c) => (
           <span
             key={c}
-            className="rounded-full bg-[#E6F4F3] border border-[#D0E8E6] px-2.5 py-0.5 text-[10px] font-bold text-[#236D64]"
+            className="rounded-full bg-[#E6F4F3] border border-[#D0E8E6] px-2.5 py-0.5 text-xs font-bold text-[#236D64]"
           >
             {c}
           </span>
         ))}
       </div>
 
-      <div className="mt-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-1 text-[11px] text-[#4A6B68]">
-        <span className="flex items-center gap-1">
-          <BookMarked className="h-3 w-3 text-[#17A296]" /> {works} {t("authors.card.works")}
+      <div className="mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-2 text-xs text-[#4A6B68] font-semibold">
+        <span className="flex items-center gap-1.5">
+          <BookMarked className="h-3.5 w-3.5 text-[#17A296]" aria-hidden="true" />
+          <span>{works} {t("authors.card.works")}</span>
         </span>
-        <span className="flex items-center gap-1">
-          <Users className="h-3 w-3 text-[#17A296]" />{" "}
-          {formatFollowers(followers + (following ? 1 : 0))} {t("authors.card.followers")}
+        <span className="flex items-center gap-1.5">
+          <Users className="h-3.5 w-3.5 text-[#17A296]" aria-hidden="true" />
+          <span>{formatFollowers(followers + (following ? 1 : 0))} {t("authors.card.followers")}</span>
         </span>
       </div>
 
       <FollowButton
         following={following}
         onToggle={onToggleFollow}
-        className="w-full"
+        className="w-full mt-1"
       />
 
       <a
-        href="#"
-        className="hidden items-center gap-1 text-[12px] font-semibold text-[#0E6760] transition hover:text-[#17A296] sm:flex"
+        href="#explore"
+        className="hidden items-center gap-1 text-xs font-bold text-[#0E6760] transition-colors hover:text-[#17A296] sm:flex pt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
       >
-        {t("authors.card.explore")}{" "}
+        <span>{t("authors.card.explore")}</span>
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
       </a>
     </article>

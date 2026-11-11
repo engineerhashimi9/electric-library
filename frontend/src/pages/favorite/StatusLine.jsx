@@ -7,11 +7,12 @@ const tones = {
 export default function StatusLine({ status, meta, className = "" }) {
   const t = (status && tones[status.type]) || tones.available;
   return (
-    <div className={`flex items-center justify-between gap-2 text-[11px] tracking-[0.66px] ${className}`}>
+    <div className={`flex items-center justify-between gap-2 text-xs ${className}`}>
       <span className={`flex items-center gap-1.5 ${t.text}`}>
-        <span className={`h-2 w-2 shrink-0 rounded-full ${t.dot}`} /> {status?.label || ""}
+        <span className={`h-2 w-2 shrink-0 rounded-full ${t.dot}`} aria-hidden="true" />
+        <span className="truncate">{status?.label || ""}</span>
       </span>
-      <span className="whitespace-nowrap font-bold text-[#4A6B68]">{meta}</span>
+      {meta && <span className="whitespace-nowrap font-bold text-[#4A6B68]">{meta}</span>}
     </div>
   );
 }
