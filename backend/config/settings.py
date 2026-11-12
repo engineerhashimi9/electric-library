@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,8 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-      "django_filters",
-     "corsheaders",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "django_filters",
+    "corsheaders",
     "api",
     "books",
     "users",
@@ -127,7 +130,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),

@@ -25,9 +25,16 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            token = TokenObtainPairView.for_user(serializer.instance)
-            return Response({**serializer.data, "refresh": str(token), "access": str(token.access_token)}, status=status.HTTP_201_CREATED)
+            user = serializer.save()
+            refresh = RefreshToken.for_user(user)
+            return Response(
+                {
+                    "user": UserSerializer(user).data,
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                },
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -35,7 +42,7 @@ class LoginView(APIView):
     serializer_class = UserLoginSerializer
 
     def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             password = serializer.validated_data["password"]
@@ -44,6 +51,7 @@ class LoginView(APIView):
                 refresh = RefreshToken.for_user(user)
                 return Response(
                     {
+                        "user": UserSerializer(user).data,
                         "refresh": str(refresh),
                         "access": str(refresh.access_token),
                     }
@@ -78,11 +86,19 @@ class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = {"title": ["exact", "in"], "category": ["exact", "in"], "author": ["exact", "in"], "price": ["exact", "lt", "gt"], "publication_date": [
-        "exact", "lt", "gt"], "edition": ["exact", "lt", "gt"], "score": ["exact", "lt", "gt"], "downloads": ["exact", "lt", "gt"], "pages": ["exact", "lt", "gt"]}
-    # filterset_fields=["author","category"]
-    search_fields = ["content", "title"]
-    ordering_fields = ["id"]
+    filterset_fields = {
+        "title": ["exact", "in"],
+        "category": ["exact", "in"],
+        "author": ["exact", "in"],
+        "price": ["exact", "lt", "gt"],
+        "publication_date": ["exact", "lt", "gt"],
+        "edition": ["exact", "lt", "gt"],
+        "score": ["exact", "lt", "gt"],
+        "downloads": ["exact", "lt", "gt"],
+        "pages": ["exact", "lt", "gt"],
+    }
+    search_fields = ["title", "description"]
+    ordering_fields = ["id", "title", "price", "publication_date"]
 
 
 class AuthorViewset(viewsets.ModelViewSet):
