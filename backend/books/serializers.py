@@ -1,4 +1,4 @@
-from django.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer
 from books.models import Author, Book
 
 

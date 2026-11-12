@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from backend.books.models import Author, Book
-from backend.books.serializers import BookSerializer, AuthorSerializer
+from books.models import Author, Book
+from books.serializers import BookSerializer, AuthorSerializer
 from rest_framework import viewsets
 from users.models import User
 from users.serializers import UserSerializer, UserRegistrationSerializer, UserLoginSerializer
@@ -23,10 +23,10 @@ class RegisterView(APIView):
     serializer_class = UserRegistrationSerializer
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            token = TokenObtainPairView(serializer.instance)
+            token = TokenObtainPairView.for_user(serializer.instance)
             return Response({**serializer.data, "refresh": str(token), "access": str(token.access_token)}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -74,6 +74,7 @@ class ProfileView(APIView):
 
 
 class BookViewset(viewsets.ModelViewSet):
+    # permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]

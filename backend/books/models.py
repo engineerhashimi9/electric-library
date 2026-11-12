@@ -14,12 +14,12 @@ class Author(models.Model):
     name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     email=models.EmailField(unique=True)
-    description=models.TextField()
+    description=models.TextField(blank=True, null=True)
     
 class Category(models.Model)  :
     id=models.AutoField(primary_key=True, unique=True)
     name=models.CharField(max_length=100)
-    description=models.TextField()
+    description=models.TextField(blank=True, null=True)
     
 class Book(models.Model):
     id=models.AutoField(unique=True, primary_key=True)
@@ -32,4 +32,5 @@ class Book(models.Model):
     score=models.DecimalField(max_digits=3, decimal_places=2)
     downloads=models.IntegerField(default=0)
     pages=models.IntegerField()
+    description=models.TextField(blank=True, null=True)
     

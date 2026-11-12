@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     id = models.AutoField(unique=True, primary_key=True)
     name = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     birth_date = models.DateField(auto_now=False, auto_now_add=False, null=True)
     email = models.EmailField(unique=True)
     created_date = models.DateField(auto_now_add=True)
@@ -44,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "lastname"]
+    REQUIRED_FIELDS = ["name", "last_name"]
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
     

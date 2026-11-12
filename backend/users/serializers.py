@@ -5,21 +5,21 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "name", "lastname",
+        fields = ["id", "name", "last_name",
                   "birth_date", "email", "created_date"]
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "name", "lastname", "birth_date", "email", "password"]
+        fields = ["id", "name", "last_name", "birth_date", "email", "password"]
 
     def create(self, validated_data):
         user = User.objects.create_customer(
             email=validated_data["email"],
             password=validated_data["password"],
             name=validated_data["name"],
-            lastname=validated_data["lastname"],
+            last_name=validated_data["last_name"],
             birth_date=validated_data.get("birth_date"),
         )
         return user
