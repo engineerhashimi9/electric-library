@@ -1,12 +1,21 @@
 import React from "react";
-import { Search, Heart } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Search, Heart, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/hooks/useAuth";
+import Avatar from "./ui/Avatar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import BrandLogo from "./ui/BrandLogo";
 
 export default function Navbar() {
   const { t } = useTranslation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  };
 
   const navItems = [
     { label: t("nav.home"), to: "/" },
@@ -93,21 +102,58 @@ export default function Navbar() {
 
           <LanguageSwitcher compact />
 
-          <div className="flex items-center gap-2.5 border-l rtl:border-l-0 rtl:border-r border-[#D0E8E6] pl-3 rtl:pl-0 rtl:pr-3">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-              alt={t("nav.userName")}
-              className="w-9 h-9 rounded-full object-cover border-2 border-[#D0E8E6] shrink-0 shadow-library-sm"
-            />
-            <div className="hidden xl:block text-start">
-              <p className="text-xs font-bold text-[#0E6760] leading-tight">
-                {t("nav.userName")}
-              </p>
-              <p className="text-[11px] text-[#4A6B68] font-medium">
-                {t("nav.userRole")}
-              </p>
+          {user ? (
+            <div className="flex items-center gap-2.5 border-l rtl:border-l-0 rtl:border-r border-[#D0E8E6] pl-3 rtl:pl-0 rtl:pr-3">
+              <Avatar
+                name={user.name}
+                className="w-9 h-9 text-xs border-2 border-[#D0E8E6] shrink-0 shadow-library-sm"
+              />
+              <div className="hidden xl:block text-start max-w-[140px]">
+                <p className="text-xs font-bold text-[#0E6760] leading-tight truncate">
+                  {user.name}
+                </p>
+                <p className="text-[11px] text-[#4A6B68] font-medium truncate">
+                  {t("nav.userRole")}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                title={t("nav.signIn")}
+                aria-label="Sign out"
+                className="p-2 rounded-xl text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+              >
+                <LogOut size={16} aria-hidden="true" />
+              </button>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-2 border-l rtl:border-l-0 rtl:border-r border-[#D0E8E6] pl-3 rtl:pl-0 rtl:pr-3">
+              <NavLink
+                to="/signin"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
+                    isActive
+                      ? "bg-[#E6F4F3] text-[#0E6760]"
+                      : "text-[#0E6760] hover:bg-[#E6F4F3]"
+                  }`
+                }
+              >
+                {t("nav.signIn")}
+              </NavLink>
+              <NavLink
+                to="/signup"
+                className={({ isActive }) =>
+                  `px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-library-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
+                    isActive
+                      ? "bg-[#0E6760] text-[#FFFFFF]"
+                      : "bg-[#17A296] hover:bg-[#0E6760] text-[#FFFFFF]"
+                  }`
+                }
+              >
+                {t("nav.signUp")}
+              </NavLink>
+            </div>
+          )}
         </div>
       </header>
 
@@ -132,11 +178,29 @@ export default function Navbar() {
           >
             <Search size={18} />
           </NavLink>
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
-            alt={t("nav.userName")}
-            className="w-8 h-8 rounded-full object-cover border border-[#D0E8E6] shadow-library-sm"
-          />
+          {user ? (
+            <div className="flex items-center gap-1.5">
+              <Avatar
+                name={user.name}
+                className="w-8 h-8 text-xs border border-[#D0E8E6] shadow-library-sm"
+              />
+              <button
+                type="button"
+                onClick={handleLogout}
+                aria-label="Sign out"
+                className="p-2 bg-[#FFFFFF] border border-[#D0E8E6] rounded-xl text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+              >
+                <LogOut size={16} aria-hidden="true" />
+              </button>
+            </div>
+          ) : (
+            <NavLink
+              to="/signin"
+              className="px-3 py-1.5 bg-[#17A296] hover:bg-[#0E6760] text-[#FFFFFF] text-xs font-bold rounded-xl shadow-library-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+            >
+              {t("nav.signIn")}
+            </NavLink>
+          )}
         </div>
       </header>
     </>

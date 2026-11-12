@@ -6,6 +6,7 @@ export const Input = ({
   error,
   icon: Icon,
   rightIcon: RightIcon,
+  rightElement,
   id,
   className = "",
   ...props
@@ -42,14 +43,20 @@ export const Input = ({
               ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
               : "border-[#D0E8E6] focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20"
           } ${Icon ? "pl-11 rtl:pl-3.5 rtl:pr-11" : ""} ${
-            RightIcon ? "pr-11 rtl:pr-3.5 rtl:pl-11" : ""
+            RightIcon || rightElement ? "pr-11 rtl:pr-3.5 rtl:pl-11" : ""
           } ${className}`}
           {...props}
         />
-        {RightIcon && (
-          <span className="absolute right-3.5 rtl:right-auto rtl:left-3.5 text-[#236D64] flex items-center justify-center">
-            <RightIcon size={18} />
-          </span>
+        {rightElement ? (
+          <div className="absolute right-3 rtl:right-auto rtl:left-3 flex items-center justify-center">
+            {rightElement}
+          </div>
+        ) : (
+          RightIcon && (
+            <span className="absolute right-3.5 rtl:right-auto rtl:left-3.5 text-[#236D64] flex items-center justify-center pointer-events-none">
+              <RightIcon size={18} />
+            </span>
+          )
         )}
       </div>
       {error && (

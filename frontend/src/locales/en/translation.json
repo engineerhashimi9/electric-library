@@ -13,7 +13,9 @@
     "notifications": "Notifications",
     "language": "Language",
     "langEn": "English",
-    "langFa": "دری"
+    "langFa": "دری",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
   },
   "bottomNav": {
     "home": "Home",
@@ -346,7 +348,7 @@
     "cloudActive": "Archival Cloud Active",
     "cloudDesc": "Last session marginalia saved from your Cambridge folio.",
     "emailLabel": "Email or Lumina Patron ID",
-    "passLabel": "Secret Passphrase",
+    "passLabel": "Password",
     "forgotKey": "Forgot key?",
     "keepActive": "Keep reading session active",
     "submit": "Enter Library",
@@ -359,7 +361,34 @@
     "newMember": "New to the fellowship?",
     "request": "Request Membership",
     "encryption": "Protected by Lumina Archival Encryption",
-    "terms": "Privacy & Terms"
+    "terms": "Privacy & Terms",
+    "registerDesk": "FELLOWSHIP REGISTRATION",
+    "registerTitle": "Join the Bargin Sanctuary",
+    "registerDesc": "Create your patron account to curate shelves, synchronize marginalia, and borrow rare digital folios.",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "e.g. Clara Jensen",
+    "emailOnlyLabel": "Email Address",
+    "confirmPassLabel": "Confirm Password",
+    "passMinHint": "Minimum 8 characters",
+    "agreeTerms": "I agree to the Archive Custody Charter and Privacy Policy",
+    "registerSubmit": "Create Sanctuary Account",
+    "alreadyMember": "Already a member of the fellowship?",
+    "signInLink": "Sign In",
+    "signUpSuccess": "Welcome to Bargin! Your patron account has been created.",
+    "signInSuccess": "Welcome back! Redirecting to your library...",
+    "showcaseEyebrow": "ENDOWED DIGITAL SANCTUARY",
+    "showcaseTitle": "40,000+ Rare Folios & Synchronized Marginalia",
+    "showcaseDesc": "Access curated manuscripts, scholarly translations, and cross-device reading notes in English and Dari.",
+    "benefit1": "Instant access to curated e-books & audiobooks",
+    "benefit2": "Synchronized highlights & personal reading shelves",
+    "benefit3": "Bilingual archive in English & Dari (دری)",
+    "errors": {
+      "nameRequired": "Please enter your full name.",
+      "emailRequired": "Please enter a valid email address.",
+      "passwordLength": "Passphrase must be at least 8 characters.",
+      "passwordMismatch": "Passphrases do not match.",
+      "termsRequired": "You must agree to the terms to continue."
+    }
   },
   "bookCard": {
     "ebook": "E-BOOK",
