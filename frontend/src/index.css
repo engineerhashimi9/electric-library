@@ -117,7 +117,7 @@ select {
 
 /* Accessibility Focus States */
 :focus-visible {
-  outline: 2px solid #17A296;
+  
   outline-offset: 3px;
 }
 
@@ -125,7 +125,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 2px solid #17A296;
+
   outline-offset: 2px;
 }
 

@@ -1,5 +1,8 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { AuthLayout } from "./features/auth/AuthLayout";
 import { SignInForm } from "./features/auth/SignInForm";
+import { SignUpForm } from "./features/auth/SignUpForm";
 import { HomePage } from "./pages/Home/HomePage";
 import Footer from "./component/Footer";
 import MobileBottomNav from "./component/MobileBottomNav";
@@ -8,11 +11,16 @@ import ExploreLibrary from "./pages/exploreBooks/ExploreLibrary.jsx";
 import Authors from "./pages/author/Authors.jsx";
 import Favorites from "./pages/favorite/Favorites.jsx";
 
-function App() {
+const AUTH_ROUTES = ["/signin", "/login", "/signup", "/register"];
+
+function AppContent() {
+  const { pathname } = useLocation();
+  const isAuthPage = AUTH_ROUTES.includes(pathname.toLowerCase());
+
   return (
-    <BrowserRouter>
-      <Navbar />
-      <MobileBottomNav />
+    <>
+      {!isAuthPage && <Navbar />}
+      {!isAuthPage && <MobileBottomNav />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/explorebooks" element={<ExploreLibrary />} />
@@ -24,16 +32,35 @@ function App() {
         <Route
           path="/signin"
           element={
-            <div className="min-h-screen bg-[#F4FAFA] flex items-center justify-center py-12 px-4 sm:px-6">
+            <AuthLayout>
               <SignInForm />
-            </div>
+            </AuthLayout>
           }
         />
         <Route path="/login" element={<Navigate to="/signin" replace />} />
+        <Route
+          path="/signup"
+          element={
+            <AuthLayout>
+              <SignUpForm />
+            </AuthLayout>
+          }
+        />
+        <Route path="/register" element={<Navigate to="/signup" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer className="hidden md:block" />
-    </BrowserRouter>
+      {!isAuthPage && <Footer className="hidden md:block" />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
