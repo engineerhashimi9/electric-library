@@ -10,6 +10,8 @@ export const SignInForm = () => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("clara.vane@lumina.org");
+  const [name, setName] = useState("clara.vane@lumina.org");
+  const [lastName, setLastName] = useState("clara.vane@lumina.org");
   const [password, setPassword] = useState("archival-scholar-2024");
 
   return (
@@ -48,6 +50,25 @@ export const SignInForm = () => {
 
       {/* Input Fields */}
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+        <Input
+          
+          type="text"
+          placeholder="Ahmad"
+          icon={Name}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <Input
+          
+          type="text"
+          placeholder="Vane"
+          icon={Name}
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+          required
+        />
         <Input
           label={t("auth.emailLabel")}
           type="email"
