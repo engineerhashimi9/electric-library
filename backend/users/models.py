@@ -8,7 +8,7 @@ from django.urls import reverse
 
 
 class UserManager(BaseUserManager):
-    def create_customer(self, email, password, **kwargs):
+    def create_user(self, email, password, **kwargs):
         if not email:
             raise ValueError("email must be set!")
         email = self.normalize_email(email)
@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
             raise ValueError("invalid operation")
         if kwargs.get("is_superuser") is not True:
             raise ValueError("invalid operation")
-        return self.create_customer(email, password, **kwargs)
+        return self.create_user(email, password, **kwargs)
 
 
 class User(AbstractBaseUser, PermissionsMixin):

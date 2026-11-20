@@ -1,6 +1,9 @@
+from xml.parsers.expat import model
 from django.db import models
 from django.contrib.auth import get_user_model    
 User = get_user_model()
+
+
 
 
 class UserBook(models.Model):
@@ -14,6 +17,7 @@ class Author(models.Model):
     name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     email=models.EmailField(unique=True)
+    job=models.CharField(max_length=200)
     description=models.TextField(blank=True, null=True)
     
 class Category(models.Model)  :

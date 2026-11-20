@@ -13,4 +13,5 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r"books", views.BookViewset, basename="book")
 router.register(r"authors", views.AuthorViewset, basename="author")
+router.register(r"categories", views.CategoryViewSet, basename="category")
 urlpatterns += router.urls
