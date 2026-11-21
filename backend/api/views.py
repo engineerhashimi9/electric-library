@@ -200,4 +200,4 @@ class AuthorApiView(APIView):
 class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomPermisson]
     queryset = Category.objects.all()
-    serializer_class = CategorySeializer
+    serializer_class = CategorySerializer

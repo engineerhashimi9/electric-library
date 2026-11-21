@@ -35,10 +35,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     id = models.AutoField(unique=True, primary_key=True)
-    name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     birth_date = models.DateField(auto_now=False, auto_now_add=False, null=True)
     email = models.EmailField(unique=True)
+    bio=models.CharField(max_length=250,default="")
     created_date = models.DateField(auto_now_add=True)
     ####
     is_superuser = models.BooleanField(default=False)
