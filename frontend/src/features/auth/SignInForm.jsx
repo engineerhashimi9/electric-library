@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { User,Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -7,11 +7,11 @@ import { Input } from "@/component/ui/Input";
 import { Button } from "@/component/ui/Button";
 import { Checkbox } from "@/component/ui/Checkbox";
 import LanguageSwitcher from "@/component/LanguageSwitcher";
+import { login } from "../../api/auth/login";
 
 export const SignInForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("clara.vane@lumina.org");
   const [password, setPassword] = useState("archival-scholar-2024");
@@ -43,8 +43,8 @@ export const SignInForm = () => {
       .join(" ");
 
     login({
-      name: formattedName || t("nav.userName"),
       email: email.trim(),
+      password: password,
     });
     setSubmitted(true);
     setTimeout(() => {
@@ -99,6 +99,7 @@ export const SignInForm = () => {
 
       {/* Input Fields */}
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
+
         <Input
           label={t("auth.emailLabel")}
           type="email"

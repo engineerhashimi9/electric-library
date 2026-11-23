@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
+import { User, Mail, Lock, Calendar,Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/component/ui/Input";
 import { Button } from "@/component/ui/Button";
 import { Checkbox } from "@/component/ui/Checkbox";
+import { signup } from "../../api/auth/singup";
 import LanguageSwitcher from "@/component/LanguageSwitcher";
 
 export const SignUpForm = () => {
@@ -13,7 +14,9 @@ export const SignUpForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,12 +27,16 @@ export const SignUpForm = () => {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    alert("handleSubmit called");
     e.preventDefault();
     const nextErrors = {};
 
-    if (!fullName.trim()) {
-      nextErrors.fullName = t("auth.errors.nameRequired");
+    if (!name.trim()) {
+      nextErrors.name = t("auth.errors.nameRequired");
+    }
+    if (!lastName.trim()) {
+      nextErrors.lastName = t("auth.errors.lastNameRequired");
     }
     if (!email.trim() || !email.includes("@")) {
       nextErrors.email = t("auth.errors.emailRequired");
@@ -50,10 +57,7 @@ export const SignUpForm = () => {
     }
 
     setErrors({});
-    login({
-      name: fullName.trim(),
-      email: email.trim(),
-    });
+    await signup(name.trim(), lastName.trim(), birthDate, email.trim(), password);
     setSubmitted(true);
     setTimeout(() => {
       navigate("/");
@@ -102,12 +106,40 @@ export const SignUpForm = () => {
           type="text"
           placeholder={t("auth.fullNamePlaceholder")}
           icon={User}
-          value={fullName}
+          value={name}
           onChange={(e) => {
-            setFullName(e.target.value);
-            if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
+            setName(e.target.value);
+            if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
           }}
-          error={errors.fullName}
+          error={errors.name}
+          required
+        />
+
+        <Input
+          label={t("auth.lastNameLabel")}
+          type="text"
+          placeholder={t("auth.lastNamePlaceholder")}
+          icon={User}
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+            if (errors.lastName) setErrors((prev) => ({ ...prev, lastName: "" }));
+          }}
+          error={errors.lastName}
+          required
+        />
+
+        <Input
+          label={t("auth.birthDateLabel")}
+          type="date"
+          placeholder={t("auth.birthDatePlaceholder")}
+          icon={Calendar}
+          value={birthDate}
+          onChange={(e) => {
+            setBirthDate(e.target.value);
+            if (errors.birthDate) setErrors((prev) => ({ ...prev, birthDate: "" }));
+          }}
+          error={errors.birthDate}
           required
         />
 

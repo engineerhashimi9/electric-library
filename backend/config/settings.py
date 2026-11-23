@@ -1,5 +1,6 @@
+from datetime import timedelta
 from pathlib import Path
-
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,8 +15,9 @@ SECRET_KEY = "django-insecure-9gof1ljsbf%ehn%19jsaxocda1sej&*-^mdn@(5-m4^8*b)7)5
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -26,12 +28,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "django_filters",
+    "corsheaders",
     "api",
     "books",
     "users",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,9 +130,20 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+# settings.py
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "my_drf_api",
+        "TIMEOUT": 600,  # Default timeout in seconds (5 minutes)
+    }
 }
