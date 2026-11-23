@@ -1,4 +1,5 @@
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BookCover from "./BookCover";
 import StatusLine from "./StatusLine";
@@ -7,26 +8,31 @@ import { formatVotes } from "../../utils/formatters";
 import { getLocalized } from "../../utils/langHelper";
 
 export default function BookListItem({ book, onRemove, onDownload }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
-  const { title, author, format, rating, votes, badge, note, status, meta, cover } = book;
+  const { id, title, author, format, rating, votes, badge, note, status, meta, cover } = book;
 
   const locTitle = getLocalized(title, lang);
   const locAuthor = getLocalized(author, lang);
   const locFormat = getLocalized(format, lang);
   const locBadge = getLocalized(badge, lang);
   const locNote = getLocalized(note, lang);
+  const bookDetailUrl = `/book/${id}`;
 
   return (
     <article className="group flex flex-wrap items-center gap-3 sm:gap-5 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] hover:border-[#17A296] p-3 sm:p-4 shadow-library-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-library-hover lg:flex-nowrap text-[#0A2E2C]">
-      <div className="h-24 w-16 sm:h-28 sm:w-20 shrink-0 overflow-hidden rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] shadow-sm">
+      <Link to={bookDetailUrl} className="h-24 w-16 sm:h-28 sm:w-20 shrink-0 overflow-hidden rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] shadow-sm block">
         <BookCover cover={cover} title={locTitle} className="h-full w-full transition duration-500 group-hover:scale-105" />
-      </div>
+      </Link>
 
       <div className="min-w-0 flex-1 space-y-1">
         <p className="truncate text-xs font-bold uppercase tracking-wider text-[#236D64]">{locFormat} • {locBadge}</p>
-        <h3 className="truncate text-base sm:text-lg text-[#0A2E2C] font-extrabold leading-snug">{locTitle}</h3>
+        <Link to={bookDetailUrl} className="block group/title">
+          <h3 className="truncate text-base sm:text-lg text-[#0A2E2C] group-hover/title:text-[#0E6760] font-extrabold leading-snug transition-colors">
+            {locTitle}
+          </h3>
+        </Link>
         <p className="text-xs sm:text-sm text-[#4A6B68] font-medium">{locAuthor}</p>
         <p className="line-clamp-1 hidden text-xs italic text-[#4A6B68] sm:block">{locNote}</p>
         <p className="flex items-center gap-1.5 text-xs font-bold text-[#0A2E2C] lg:hidden">
@@ -50,7 +56,17 @@ export default function BookListItem({ book, onRemove, onDownload }) {
         <StatusLine status={status} meta={meta} />
       </div>
 
-      <ActionButton onClick={() => onDownload && onDownload(book)} className="w-full sm:w-[160px] sm:shrink-0" />
+      <div className="flex items-center gap-2 w-full sm:w-auto">
+        <Link
+          to={bookDetailUrl}
+          className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl bg-[#E6F4F3] hover:bg-[#17A296] hover:text-[#FFFFFF] border border-[#D0E8E6] text-[#0E6760] font-bold text-xs transition-colors shrink-0"
+          title={t("bookCard.detail")}
+        >
+          <Info size={14} />
+          <span>{t("bookCard.detail")}</span>
+        </Link>
+        <ActionButton onClick={() => onDownload && onDownload(book)} className="flex-1 sm:w-[130px] sm:shrink-0" />
+      </div>
     </article>
   );
 }

@@ -10,6 +10,7 @@ import Navbar from "./component/Navbar";
 import ExploreLibrary from "./pages/exploreBooks/ExploreLibrary.jsx";
 import Authors from "./pages/author/Authors.jsx";
 import Favorites from "./pages/favorite/Favorites.jsx";
+import BookDetail from "./pages/bookDetail/BookDetail.jsx";
 
 const AUTH_ROUTES = ["/signin", "/login", "/signup", "/register"];
 
@@ -29,6 +30,8 @@ function AppContent() {
         <Route path="/favorites" element={<Navigate to="/favorite" replace />} />
         <Route path="/author" element={<Authors />} />
         <Route path="/authors" element={<Navigate to="/author" replace />} />
+        <Route path="/book/:id" element={<BookDetail />} />
+        <Route path="/books/:id" element={<BookDetail />} />
         <Route
           path="/signin"
           element={

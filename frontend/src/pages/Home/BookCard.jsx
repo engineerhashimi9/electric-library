@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Star, Heart } from "lucide-react";
+import { Star, Heart, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getLocalized } from "@/utils/langHelper";
 
@@ -11,6 +12,7 @@ export default function BookCard({ book }) {
   const title = getLocalized(book.title, lang);
   const author = getLocalized(book.author, lang);
   const tag = getLocalized(book.tag, lang);
+  const bookId = book.id || "meditations";
 
   return (
     <article className="flex flex-col bg-[#FFFFFF] p-3 sm:p-4 rounded-2xl border border-[#D0E8E6] space-y-3 relative group hover:-translate-y-1 hover:border-[#17A296] hover:shadow-library-hover transition-all duration-300">
@@ -27,7 +29,11 @@ export default function BookCard({ book }) {
         />
       </button>
 
-      <div className="relative overflow-hidden rounded-xl bg-[#E6F4F3] aspect-[2/3] w-full border border-[#D0E8E6]/60">
+      <Link
+        to={`/book/${bookId}`}
+        aria-label={`${title} ${t("bookCard.detail")}`}
+        className="relative overflow-hidden rounded-xl bg-[#E6F4F3] aspect-[2/3] w-full border border-[#D0E8E6]/60 block"
+      >
         <img
           src={book.img}
           alt={title}
@@ -39,28 +45,34 @@ export default function BookCard({ book }) {
             {tag}
           </span>
         )}
-      </div>
+      </Link>
 
       <div className="space-y-1 flex-1 min-w-0">
         <div className="flex items-center gap-1.5 text-xs text-[#0A2E2C] font-bold">
           <Star size={12} className="fill-[#17A296] text-[#17A296]" aria-hidden="true" />
           <span>{book.rating}</span>
         </div>
-        <h3 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C] truncate leading-snug">
-          {title}
-        </h3>
+        <Link to={`/book/${bookId}`} className="block">
+          <h3 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C] hover:text-[#0E6760] transition-colors truncate leading-snug">
+            {title}
+          </h3>
+        </Link>
         <p className="text-xs text-[#4A6B68] truncate font-medium">
           {author}
         </p>
       </div>
 
       <div className="flex justify-between items-center gap-2 pt-1 mt-auto border-t border-[#D0E8E6]/50">
-        <span className="text-[11px] sm:text-xs text-[#4A6B68] font-semibold truncate">
-          {t("bookCard.available")}
-        </span>
+        <Link
+          to={`/book/${bookId}`}
+          className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 bg-[#E6F4F3] text-[#0E6760] hover:bg-[#17A296] hover:text-[#FFFFFF] font-bold rounded-lg transition-colors shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+        >
+          <Info size={13} aria-hidden="true" />
+          <span>{t("bookCard.detail")}</span>
+        </Link>
         <button
           type="button"
-          className="text-xs px-3 py-1.5 bg-[#E6F4F3] text-[#0E6760] hover:bg-[#17A296] hover:text-[#FFFFFF] font-bold rounded-lg transition-colors shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+          className="text-xs px-3 py-1.5 bg-[#0E6760] text-[#FFFFFF] hover:bg-[#17A296] font-bold rounded-lg transition-colors shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
         >
           {t("bookCard.borrow")}
         </button>

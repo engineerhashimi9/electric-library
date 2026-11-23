@@ -1,4 +1,5 @@
-import { Star, BookOpen, Bookmark } from "lucide-react";
+import { Star, Bookmark, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getLocalized } from "@/utils/langHelper";
 
@@ -7,6 +8,8 @@ export default function MobileSpotlightCard({ book }) {
   const lang = i18n.language;
 
   if (!book) return null;
+  const bookId = book.id || "shadow-of-the-wind";
+  const title = getLocalized(book.title, lang);
 
   return (
     <article
@@ -25,18 +28,22 @@ export default function MobileSpotlightCard({ book }) {
       </div>
 
       <div className="flex gap-3.5">
-        <img
-          src={book.cover}
-          alt={getLocalized(book.title, lang)}
-          className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md border border-[#156B6B] shrink-0"
-        />
+        <Link to={`/book/${bookId}`} className="shrink-0">
+          <img
+            src={book.cover}
+            alt={title}
+            className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md border border-[#156B6B]"
+          />
+        </Link>
         <div className="space-y-1 min-w-0 flex-1">
           <span className="text-[10px] text-[#9EEFE8] uppercase font-bold tracking-wider block">
             {getLocalized(book.genre, lang)}
           </span>
-          <h3 className="text-base sm:text-lg leading-tight text-[#FFFFFF] font-extrabold line-clamp-2">
-            {getLocalized(book.title, lang)}
-          </h3>
+          <Link to={`/book/${bookId}`} className="block">
+            <h3 className="text-base sm:text-lg leading-tight text-[#FFFFFF] font-extrabold line-clamp-2 hover:text-[#9EEFE8] transition-colors">
+              {title}
+            </h3>
+          </Link>
           <p className="text-xs text-[#B8E2DF] truncate">{getLocalized(book.author, lang)}</p>
           <p className="text-xs text-[#B8E2DF]/90 line-clamp-2 pt-0.5 leading-relaxed">
             {t("home.spotlight.desc")}
@@ -45,13 +52,13 @@ export default function MobileSpotlightCard({ book }) {
       </div>
 
       <div className="flex items-center gap-2 pt-1">
-        <button
-          type="button"
+        <Link
+          to={`/book/${bookId}`}
           className="flex-1 bg-[#17A296] hover:bg-[#FFFFFF] hover:text-[#0E6760] text-[#FFFFFF] py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9EEFE8]"
         >
-          <BookOpen size={15} aria-hidden="true" />
-          <span>{t("home.spotlight.readBtn")}</span>
-        </button>
+          <Info size={15} aria-hidden="true" />
+          <span>{t("bookCard.detail")}</span>
+        </Link>
         <button
           type="button"
           className="p-2.5 bg-[#156B6B] border border-[#17A296]/30 text-[#B8E2DF] hover:bg-[#17A296] hover:text-[#FFFFFF] rounded-xl transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9EEFE8]"

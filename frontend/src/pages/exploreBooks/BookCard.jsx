@@ -3,8 +3,10 @@ import {
   Download,
   Heart,
   Star,
+  Info,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getLocalized } from "../../utils/langHelper";
 
@@ -34,6 +36,8 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
       hardcover: t("bookCard.hardcover"),
     }[book.mobileFormat] || book.mobileFormat;
 
+  const bookDetailUrl = `/book/${book.id}`;
+
   return (
     <article
       className={`group flex w-full rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] hover:border-[#17A296] hover:-translate-y-1 hover:shadow-library-hover p-3 sm:p-4 shadow-library-sm transition-all duration-300 ${
@@ -47,30 +51,32 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
             : "w-full"
         }`}
       >
-        {imageFailed ? (
-          <div className="flex aspect-[2/3] h-full w-full flex-col items-center justify-center gap-3 bg-[#E6F4F3] p-3 text-center">
-            <BookOpen size={28} className="text-[#236D64]" aria-hidden="true" />
-            <span className="text-xs sm:text-sm font-bold text-[#0E6760] line-clamp-2">
-              {localizedTitle}
-            </span>
-          </div>
-        ) : (
-          <picture>
-            <source
-              media="(max-width: 1023px)"
-              srcSet={book.mobileCover || book.cover}
-            />
-            <img
-              src={book.cover}
-              alt={`${localizedTitle} book cover`}
-              loading="lazy"
-              onError={() => setImageFailed(true)}
-              className="aspect-[2/3] h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </picture>
-        )}
+        <Link to={bookDetailUrl} className="block w-full h-full">
+          {imageFailed ? (
+            <div className="flex aspect-[2/3] h-full w-full flex-col items-center justify-center gap-3 bg-[#E6F4F3] p-3 text-center">
+              <BookOpen size={28} className="text-[#236D64]" aria-hidden="true" />
+              <span className="text-xs sm:text-sm font-bold text-[#0E6760] line-clamp-2">
+                {localizedTitle}
+              </span>
+            </div>
+          ) : (
+            <picture>
+              <source
+                media="(max-width: 1023px)"
+                srcSet={book.mobileCover || book.cover}
+              />
+              <img
+                src={book.cover}
+                alt={`${localizedTitle} book cover`}
+                loading="lazy"
+                onError={() => setImageFailed(true)}
+                className="aspect-[2/3] h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </picture>
+          )}
+        </Link>
 
-        <span className="absolute left-2.5 top-2.5 rtl:left-auto rtl:right-2.5 rounded-lg px-2.5 py-1 text-xs font-bold text-[#236D64] bg-[#E6F4F3]/95 border border-[#D0E8E6] backdrop-blur max-w-[70%] truncate shadow-sm">
+        <span className="absolute left-2.5 top-2.5 rtl:left-auto rtl:right-2.5 rounded-lg px-2.5 py-1 text-xs font-bold text-[#236D64] bg-[#E6F4F3]/95 border border-[#D0E8E6] backdrop-blur max-w-[70%] truncate shadow-sm pointer-events-none">
           <span className="lg:hidden">{mobileLabel}</span>
           <span className="hidden lg:inline">{desktopLabel}</span>
         </span>
@@ -108,10 +114,12 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
           <span className="text-[#4A6B68]">({book.reviews})</span>
         </div>
 
-        <h3 className="truncate text-sm sm:text-base font-extrabold leading-snug text-[#0A2E2C]">
-          <span className="lg:hidden">{localizedMobileTitle}</span>
-          <span className="hidden lg:inline">{localizedTitle}</span>
-        </h3>
+        <Link to={bookDetailUrl} className="block group/title">
+          <h3 className="truncate text-sm sm:text-base font-extrabold leading-snug text-[#0A2E2C] group-hover/title:text-[#0E6760] transition-colors">
+            <span className="lg:hidden">{localizedMobileTitle}</span>
+            <span className="hidden lg:inline">{localizedTitle}</span>
+          </h3>
+        </Link>
 
         <p className="mt-1 truncate text-xs sm:text-sm text-[#4A6B68] font-medium">
           {localizedAuthor}
@@ -140,30 +148,43 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
           )}
         </p>
 
+        {/* Mobile action bar: Replaced available with Detail button */}
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3 lg:hidden">
-          <span className="rounded-full px-2.5 py-1 text-xs font-bold bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] truncate">
-            {book.available
-              ? t("bookCard.available")
-              : t("bookCard.onHold", { count: book.holds })}
-          </span>
+          <Link
+            to={bookDetailUrl}
+            className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#17A296] hover:text-[#FFFFFF] transition-colors truncate active:scale-95"
+          >
+            <Info size={13} />
+            <span>{t("bookCard.detail")}</span>
+          </Link>
           <button
             type="button"
             onClick={() => onAction(book)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760] text-xs font-bold transition-all shadow-library-sm shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF] text-xs font-bold transition-all shadow-library-sm shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
           >
             <Download size={14} aria-hidden="true" />
             <span>{t("bookCard.download", "Download")}</span>
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => onAction(book)}
-          className="mt-auto hidden w-full items-center justify-center gap-2 rounded-xl bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760] px-4 py-2.5 text-xs sm:text-sm font-bold transition-all shadow-library-sm active:scale-95 lg:flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-        >
-          <Download size={16} aria-hidden="true" />
-          <span>{t("bookCard.download", "Download")}</span>
-        </button>
+        {/* Desktop action bar: Both Detail button and Download button */}
+        <div className="mt-auto hidden w-full items-center gap-2 pt-3 lg:flex">
+          <Link
+            to={bookDetailUrl}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#17A296] hover:text-[#FFFFFF] hover:border-[#17A296] px-3 py-2.5 text-xs sm:text-sm font-bold transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+          >
+            <Info size={15} aria-hidden="true" />
+            <span>{t("bookCard.detail")}</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => onAction(book)}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF] px-3 py-2.5 text-xs sm:text-sm font-bold transition-all shadow-library-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+          >
+            <Download size={15} aria-hidden="true" />
+            <span>{t("bookCard.download", "Download")}</span>
+          </button>
+        </div>
       </div>
     </article>
   );

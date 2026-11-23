@@ -1,6 +1,7 @@
 export const user = { name: "Clara", streakDays: 14 };
 
 export const spotlightBook = {
+  id: "shadow-of-the-wind",
   title: { en: "The Shadow of the Wind", fa: "سایه باد" },
   author: { en: "Carlos Ruiz Zafón", fa: "کارلوس رویث ثافون" },
   genre: { en: "GOTHIC MYSTERY", fa: "معمایی و رازآلود" },
@@ -11,6 +12,7 @@ export const spotlightBook = {
 
 export const popularBooks = [
   {
+    id: "invisible-cities",
     title: { en: "Invisible Cities", fa: "شهرهای ناپیدا" },
     author: { en: "Italo Calvino", fa: "ایتالو کالوینو" },
     rating: "4.8",
@@ -18,6 +20,7 @@ export const popularBooks = [
     img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300",
   },
   {
+    id: "goldfinch",
     title: { en: "The Goldfinch", fa: "سهره طلایی" },
     author: { en: "Donna Tartt", fa: "دونا تارت" },
     rating: "4.7",
@@ -25,6 +28,7 @@ export const popularBooks = [
     img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=300",
   },
   {
+    id: "meditations",
     title: { en: "Meditations", fa: "تأملات" },
     author: { en: "Marcus Aurelius", fa: "مارکوس اورلیوس" },
     rating: "4.9",
@@ -32,6 +36,7 @@ export const popularBooks = [
     img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=300",
   },
   {
+    id: "normal-people",
     title: { en: "Normal People", fa: "مردم عادی" },
     author: { en: "Sally Rooney", fa: "سالی رونی" },
     rating: "4.6",

@@ -400,9 +400,11 @@
     "listen": "شنیدن اکنون",
     "reserveShort": "رزرو",
     "listenShort": "شنیدن",
-    "available": "موجود",
+    "Detail": "جزئیات",
     "onHold": "{{count}} در صف امانت",
-    "reviews": "نقد"
+    "reviews": "نقد",
+    "detail": "جزئیات",
+    "available": "موجود"
   },
   "common": {
     "undo": "بازگردانی",
@@ -438,5 +440,38 @@
     "colophon": "شناسنامه حفظ و نگهداری",
     "copyright": "© ۲۰۲۴ بنیاد کتابخانه دیجیتال لومینا. تمام حقوق محفوظ است.",
     "edition": "دفتر چهارم • ویرایش ۲۰۲۴.۱۱"
+  },
+  "bookDetail": {
+    "back": "بازگشت به کتاب‌ها",
+    "breadcrumbHome": "خانه",
+    "breadcrumbExplore": "کاوش کتاب‌ها",
+    "borrow": "امانت گرفتن کتاب",
+    "download": "دانلود نسخه",
+    "readOnline": "مطالعه آنلاین",
+    "addToFavorites": "افزودن به علاقه‌مندی‌ها",
+    "inFavorites": "در علاقه‌مندی‌ها",
+    "share": "اشتراک‌گذاری",
+    "copied": "پیوند با موفقیت کپی شد!",
+    "overview": "بررسی و خلاصه کتاب",
+    "specifications": "مشخصات و شناسنامه",
+    "reviews": "دیدگاه‌ها و نقدها",
+    "curatorNote": "یادداشت مدیر کتابخانه",
+    "notableQuote": "گزیده‌ای ماندگار از اثر",
+    "isbn": "شابک (ISBN)",
+    "published": "سال نشر",
+    "pages": "تعداد صفحات",
+    "format": "قالب نسخه",
+    "language": "زبان اثر",
+    "publisher": "ناشر",
+    "shelfLocation": "محل در مخزن کتابخانه",
+    "fileSize": "حجم فایل دیجیتال",
+    "availableCopies": "وضعیت دسترسی",
+    "available": "موجود در مخزن کتابخانه",
+    "relatedTitle": "آثار مرتبط و هم‌پیوند",
+    "relatedSubtitle": "کتاب‌های برگزیده از همین حوزه فکری در بایگانی",
+    "borrowSuccess": "کتاب با موفقیت امانت گرفته شد! مطالعه لذت‌بخشی داشته باشید.",
+    "downloadSuccess": "نسخه کتاب در کتابخانه آفلاین شما ذخیره گردید.",
+    "notFound": "کتاب مورد نظر در بایگانی یافت نشد.",
+    "returnExplore": "بازگشت به بخش کاوش کتاب‌ها"
   }
 }

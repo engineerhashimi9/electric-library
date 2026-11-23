@@ -1,4 +1,5 @@
-import { Heart, Star, Quote, Headphones } from "lucide-react";
+import { Heart, Star, Quote, Headphones, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BookCover from "./BookCover";
 import StatusLine from "./StatusLine";
@@ -8,30 +9,33 @@ import { getLocalized } from "../../utils/langHelper";
 import { formatVotes } from "../../utils/formatters";
 
 export default function BookCard({ book, onRemove, onDownload }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
-  const { title, author, format, rating, votes, badge, note, status, meta, cover } = book;
+  const { id, title, author, format, rating, votes, badge, note, status, meta, cover } = book;
 
   const locTitle = getLocalized(title, lang);
   const locAuthor = getLocalized(author, lang);
   const locFormat = getLocalized(format, lang);
   const locBadge = getLocalized(badge, lang);
   const locNote = getLocalized(note, lang);
+  const bookDetailUrl = `/book/${id}`;
 
   return (
     <article className="group flex flex-col rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] hover:border-[#17A296] p-3 sm:p-4 shadow-library-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-library-hover text-[#0A2E2C]">
       {/* Cover */}
       <div className="relative mb-3 h-[190px] overflow-hidden rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] sm:mb-4 sm:h-[260px] xl:h-[310px]">
-        <BookCover cover={cover} title={locTitle} className="h-full w-full transition duration-500 group-hover:scale-105" />
+        <Link to={bookDetailUrl} className="block h-full w-full">
+          <BookCover cover={cover} title={locTitle} className="h-full w-full transition duration-500 group-hover:scale-105" />
+        </Link>
         <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-[#0E6760]/85 via-transparent via-50% to-transparent sm:block" />
 
         {/* Format badge: mobile bottom-left | desktop top-left */}
-        <span className="absolute bottom-2 left-2 rtl:left-auto rtl:right-2 flex max-w-[80%] items-center gap-1.5 truncate rounded-lg bg-[#0E6760]/95 border border-[#156B6B] text-[#FFFFFF] px-2.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur sm:hidden shadow-sm">
+        <span className="absolute bottom-2 left-2 rtl:left-auto rtl:right-2 flex max-w-[80%] items-center gap-1.5 truncate rounded-lg bg-[#0E6760]/95 border border-[#156B6B] text-[#FFFFFF] px-2.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur sm:hidden shadow-sm pointer-events-none">
           {/AUDIO/.test(locFormat) && <Headphones className="h-3.5 w-3.5 shrink-0 text-[#17A296]" />}
           <span className="truncate">{locFormat}</span>
         </span>
-        <span className="absolute left-3 top-3 rtl:left-auto rtl:right-3 hidden max-w-[70%] truncate rounded-lg bg-[#0E6760]/95 border border-[#156B6B] text-[#FFFFFF] px-2.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur sm:block shadow-sm">
+        <span className="absolute left-3 top-3 rtl:left-auto rtl:right-3 hidden max-w-[70%] truncate rounded-lg bg-[#0E6760]/95 border border-[#156B6B] text-[#FFFFFF] px-2.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur sm:block shadow-sm pointer-events-none">
           {locFormat}
         </span>
 
@@ -61,7 +65,11 @@ export default function BookCard({ book, onRemove, onDownload }) {
           <b className="text-[#0A2E2C] font-extrabold">{rating}</b> <span className="text-[#4A6B68]">({formatVotes(votes)})</span>
         </p>
 
-        <h3 className="line-clamp-2 min-h-[44px] text-sm sm:text-base font-extrabold text-[#0A2E2C] leading-snug sm:min-h-[52px] sm:pb-1">{locTitle}</h3>
+        <Link to={bookDetailUrl} className="block group/title">
+          <h3 className="line-clamp-2 min-h-[44px] text-sm sm:text-base font-extrabold text-[#0A2E2C] group-hover/title:text-[#0E6760] transition-colors leading-snug sm:min-h-[52px] sm:pb-1">
+            {locTitle}
+          </h3>
+        </Link>
         <p className="pb-3 text-xs sm:text-sm text-[#4A6B68] font-medium truncate">{locAuthor}</p>
 
         {/* Mobile status chip */}
@@ -73,9 +81,19 @@ export default function BookCard({ book, onRemove, onDownload }) {
           <span className="line-clamp-2">{locNote}</span>
         </p>
 
-        <div className="mt-auto space-y-3 sm:pt-2">
+        <div className="mt-auto space-y-2 sm:pt-2">
           <StatusLine status={status} meta={meta} className="hidden sm:flex" />
-          <ActionButton onClick={() => onDownload && onDownload(book)} className="w-full" />
+          <div className="flex items-center gap-2">
+            <Link
+              to={bookDetailUrl}
+              className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl bg-[#E6F4F3] hover:bg-[#17A296] hover:text-[#FFFFFF] border border-[#D0E8E6] text-[#0E6760] font-bold text-xs transition-colors shrink-0"
+              title={t("bookCard.detail")}
+            >
+              <Info size={14} />
+              <span className="hidden sm:inline">{t("bookCard.detail")}</span>
+            </Link>
+            <ActionButton onClick={() => onDownload && onDownload(book)} className="flex-1" />
+          </div>
         </div>
       </div>
     </article>

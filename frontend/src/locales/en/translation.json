@@ -402,7 +402,8 @@
     "listenShort": "Listen",
     "available": "Available",
     "onHold": "{{count}} on hold",
-    "reviews": "reviews"
+    "reviews": "reviews",
+    "detail": "Detail"
   },
   "common": {
     "undo": "Undo",
@@ -438,5 +439,38 @@
     "colophon": "Preservation Colophon",
     "copyright": "© 2024 Lumina Digital Library Foundation. All scholarly rights reserved.",
     "edition": "VOL. IV • EDITION 2024.11"
+  },
+  "bookDetail": {
+    "back": "Back to books",
+    "breadcrumbHome": "Home",
+    "breadcrumbExplore": "Explore Books",
+    "borrow": "Borrow Book",
+    "download": "Download Edition",
+    "readOnline": "Read Online",
+    "addToFavorites": "Add to Favorites",
+    "inFavorites": "In Favorites",
+    "share": "Share",
+    "copied": "Link copied to clipboard!",
+    "overview": "Overview & Synopsis",
+    "specifications": "Specifications",
+    "reviews": "Reader Reflections",
+    "curatorNote": "Curator's Note",
+    "notableQuote": "Notable Excerpt",
+    "isbn": "ISBN-13",
+    "published": "Publication Year",
+    "pages": "Pages",
+    "format": "Edition Format",
+    "language": "Original Language",
+    "publisher": "Publisher",
+    "shelfLocation": "Stack Location",
+    "fileSize": "Digital Size",
+    "availableCopies": "Status",
+    "available": "Available in Vault",
+    "relatedTitle": "Related in Archive",
+    "relatedSubtitle": "Curated companion works from our digital repository",
+    "borrowSuccess": "Successfully borrowed! Enjoy reading.",
+    "downloadSuccess": "Edition downloaded to your offline library.",
+    "notFound": "Book not found in archives.",
+    "returnExplore": "Return to Explore Books"
   }
 }
