@@ -28,13 +28,13 @@ import { getLocalized } from "@/utils/langHelper";
 
 export default function BookDetail() {
   const { bookId } = useParams().id;
+  const book = getBookById(bookId);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
   const [bookDetail, setBookDetail] = useState({});
 
-  const book = getBookById(bookId);
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
   const [isFavorite, setIsFavorite] = useState(false);
   const [borrowedBookId, setBorrowedBookId] = useState(null);
@@ -46,9 +46,10 @@ export default function BookDetail() {
   const imageError = failedImageId === bookId;
 
   useEffect(() => {
+    console.log(bookId);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [bookId]);
-   useEffect(() => {
+  useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/v1/books/${bookId}/`)
       .then((response) => {
@@ -57,7 +58,7 @@ export default function BookDetail() {
       .catch((error) => {
         console.error("Error fetching book details:", error);
       });
-  }, [bookId]);
+  }, []);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -98,7 +99,7 @@ export default function BookDetail() {
     }
   };
 
-  if (!book) {
+  if (!bookDetail) {
     return (
       <main className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
         <h1 className="text-xl sm:text-2xl font-extrabold text-[#0E6760] mb-2">
@@ -114,14 +115,8 @@ export default function BookDetail() {
     );
   }
 
-  const title = getLocalized(book.title, lang);
-  const author = getLocalized(book.author, lang);
-  const genre = getLocalized(book.genre, lang);
-  const publisher = getLocalized(book.publisher, lang);
-  const quote = getLocalized(book.quote, lang);
-  const description = getLocalized(book.description, lang);
-  const curatorNote = getLocalized(book.curatorNote, lang);
-  const tag = getLocalized(book.tag, lang);
+
+ 
   const relatedBooks = getRelatedBooks(book.id, 4);
 
   return (
@@ -160,7 +155,7 @@ export default function BookDetail() {
             </Link>
             <span className="text-[#D0E8E6] font-bold">/</span>
             <span className="text-[#0E6760] font-bold truncate max-w-[200px] sm:max-w-xs">
-              {title}
+              {bookDetail.title }
             </span>
           </div>
 
@@ -197,29 +192,29 @@ export default function BookDetail() {
                       className="text-[#17A296] mb-3 opacity-80"
                     />
                     <span className="font-extrabold text-base leading-snug">
-                      {title}
+                      {bookDetail.title}
                     </span>
                     <span className="text-xs text-[#4A6B68] mt-1 font-medium">
-                      {author}
+                      {bookDetail.author}
                     </span>
                   </div>
                 ) : (
                   <img
-                    src={book.cover}
-                    alt={title}
-                    onError={() => setFailedImageId(id)}
+                    src={bookDetail.cover}
+                    alt={bookDetail.title}
+                    onError={() => setFailedImageId(bookDetail.id)}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 )}
 
                 {/* Format pill badge */}
                 <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 bg-[#0E6760]/90 border border-[#156B6B] text-[#FFFFFF] text-xs font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider backdrop-blur shadow-sm flex items-center gap-1.5">
-                  {book.format === "audio" ? (
+                  {bookDetail.format === "audio" ? (
                     <Headphones size={13} className="text-[#9EEFE8]" />
                   ) : (
                     <BookOpen size={13} className="text-[#9EEFE8]" />
                   )}
-                  <span>{book.format}</span>
+                  <span>{bookDetail.format}</span>
                 </div>
 
                 {/* Favorite Heart Button */}
@@ -244,11 +239,7 @@ export default function BookDetail() {
                   />
                 </button>
 
-                {tag && (
-                  <div className="absolute bottom-3 left-3 rtl:left-auto rtl:right-3 bg-[#E6F4F3]/95 border border-[#D0E8E6] text-[#0E6760] font-extrabold text-xs px-3 py-1 rounded-full backdrop-blur shadow-sm">
-                    {tag}
-                  </div>
-                )}
+                
               </div>
 
               {/* Action Buttons Below Cover */}
@@ -296,7 +287,9 @@ export default function BookDetail() {
               {/* Genre & Availability Badge */}
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] text-xs font-extrabold px-3 py-1 rounded-full">
-                  {genre}
+                  {bookDetail.category?.map((category) => (
+                    <span key={category.id}>{category.name}</span>
+                  ))}
                 </span>
                 <span className="inline-flex items-center gap-1.5 bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-xs font-bold px-3 py-1 rounded-full">
                   <span className="h-2 w-2 rounded-full bg-[#17A296] animate-pulse" />
@@ -310,7 +303,7 @@ export default function BookDetail() {
                   id="book-detail-title"
                   className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0E6760] tracking-tight leading-tight"
                 >
-                  {title}
+                  {bookDetail.title }
                 </h1>
                 <p className="text-base sm:text-lg text-[#4A6B68] font-semibold">
                   {lang === "fa" ? "اثر: " : "By "}
@@ -318,7 +311,7 @@ export default function BookDetail() {
                     to="/author"
                     className="text-[#0E6760] hover:text-[#17A296] hover:underline underline-offset-4 transition-colors"
                   >
-                    {author}
+                    {bookDetail.author?.name} {bookDetail.author?.last_name}
                   </Link>
                 </p>
               </div>
@@ -384,7 +377,7 @@ export default function BookDetail() {
               </div>
 
               {/* Notable Excerpt Callout */}
-              {quote && (
+              {bookDetail.quote && (
                 <div className="relative rounded-2xl bg-[#E6F4F3]/70 border border-[#D0E8E6] p-4 sm:p-5">
                   <Quote
                     size={22}
@@ -392,7 +385,7 @@ export default function BookDetail() {
                     aria-hidden="true"
                   />
                   <p className="text-xs sm:text-sm italic font-medium text-[#0E6760] leading-relaxed pr-6 rtl:pr-0 rtl:pl-6">
-                    &ldquo;{quote}&rdquo;
+                    &ldquo;{bookDetail.quote}&rdquo;
                   </p>
                 </div>
               )}
@@ -492,18 +485,18 @@ export default function BookDetail() {
                   <span>{t("bookDetail.overview")}</span>
                 </h2>
                 <p className="text-sm sm:text-base text-[#4A6B68] leading-relaxed font-normal">
-                  {description}
+                  {bookDetail.description}
                 </p>
               </div>
 
-              {curatorNote && (
+              {bookDetail.quote && (
                 <div className="border-t border-[#D0E8E6]/60 pt-5 space-y-2">
                   <h3 className="text-xs sm:text-sm font-extrabold text-[#236D64] uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles size={14} className="text-[#17A296]" />
                     <span>{t("bookDetail.curatorNote")}</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-[#4A6B68] italic font-medium leading-relaxed bg-[#F6FBFA] border border-[#D0E8E6] p-4 rounded-2xl">
-                    {curatorNote}
+                    {bookDetail.quote }
                   </p>
                 </div>
               )}
@@ -538,7 +531,7 @@ export default function BookDetail() {
                       {t("bookDetail.publisher")}
                     </dt>
                     <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {publisher}
+                      {bookDetail.publisher}
                     </dd>
                   </div>
                 </div>

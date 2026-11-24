@@ -43,6 +43,9 @@ class BookFa(models.Model):
     category = models.ManyToManyField(CategoryFa, related_name="books")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     publication_date = models.DateField(auto_now=False, auto_now_add=False)
+    publisher = models.CharField(max_length=100, default="متن ندارد")
+    quote = models.TextField(blank=True, null=True, default="متن ندارد")
+
     edition = models.IntegerField()
     score = models.DecimalField(max_digits=3, decimal_places=2)
     downloads = models.IntegerField(default=0)
@@ -57,6 +60,8 @@ class Book(models.Model):
     category = models.ManyToManyField(Category, related_name="books")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     publication_date = models.DateField(auto_now=False, auto_now_add=False)
+    publisher = models.CharField(max_length=100, default="Has no PUB")
+    quote = models.TextField(blank=True, null=True, default="Has no quote")
     edition = models.IntegerField()
     score = models.DecimalField(max_digits=3, decimal_places=2)
     downloads = models.IntegerField(default=0)
