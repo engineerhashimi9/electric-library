@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 import {
   ArrowLeft,
   ArrowRight,
@@ -26,13 +27,14 @@ import { getBookById, getRelatedBooks } from "@/data/booksRepository";
 import { getLocalized } from "@/utils/langHelper";
 
 export default function BookDetail() {
-  const { id } = useParams();
+  const { bookId } = useParams().id;
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
+  const [bookDetail, setBookDetail] = useState({});
 
-  const book = getBookById(id);
+  const book = getBookById(bookId);
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
   const [isFavorite, setIsFavorite] = useState(false);
   const [borrowedBookId, setBorrowedBookId] = useState(null);
@@ -40,12 +42,22 @@ export default function BookDetail() {
   const [isCopied, setIsCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const isBorrowed = borrowedBookId === id;
-  const imageError = failedImageId === id;
+  const isBorrowed = borrowedBookId === bookId;
+  const imageError = failedImageId === bookId;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [id]);
+  }, [bookId]);
+   useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:8000/api/v1/books/${bookId}/`)
+      .then((response) => {
+        setBookDetail(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching book details:", error);
+      });
+  }, [bookId]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
