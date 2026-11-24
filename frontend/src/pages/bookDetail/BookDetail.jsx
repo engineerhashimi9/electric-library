@@ -28,6 +28,8 @@ import { getLocalized } from "@/utils/langHelper";
 
 export default function BookDetail() {
   const { bookId } = useParams().id;
+  console.log(useParams());
+
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -36,8 +38,11 @@ export default function BookDetail() {
 
   const book = getBookById(bookId);
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
+
   const [isFavorite, setIsFavorite] = useState(false);
+
   const [borrowedBookId, setBorrowedBookId] = useState(null);
+
   const [failedImageId, setFailedImageId] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -48,9 +53,9 @@ export default function BookDetail() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [bookId]);
-   useEffect(() => {
+  useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/v1/books/${bookId}/`)
+      .get(`http://127.0.0.1:8000/api/v1/books/${book}/`)
       .then((response) => {
         setBookDetail(response.data);
       })

@@ -18,6 +18,9 @@ function AppContent() {
   const { pathname } = useLocation();
   const isAuthPage = AUTH_ROUTES.includes(pathname.toLowerCase());
 
+
+
+  
   return (
     <>
       {!isAuthPage && <Navbar />}

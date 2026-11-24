@@ -9,7 +9,7 @@ export default function DesktopSpotlightCard({ book }) {
   const lang = i18n.language;
   const [bookDetail, setBookDetail] = useState({});
   const [bookCategory, setBookCategory] = useState([]);
- 
+
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/v1/books/get_best_book/`, {
@@ -20,18 +20,18 @@ export default function DesktopSpotlightCard({ book }) {
       })
       .then((response) => {
         setBookDetail(response.data);
+        
         if (response.data.category) {
           setBookCategory(response.data.category);
         }
-        console.log("Book details fetched successfully:", response.data);
-       
+      console.log(response)
       })
       .catch((error) => {
         console.error("Error fetching book details:", error);
       });
   }, []);
   if (!book) return null;
-  const bookId = book.id || "shadow-of-the-wind";
+  // const bookId = book.id || "shadow-of-the-wind";
   const title = getLocalized(book.title, lang);
 
   return (
@@ -71,9 +71,11 @@ export default function DesktopSpotlightCard({ book }) {
         </Link>
         <div className="space-y-1.5 min-w-0 flex-1">
           <span className="text-[11px] text-[#9EEFE8] uppercase tracking-wider font-bold block truncate">
-            {bookCategory.map((category) => <div key={category.id}>{getLocalized(category.name, lang)}</div>)}
+            {bookCategory.map((category) => (
+              <div key={category.id}>{getLocalized(category.name, lang)}</div>
+            ))}
           </span>
-          <Link to={`/book/${bookDetail.id}`} className="block">
+          <Link to={`/book/${bookDetail?.id}`} className="block">
             <h3 className="text-base sm:text-lg leading-snug text-[#FFFFFF] font-extrabold line-clamp-2 hover:text-[#9EEFE8] transition-colors">
               {bookDetail.title ? getLocalized(bookDetail.title, lang) : title}
             </h3>
