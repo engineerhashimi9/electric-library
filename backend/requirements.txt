@@ -1,8 +1,12 @@
 asgiref==3.12.1
 Django==5.2
+django-cors-headers==4.9.0
+django-filter==26.2
+django-redis==7.0.0
+django-rest-framework==0.1.0
 djangorestframework==3.18.1
-django-filter==24.3
-django-cors-headers==4.6.0
-djangorestframework-simplejwt==5.3.1
+djangorestframework_simplejwt==5.5.1
+PyJWT==2.15.1
+redis==8.1.0
 sqlparse==0.6.0
 tzdata==2026.4
