@@ -68,5 +68,6 @@ export default function MobileSpotlightCard({ book }) {
         </button>
       </div>
     </article>
+  
   );
 }
