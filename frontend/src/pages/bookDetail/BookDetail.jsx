@@ -54,7 +54,6 @@ export default function BookDetail() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [bookId]);
   useEffect(() => {
-  useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/v1/books/${book}/`)
       .then((response) => {
@@ -120,8 +119,6 @@ export default function BookDetail() {
     );
   }
 
-
- 
   const relatedBooks = getRelatedBooks(book.id, 4);
 
   return (
@@ -160,7 +157,7 @@ export default function BookDetail() {
             </Link>
             <span className="text-[#D0E8E6] font-bold">/</span>
             <span className="text-[#0E6760] font-bold truncate max-w-[200px] sm:max-w-xs">
-              {bookDetail.title }
+              {bookDetail.title}
             </span>
           </div>
 
@@ -243,8 +240,6 @@ export default function BookDetail() {
                     }
                   />
                 </button>
-
-                
               </div>
 
               {/* Action Buttons Below Cover */}
@@ -308,7 +303,7 @@ export default function BookDetail() {
                   id="book-detail-title"
                   className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0E6760] tracking-tight leading-tight"
                 >
-                  {bookDetail.title }
+                  {bookDetail.title}
                 </h1>
                 <p className="text-base sm:text-lg text-[#4A6B68] font-semibold">
                   {lang === "fa" ? "اثر: " : "By "}
@@ -501,7 +496,7 @@ export default function BookDetail() {
                     <span>{t("bookDetail.curatorNote")}</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-[#4A6B68] italic font-medium leading-relaxed bg-[#F6FBFA] border border-[#D0E8E6] p-4 rounded-2xl">
-                    {bookDetail.quote }
+                    {bookDetail.quote}
                   </p>
                 </div>
               )}
@@ -766,7 +761,7 @@ export default function BookDetail() {
   );
 }
 
-function BarcodeIcon(props) {
+function getIconData(params) {
   return (
     <svg
       {...props}
