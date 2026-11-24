@@ -12,8 +12,6 @@ class BookSerializer(ModelSerializer):
         representation['author'] = AuthorSerializer(instance.author).data
         representation['category'] = CategorySerializer(
             instance.category.all(), many=True).data
-        print(representation, "representation")
-        print(representation["category"], "representation_category")
         return representation
 
 
