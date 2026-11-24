@@ -101,10 +101,15 @@ class BookViewset(viewsets.ModelViewSet):
     }
     search_fields = ["title", "description"]
     ordering_fields = ["id", "title", "price", "publication_date"]
-    @action(detail=False,methods=['post'])
+    @action(detail=False,methods=['get'])
     def get_best_20_books(self,request) :
         books=Book.objects.all().order_by("-downloads")[:20]
         serializer=self.serializer_class(books,many=True)
+        return Response(serializer.data,status=200)
+    @action(detail=False,methods=['get'])
+    def get_best_book(self,request) :
+        books=Book.objects.all().order_by("-score").first()
+        serializer=self.serializer_class(books)
         return Response(serializer.data,status=200)
         
 
