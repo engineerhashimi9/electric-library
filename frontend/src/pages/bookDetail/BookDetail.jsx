@@ -27,12 +27,16 @@ import { getLocalized } from "@/utils/langHelper";
 
 export default function BookDetail() {
   const { id } = useParams();
+
+  
+
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
   const book = getBookById(id);
+
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
   const [isFavorite, setIsFavorite] = useState(false);
   const [borrowedBookId, setBorrowedBookId] = useState(null);
@@ -59,8 +63,12 @@ export default function BookDetail() {
       const next = !prev;
       showToast(
         next
-          ? (lang === "fa" ? "به علاقه‌مندی‌ها افزوده شد" : "Added to your favorites")
-          : (lang === "fa" ? "از علاقه‌مندی‌ها حذف شد" : "Removed from favorites")
+          ? lang === "fa"
+            ? "به علاقه‌مندی‌ها افزوده شد"
+            : "Added to your favorites"
+          : lang === "fa"
+            ? "از علاقه‌مندی‌ها حذف شد"
+            : "Removed from favorites",
       );
       return next;
     });
@@ -176,7 +184,10 @@ export default function BookDetail() {
               <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[2/3] rounded-2xl overflow-hidden shadow-library-lg border border-[#D0E8E6] bg-[#E6F4F3] group">
                 {imageError ? (
                   <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#E6F4F3] text-[#0E6760]">
-                    <BookOpen size={48} className="text-[#17A296] mb-3 opacity-80" />
+                    <BookOpen
+                      size={48}
+                      className="text-[#17A296] mb-3 opacity-80"
+                    />
                     <span className="font-extrabold text-base leading-snug">
                       {title}
                     </span>
@@ -207,7 +218,11 @@ export default function BookDetail() {
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
-                  aria-label={isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
+                  aria-label={
+                    isFavorite
+                      ? t("bookDetail.inFavorites")
+                      : t("bookDetail.addToFavorites")
+                  }
                   aria-pressed={isFavorite}
                   className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2.5 rounded-full bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] text-[#0E6760] border border-[#D0E8E6] shadow-library-sm backdrop-blur transition-all active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
                 >
@@ -239,9 +254,16 @@ export default function BookDetail() {
                       : "bg-[#FFFFFF] border-[#D0E8E6] text-[#4A6B68] hover:bg-[#F6FBFA] hover:text-[#0E6760]"
                   }`}
                 >
-                  <Bookmark size={15} className={isFavorite ? "fill-[#17A296] text-[#17A296]" : ""} />
+                  <Bookmark
+                    size={15}
+                    className={
+                      isFavorite ? "fill-[#17A296] text-[#17A296]" : ""
+                    }
+                  />
                   <span className="truncate">
-                    {isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
+                    {isFavorite
+                      ? t("bookDetail.inFavorites")
+                      : t("bookDetail.addToFavorites")}
                   </span>
                 </button>
 
@@ -298,7 +320,9 @@ export default function BookDetail() {
                 <div className="flex items-center gap-1 text-sm font-extrabold text-[#0A2E2C]">
                   <Star size={16} className="fill-[#F59E0B] text-[#F59E0B]" />
                   <span>{book.rating}</span>
-                  <span className="text-xs text-[#4A6B68] font-medium">/ 5.0</span>
+                  <span className="text-xs text-[#4A6B68] font-medium">
+                    / 5.0
+                  </span>
                 </div>
                 <span className="text-[#D0E8E6] font-bold">•</span>
                 <span className="text-xs sm:text-sm text-[#4A6B68] font-medium">
@@ -317,7 +341,9 @@ export default function BookDetail() {
                     {t("bookDetail.pages")}
                   </span>
                   <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block">
-                    {book.pages ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}` : (book.duration || "—")}
+                    {book.pages
+                      ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}`
+                      : book.duration || "—"}
                   </span>
                 </div>
 
@@ -377,7 +403,11 @@ export default function BookDetail() {
                   {isBorrowed ? (
                     <>
                       <CheckCircle2 size={18} />
-                      <span>{lang === "fa" ? "امانت گرفته شد" : "Borrowed (Active Loan)"}</span>
+                      <span>
+                        {lang === "fa"
+                          ? "امانت گرفته شد"
+                          : "Borrowed (Active Loan)"}
+                      </span>
                     </>
                   ) : (
                     <>
@@ -487,7 +517,9 @@ export default function BookDetail() {
                     <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
                       {t("bookDetail.isbn")}
                     </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">{book.isbn}</dd>
+                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
+                      {book.isbn}
+                    </dd>
                   </div>
                 </div>
 
@@ -497,7 +529,9 @@ export default function BookDetail() {
                     <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
                       {t("bookDetail.publisher")}
                     </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">{publisher}</dd>
+                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
+                      {publisher}
+                    </dd>
                   </div>
                 </div>
 
@@ -507,7 +541,9 @@ export default function BookDetail() {
                     <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
                       {t("bookDetail.published")}
                     </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">{book.publishedYear}</dd>
+                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
+                      {book.publishedYear}
+                    </dd>
                   </div>
                 </div>
 
@@ -529,7 +565,9 @@ export default function BookDetail() {
                     <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
                       {t("bookDetail.shelfLocation")}
                     </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">{book.shelf}</dd>
+                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
+                      {book.shelf}
+                    </dd>
                   </div>
                 </div>
 
@@ -558,16 +596,26 @@ export default function BookDetail() {
                     <span>{t("bookDetail.reviews")}</span>
                   </h2>
                   <p className="text-xs sm:text-sm text-[#4A6B68] mt-1 font-medium">
-                    {book.reviews} {t("bookCard.reviews")} • {lang === "fa" ? "میانگین نمره: " : "Average rating: "} {book.rating} / 5.0
+                    {book.reviews} {t("bookCard.reviews")} •{" "}
+                    {lang === "fa" ? "میانگین نمره: " : "Average rating: "}{" "}
+                    {book.rating} / 5.0
                   </p>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => showToast(lang === "fa" ? "بخش ثبت نظر در حال حاضر برای اعضای رسمی فعال است." : "Review submission is open to verified scholars.")}
+                  onClick={() =>
+                    showToast(
+                      lang === "fa"
+                        ? "بخش ثبت نظر در حال حاضر برای اعضای رسمی فعال است."
+                        : "Review submission is open to verified scholars.",
+                    )
+                  }
                   className="px-4 py-2 rounded-xl bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF] text-xs font-bold transition-colors shrink-0"
                 >
-                  {lang === "fa" ? "ثبت دیدگاه یا یادداشت" : "Write a Reflection"}
+                  {lang === "fa"
+                    ? "ثبت دیدگاه یا یادداشت"
+                    : "Write a Reflection"}
                 </button>
               </div>
 
@@ -584,7 +632,9 @@ export default function BookDetail() {
                           Eleanor Vance
                         </h4>
                         <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa" ? "عضو پیوسته بایگانی • ۲ هفته قبل" : "Curator Fellow • 2 weeks ago"}
+                          {lang === "fa"
+                            ? "عضو پیوسته بایگانی • ۲ هفته قبل"
+                            : "Curator Fellow • 2 weeks ago"}
                         </span>
                       </div>
                     </div>
@@ -612,7 +662,9 @@ export default function BookDetail() {
                           Tariq Haidari
                         </h4>
                         <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa" ? "پژوهشگر فلسفه و ادبیات • ۱ ماه قبل" : "Literature Scholar • 1 month ago"}
+                          {lang === "fa"
+                            ? "پژوهشگر فلسفه و ادبیات • ۱ ماه قبل"
+                            : "Literature Scholar • 1 month ago"}
                         </span>
                       </div>
                     </div>
@@ -671,7 +723,11 @@ export default function BookDetail() {
 
                     <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 text-xs text-[#0A2E2C] font-bold">
-                        <Star size={12} className="fill-[#17A296] text-[#17A296]" aria-hidden="true" />
+                        <Star
+                          size={12}
+                          className="fill-[#17A296] text-[#17A296]"
+                          aria-hidden="true"
+                        />
                         <span>{relBook.rating}</span>
                       </div>
                       <Link to={`/book/${relBook.id}`} className="block">
