@@ -1,3 +1,4 @@
+import { API_URL } from "./login";
 
 export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refresh");
@@ -8,11 +9,9 @@ export async function refreshAccessToken() {
 
   const response = await fetch(`${API_URL}/api/token/refresh/`, {
     method: "POST",
-
     headers: {
       "Content-Type": "application/json",
     },
-
     body: JSON.stringify({
       refresh: refreshToken,
     }),
@@ -20,15 +19,12 @@ export async function refreshAccessToken() {
 
   if (!response.ok) {
     logout();
-
     return null;
   }
 
   const data = await response.json();
-
   localStorage.setItem("access", data.access);
 
-  // Save the new refresh token too, if rotation is enabled.
   if (data.refresh) {
     localStorage.setItem("refresh", data.refresh);
   }
@@ -36,49 +32,38 @@ export async function refreshAccessToken() {
   return data.access;
 }
 
-// Fetch function with automatic token refresh
 export async function apiFetch(path, options = {}) {
+  const makeRequest = (token) =>
+    fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    const makeRequest = (token) => fetch(
-        `${API_URL}${path}`,
-        {
-            ...options,
+  let accessToken = localStorage.getItem("access");
 
-            headers: {
-                ...options.headers,
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
+  if (!accessToken) {
+    throw new Error("User is not logged in");
+  }
 
-    let accessToken = localStorage.getItem("access");
+  let response = await makeRequest(accessToken);
 
-    if (!accessToken) {
-        throw new Error("User is not logged in");
-    }
+  if (response.status !== 401) {
+    return response;
+  }
 
-    // First request
-    let response = await makeRequest(accessToken);
+  accessToken = await refreshAccessToken();
 
-    // If token is still valid, return the response
-    if (response.status !== 401) {
-        return response;
-    }
+  if (!accessToken) {
+    return response;
+  }
 
-    // Try to refresh the access token
-    accessToken = await refreshAccessToken();
-
-    if (!accessToken) {
-        return response;
-    }
-
-    // Retry the original request
-    return makeRequest(accessToken);
+  return makeRequest(accessToken);
 }
+
 export function logout() {
-
-    localStorage.removeItem("access");
-
-    localStorage.removeItem("refresh");
-
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
 }

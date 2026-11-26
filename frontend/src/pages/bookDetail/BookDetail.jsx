@@ -27,42 +27,48 @@ import { getBookById, getRelatedBooks } from "@/data/booksRepository";
 import { getLocalized } from "@/utils/langHelper";
 
 export default function BookDetail() {
-  const { bookId } = useParams().id;
-  console.log(useParams());
-
+  const { id } = useParams();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
-  const [bookDetail, setBookDetail] = useState({});
+
+  const baseBook = getBookById(id);
+  const [apiBook, setApiBook] = useState(null);
 
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
-
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const [borrowedBookId, setBorrowedBookId] = useState(null);
-
-  const [failedImageId, setFailedImageId] = useState(null);
+  const [isBorrowed, setIsBorrowed] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const isBorrowed = borrowedBookId === bookId;
-  const imageError = failedImageId === bookId;
-
   useEffect(() => {
-    console.log(bookId);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [bookId]);
-  useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/api/v1/books/${book}/`)
-      .then((response) => {
-        setBookDetail(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching book details:", error);
-      });
-  }, []);
+    setImageError(false);
+    if (id) {
+      axios
+        .get(`http://127.0.0.1:8000/api/v1/books/${id}/`)
+        .then((response) => {
+          if (response.data && response.data.id) {
+            setApiBook(response.data);
+          }
+        })
+        .catch(() => {
+          // Gracefully continue using local book repository
+        });
+    }
+  }, [id]);
+
+  const book = apiBook
+    ? {
+        ...baseBook,
+        ...apiBook,
+        title: apiBook.title || baseBook.title,
+        description: apiBook.description || baseBook.description,
+        cover: apiBook.cover || baseBook.cover,
+      }
+    : baseBook;
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -88,7 +94,7 @@ export default function BookDetail() {
   };
 
   const handleBorrow = () => {
-    setBorrowedBookId(id);
+    setIsBorrowed(true);
     showToast(t("bookDetail.borrowSuccess"));
   };
 
@@ -103,166 +109,163 @@ export default function BookDetail() {
     }
   };
 
-  if (!bookDetail) {
+  if (!book) {
     return (
-      <main className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-[#0E6760] mb-2">
+      <main className="page-container" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "4rem 1rem", textAlign: "center" }}>
+        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--primary)", marginBottom: "0.5rem" }}>
           {t("bookDetail.notFound")}
         </h1>
-        <Link
-          to="/explorebooks"
-          className="mt-4 px-5 py-2.5 rounded-xl bg-[#0E6760] text-[#FFFFFF] font-bold text-sm hover:bg-[#17A296] transition-colors"
-        >
+        <Link to="/explorebooks" className="btn btn-primary btn-md">
           {t("bookDetail.returnExplore")}
         </Link>
       </main>
     );
   }
 
+  const title = getLocalized(book.title, lang);
+  const authorName =
+    typeof book.author === "object" && book.author !== null
+      ? book.author.name
+        ? `${book.author.name} ${book.author.last_name || ""}`.trim()
+        : getLocalized(book.author, lang)
+      : String(book.author || "");
+  const description = getLocalized(book.description, lang);
+  const quote = book.quote ? getLocalized(book.quote, lang) : "";
+  const curatorNote = book.curatorNote ? getLocalized(book.curatorNote, lang) : "";
   const relatedBooks = getRelatedBooks(book.id, 4);
 
   return (
-    <main className="min-h-screen bg-[#F6FBFA] text-[#0A2E2C] pb-24 pt-4 sm:pt-6">
+    <div className="page-container">
       {/* Toast notification banner */}
       {toastMessage && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-[#0E6760] text-[#FFFFFF] shadow-library-lg border border-[#17A296] text-xs sm:text-sm font-semibold animate-fade-in"
-        >
-          <Sparkles size={16} className="text-[#9EEFE8] shrink-0" />
+        <aside role="status" aria-live="polite" className="toast-floating">
+          <Sparkles size={16} style={{ color: "#9EEFE8", flexShrink: 0 }} />
           <span>{toastMessage}</span>
-        </div>
+        </aside>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+      <main className="content-container" style={{ display: "flex", flexDirection: "column", gap: "2rem", paddingTop: "1.5rem" }}>
         {/* Navigation & Breadcrumbs */}
         <nav
           aria-label="Breadcrumbs"
-          className="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm text-[#4A6B68]"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "1rem",
+            fontSize: "0.85rem",
+          }}
         >
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              to="/"
-              className="hover:text-[#0E6760] transition-colors font-medium"
-            >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+            <Link to="/" style={{ color: "var(--text-secondary)", fontWeight: 600 }}>
               {t("bookDetail.breadcrumbHome")}
             </Link>
-            <span className="text-[#D0E8E6] font-bold">/</span>
-            <Link
-              to="/explorebooks"
-              className="hover:text-[#0E6760] transition-colors font-medium"
-            >
+            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>/</span>
+            <Link to="/explorebooks" style={{ color: "var(--text-secondary)", fontWeight: 600 }}>
               {t("bookDetail.breadcrumbExplore")}
             </Link>
-            <span className="text-[#D0E8E6] font-bold">/</span>
-            <span className="text-[#0E6760] font-bold truncate max-w-[200px] sm:max-w-xs">
-              {bookDetail.title}
+            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>/</span>
+            <span style={{ color: "var(--primary)", fontWeight: 800 }} className="truncate">
+              {title}
             </span>
           </div>
 
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D0E8E6] bg-[#FFFFFF] hover:bg-[#E6F4F3] text-[#0E6760] font-bold text-xs transition-colors shadow-library-sm active:scale-95"
+            className="btn btn-outline btn-sm"
+            style={{ gap: "0.45rem" }}
           >
-            {isRtl ? (
-              <ArrowRight size={14} aria-hidden="true" />
-            ) : (
-              <ArrowLeft size={14} aria-hidden="true" />
-            )}
+            {isRtl ? <ArrowRight size={14} /> : <ArrowLeft size={14} />}
             <span>{t("bookDetail.back")}</span>
           </button>
         </nav>
 
-        {/* Hero Book Section */}
-        <section
-          aria-labelledby="book-detail-title"
-          className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-5 sm:p-8 lg:p-10 shadow-library-md relative overflow-hidden"
-        >
-          {/* Subtle decorative glow */}
-          <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#17A296]/10 rounded-full blur-3xl" />
-
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
-            {/* Left Column: Book Cover & Quick Meta */}
-            <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center">
-              <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[2/3] rounded-2xl overflow-hidden shadow-library-lg border border-[#D0E8E6] bg-[#E6F4F3] group">
+        {/* Hero Book Presentation */}
+        <section aria-labelledby="book-detail-title" className="book-detail-hero-card">
+          <div className="book-detail-layout">
+            {/* Left Column: Book Cover */}
+            <div className="detail-cover-container">
+              <div className="detail-cover-frame">
                 {imageError ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#E6F4F3] text-[#0E6760]">
-                    <BookOpen
-                      size={48}
-                      className="text-[#17A296] mb-3 opacity-80"
-                    />
-                    <span className="font-extrabold text-base leading-snug">
-                      {bookDetail.title}
-                    </span>
-                    <span className="text-xs text-[#4A6B68] mt-1 font-medium">
-                      {bookDetail.author}
-                    </span>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "1.5rem",
+                      textAlign: "center",
+                      backgroundColor: "var(--bg-secondary)",
+                    }}
+                  >
+                    <BookOpen size={44} style={{ color: "var(--primary)", marginBottom: "0.5rem" }} />
+                    <span style={{ fontWeight: 800, color: "var(--primary)" }}>{title}</span>
                   </div>
                 ) : (
-                  <img
-                    src={bookDetail.cover}
-                    alt={bookDetail.title}
-                    onError={() => setFailedImageId(bookDetail.id)}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <>
+                    <img
+                      src={book.cover}
+                      alt={title}
+                      onError={() => setImageError(true)}
+                      className="detail-cover-image"
+                    />
+                    <div className="book-spine-depth" />
+                  </>
                 )}
 
                 {/* Format pill badge */}
-                <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 bg-[#0E6760]/90 border border-[#156B6B] text-[#FFFFFF] text-xs font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider backdrop-blur shadow-sm flex items-center gap-1.5">
-                  {bookDetail.format === "audio" ? (
-                    <Headphones size={13} className="text-[#9EEFE8]" />
-                  ) : (
-                    <BookOpen size={13} className="text-[#9EEFE8]" />
-                  )}
-                  <span>{bookDetail.format}</span>
+                <div
+                  className="badge badge-teal"
+                  style={{
+                    position: "absolute",
+                    top: "0.85rem",
+                    left: isRtl ? "auto" : "0.85rem",
+                    right: isRtl ? "0.85rem" : "auto",
+                    gap: "0.4rem",
+                  }}
+                >
+                  {book.format === "audio" ? <Headphones size={13} /> : <BookOpen size={13} />}
+                  <span>{book.format}</span>
                 </div>
 
                 {/* Favorite Heart Button */}
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
-                  aria-label={
-                    isFavorite
-                      ? t("bookDetail.inFavorites")
-                      : t("bookDetail.addToFavorites")
-                  }
-                  aria-pressed={isFavorite}
-                  className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2.5 rounded-full bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] text-[#0E6760] border border-[#D0E8E6] shadow-library-sm backdrop-blur transition-all active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+                  aria-label={isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
+                  className={`book-fav-btn ${isFavorite ? "favorited" : ""}`}
+                  style={{
+                    position: "absolute",
+                    top: "0.85rem",
+                    right: isRtl ? "auto" : "0.85rem",
+                    left: isRtl ? "0.85rem" : "auto",
+                  }}
                 >
                   <Heart
                     size={18}
-                    className={
-                      isFavorite
-                        ? "fill-[#17A296] text-[#17A296]"
-                        : "text-[#4A6B68] hover:text-[#0E6760]"
-                    }
+                    style={{
+                      fill: isFavorite ? "var(--primary-light)" : "none",
+                      color: isFavorite ? "var(--primary-light)" : "var(--text-secondary)",
+                    }}
                   />
                 </button>
               </div>
 
               {/* Action Buttons Below Cover */}
-              <div className="w-full max-w-[280px] sm:max-w-[320px] flex items-center gap-2 mt-4">
+              <div style={{ display: "flex", gap: "0.5rem", width: "100%", maxWidth: "320px" }}>
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
-                    isFavorite
-                      ? "bg-[#E6F4F3] border-[#17A296] text-[#0E6760]"
-                      : "bg-[#FFFFFF] border-[#D0E8E6] text-[#4A6B68] hover:bg-[#F6FBFA] hover:text-[#0E6760]"
-                  }`}
+                  className={`btn ${isFavorite ? "btn-secondary" : "btn-outline"} btn-sm flex-1`}
+                  style={{ gap: "0.4rem" }}
                 >
-                  <Bookmark
-                    size={15}
-                    className={
-                      isFavorite ? "fill-[#17A296] text-[#17A296]" : ""
-                    }
-                  />
+                  <Bookmark size={15} style={{ fill: isFavorite ? "var(--primary-light)" : "none" }} />
                   <span className="truncate">
-                    {isFavorite
-                      ? t("bookDetail.inFavorites")
-                      : t("bookDetail.addToFavorites")}
+                    {isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
                   </span>
                 </button>
 
@@ -270,12 +273,8 @@ export default function BookDetail() {
                   type="button"
                   onClick={handleShare}
                   aria-label={t("bookDetail.share")}
-                  title={t("bookDetail.share")}
-                  className={`p-2.5 rounded-xl border border-[#D0E8E6] transition-colors shrink-0 active:scale-95 ${
-                    isCopied
-                      ? "bg-[#17A296] text-[#FFFFFF] border-[#17A296]"
-                      : "bg-[#FFFFFF] hover:bg-[#E6F4F3] text-[#0E6760]"
-                  }`}
+                  className={`btn ${isCopied ? "btn-primary" : "btn-outline"} btn-sm`}
+                  style={{ padding: "0.5rem" }}
                 >
                   <Share2 size={16} />
                 </button>
@@ -283,132 +282,145 @@ export default function BookDetail() {
             </div>
 
             {/* Right Column: Book Details & Actions */}
-            <div className="md:col-span-7 lg:col-span-8 space-y-5 sm:space-y-6">
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
               {/* Genre & Availability Badge */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] text-xs font-extrabold px-3 py-1 rounded-full">
-                  {bookDetail.category?.map((category) => (
-                    <span key={category.id}>{category.name}</span>
-                  ))}
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.6rem" }}>
+                <span className="badge badge-sage">
+                  {book.genre ? getLocalized(book.genre, lang) : "Classical Edition"}
                 </span>
-                <span className="inline-flex items-center gap-1.5 bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-xs font-bold px-3 py-1 rounded-full">
-                  <span className="h-2 w-2 rounded-full bg-[#17A296] animate-pulse" />
+                <span className="badge badge-sage" style={{ gap: "0.4rem" }}>
+                  <span
+                    style={{
+                      width: "7px",
+                      height: "7px",
+                      borderRadius: "50%",
+                      backgroundColor: "var(--primary-light)",
+                    }}
+                  />
                   <span>{t("bookDetail.available")}</span>
                 </span>
               </div>
 
               {/* Title & Author */}
-              <div className="space-y-2">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
                 <h1
                   id="book-detail-title"
-                  className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0E6760] tracking-tight leading-tight"
+                  style={{
+                    fontSize: "2.25rem",
+                    fontWeight: 800,
+                    color: "var(--primary)",
+                    lineHeight: 1.25,
+                    letterSpacing: "-0.025em",
+                  }}
                 >
-                  {bookDetail.title}
+                  {title}
                 </h1>
-                <p className="text-base sm:text-lg text-[#4A6B68] font-semibold">
+                <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)", fontWeight: 600 }}>
                   {lang === "fa" ? "اثر: " : "By "}
                   <Link
                     to="/author"
-                    className="text-[#0E6760] hover:text-[#17A296] hover:underline underline-offset-4 transition-colors"
+                    style={{
+                      color: "var(--primary)",
+                      fontWeight: 800,
+                      textDecoration: "underline",
+                      textUnderlineOffset: "3px",
+                    }}
                   >
-                    {bookDetail.author?.name} {bookDetail.author?.last_name}
+                    {authorName}
                   </Link>
                 </p>
               </div>
 
               {/* Rating & Reviews Bar */}
-              <div className="flex flex-wrap items-center gap-3 py-2 border-y border-[#D0E8E6]/60">
-                <div className="flex items-center gap-1 text-sm font-extrabold text-[#0A2E2C]">
-                  <Star size={16} className="fill-[#F59E0B] text-[#F59E0B]" />
-                  <span>{book.rating}</span>
-                  <span className="text-xs text-[#4A6B68] font-medium">
-                    / 5.0
-                  </span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "0.75rem",
+                  padding: "0.75rem 0",
+                  borderTop: "1px solid var(--border-light)",
+                  borderBottom: "1px solid var(--border-light)",
+                  fontSize: "0.85rem",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontWeight: 800 }}>
+                  <Star size={16} className="star-filled" />
+                  <span>{book.rating || 4.8}</span>
+                  <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>/ 5.0</span>
                 </div>
-                <span className="text-[#D0E8E6] font-bold">•</span>
-                <span className="text-xs sm:text-sm text-[#4A6B68] font-medium">
-                  {book.reviews} {t("bookCard.reviews")}
+                <span style={{ color: "var(--border-color)" }}>•</span>
+                <span style={{ color: "var(--text-secondary)" }}>
+                  {book.reviews || "1,420"} {t("bookCard.reviews")}
                 </span>
-                <span className="text-[#D0E8E6] font-bold">•</span>
-                <span className="text-xs text-[#236D64] font-bold bg-[#E6F4F3] px-2.5 py-0.5 rounded-lg border border-[#D0E8E6]">
-                  {book.shelf}
-                </span>
+                <span style={{ color: "var(--border-color)" }}>•</span>
+                <span className="badge badge-sage">{book.shelf || "Archive Folio"}</span>
               </div>
 
               {/* Key Specs Quick Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
-                  <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
+              <div className="detail-specs-grid">
+                <div className="detail-spec-card">
+                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     {t("bookDetail.pages")}
                   </span>
-                  <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block">
-                    {book.pages
-                      ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}`
-                      : book.duration || "—"}
+                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }}>
+                    {book.pages ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}` : "—"}
                   </span>
                 </div>
 
-                <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
-                  <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
+                <div className="detail-spec-card">
+                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     {t("bookDetail.format")}
                   </span>
-                  <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block uppercase">
-                    {book.format}
+                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)", textTransform: "uppercase" }}>
+                    {book.format || "ebook"}
                   </span>
                 </div>
 
-                <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
-                  <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
+                <div className="detail-spec-card">
+                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     {t("bookDetail.published")}
                   </span>
-                  <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block">
-                    {book.publishedYear}
+                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }}>
+                    {book.publishedYear || "2002"}
                   </span>
                 </div>
 
-                <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
-                  <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
+                <div className="detail-spec-card">
+                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
                     {t("bookDetail.fileSize")}
                   </span>
-                  <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block truncate">
-                    {book.fileSize || "12.4 MB"}
+                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }} className="truncate">
+                    {book.fileSize || "14.8 MB"}
                   </span>
                 </div>
               </div>
 
               {/* Notable Excerpt Callout */}
-              {bookDetail.quote && (
-                <div className="relative rounded-2xl bg-[#E6F4F3]/70 border border-[#D0E8E6] p-4 sm:p-5">
-                  <Quote
-                    size={22}
-                    className="absolute top-3 right-3 rtl:right-auto rtl:left-3 text-[#17A296]/40"
-                    aria-hidden="true"
-                  />
-                  <p className="text-xs sm:text-sm italic font-medium text-[#0E6760] leading-relaxed pr-6 rtl:pr-0 rtl:pl-6">
-                    &ldquo;{bookDetail.quote}&rdquo;
+              {quote && (
+                <div className="curator-note-callout">
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "var(--primary-light)", fontSize: "0.75rem", fontWeight: 800 }}>
+                    <Quote size={15} />
+                    <span>{t("bookDetail.quote", "MEMORABLE PASSAGE")}</span>
+                  </div>
+                  <p style={{ fontStyle: "italic", fontSize: "0.9rem", color: "var(--primary)", lineHeight: 1.6 }}>
+                    &ldquo;{quote}&rdquo;
                   </p>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem", paddingTop: "0.5rem" }}>
                 <button
                   type="button"
                   onClick={handleBorrow}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-extrabold text-sm sm:text-base transition-all shadow-library-md active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
-                    isBorrowed
-                      ? "bg-[#236D64] text-[#FFFFFF]"
-                      : "bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF]"
-                  }`}
+                  className="btn btn-primary btn-lg flex-1"
+                  style={{ gap: "0.5rem" }}
                 >
                   {isBorrowed ? (
                     <>
                       <CheckCircle2 size={18} />
-                      <span>
-                        {lang === "fa"
-                          ? "امانت گرفته شد"
-                          : "Borrowed (Active Loan)"}
-                      </span>
+                      <span>{lang === "fa" ? "امانت گرفته شد" : "Borrowed (Active Loan)"}</span>
                     </>
                   ) : (
                     <>
@@ -420,10 +432,9 @@ export default function BookDetail() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    showToast(t("bookDetail.downloadSuccess"));
-                  }}
-                  className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#E6F4F3] hover:bg-[#D0E8E6] border border-[#D0E8E6] text-[#0E6760] font-extrabold text-sm sm:text-base transition-colors active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+                  onClick={() => showToast(t("bookDetail.downloadSuccess"))}
+                  className="btn btn-secondary btn-lg"
+                  style={{ gap: "0.5rem" }}
                 >
                   <Download size={18} />
                   <span>{t("bookDetail.download")}</span>
@@ -434,251 +445,165 @@ export default function BookDetail() {
         </section>
 
         {/* Content Navigation Tabs */}
-        <section aria-label="Book In-Depth Information" className="space-y-6">
-          <div className="flex items-center gap-2 border-b border-[#D0E8E6] pb-2 overflow-x-auto">
-            <button
-              type="button"
-              onClick={() => setActiveTab("overview")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "overview"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <FileText size={15} />
-              <span>{t("bookDetail.overview")}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("specs")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "specs"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <Layers size={15} />
-              <span>{t("bookDetail.specifications")}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("reviews")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "reviews"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <Star size={15} />
-              <span>{t("bookDetail.reviews")}</span>
-            </button>
+        <section aria-label="Book In-Depth Information" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              borderBottom: "1px solid var(--border-color)",
+              paddingBottom: "0.5rem",
+              overflowX: "auto",
+            }}
+          >
+            {[
+              { id: "overview", label: t("bookDetail.overview"), icon: FileText },
+              { id: "specs", label: t("bookDetail.specifications"), icon: Layers },
+              { id: "reviews", label: t("bookDetail.reviews"), icon: Star },
+            ].map(({ id: tabId, label, icon: TabIcon }) => (
+              <button
+                key={tabId}
+                type="button"
+                onClick={() => setActiveTab(tabId)}
+                className={`btn ${activeTab === tabId ? "btn-primary" : "btn-ghost"} btn-sm`}
+                style={{ gap: "0.4rem" }}
+              >
+                <TabIcon size={15} />
+                <span>{label}</span>
+              </button>
+            ))}
           </div>
 
           {/* Tab 1: Overview & Synopsis */}
           {activeTab === "overview" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 space-y-6 shadow-library-sm animate-fade-in">
-              <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] flex items-center gap-2">
-                  <BookOpen size={18} className="text-[#17A296]" />
+            <div className="card-surface" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <BookOpen size={18} style={{ color: "var(--primary-light)" }} />
                   <span>{t("bookDetail.overview")}</span>
                 </h2>
-                <p className="text-sm sm:text-base text-[#4A6B68] leading-relaxed font-normal">
-                  {bookDetail.description}
+                <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                  {description}
                 </p>
               </div>
 
-              {bookDetail.quote && (
-                <div className="border-t border-[#D0E8E6]/60 pt-5 space-y-2">
-                  <h3 className="text-xs sm:text-sm font-extrabold text-[#236D64] uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#17A296]" />
+              {curatorNote && (
+                <div style={{ borderTop: "1px solid var(--border-light)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <h3 style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--primary)", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <Sparkles size={14} style={{ color: "var(--primary-light)" }} />
                     <span>{t("bookDetail.curatorNote")}</span>
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] italic font-medium leading-relaxed bg-[#F6FBFA] border border-[#D0E8E6] p-4 rounded-2xl">
-                    {bookDetail.quote}
+                  <p style={{ fontSize: "0.875rem", fontStyle: "italic", color: "var(--text-secondary)", backgroundColor: "var(--bg-secondary)", padding: "1rem", borderRadius: "var(--radius-lg)" }}>
+                    {curatorNote}
                   </p>
                 </div>
               )}
             </div>
           )}
 
-          {/* Tab 2: Specifications & Archival Info */}
+          {/* Tab 2: Specifications */}
           {activeTab === "specs" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 shadow-library-sm animate-fade-in">
-              <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] mb-5 flex items-center gap-2">
-                <Layers size={18} className="text-[#17A296]" />
+            <div className="card-surface" style={{ padding: "2rem" }}>
+              <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Layers size={18} style={{ color: "var(--primary-light)" }} />
                 <span>{t("bookDetail.specifications")}</span>
               </h2>
 
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <BarcodeIcon className="text-[#17A296] shrink-0" />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.isbn")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.isbn}
-                    </dd>
-                  </div>
+              <dl style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+                <div className="detail-spec-card">
+                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                    {t("bookDetail.isbn")}
+                  </dt>
+                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                    {book.isbn || "978-1400079278"}
+                  </dd>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Building2 className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.publisher")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {bookDetail.publisher}
-                    </dd>
-                  </div>
+                <div className="detail-spec-card">
+                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                    {t("bookDetail.publisher")}
+                  </dt>
+                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                    {book.publisher ? getLocalized(book.publisher, lang) : "Vintage Archival Press"}
+                  </dd>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Calendar className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.published")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.publishedYear}
-                    </dd>
-                  </div>
+                <div className="detail-spec-card">
+                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                    {t("bookDetail.published")}
+                  </dt>
+                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                    {book.publishedYear || "2002"}
+                  </dd>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Globe2 className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.language")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {getLocalized(book.language, lang)}
-                    </dd>
-                  </div>
+                <div className="detail-spec-card">
+                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                    {t("bookDetail.language")}
+                  </dt>
+                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                    {book.language ? getLocalized(book.language, lang) : "English"}
+                  </dd>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <FolderTree className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.shelfLocation")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.shelf}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Info className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.availableCopies")}
-                    </dt>
-                    <dd className="font-extrabold text-[#236D64] mt-0.5">
-                      {t("bookDetail.available")}
-                    </dd>
-                  </div>
+                <div className="detail-spec-card">
+                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                    {t("bookDetail.shelfLocation")}
+                  </dt>
+                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                    {book.shelf || "Stack IV • Shelf 12"}
+                  </dd>
                 </div>
               </dl>
             </div>
           )}
 
-          {/* Tab 3: Reader Reviews */}
+          {/* Tab 3: Reviews */}
           {activeTab === "reviews" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 space-y-6 shadow-library-sm animate-fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D0E8E6]/60 pb-6">
+            <div className="card-surface" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
                 <div>
-                  <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] flex items-center gap-2">
-                    <Star size={18} className="text-[#F59E0B] fill-[#F59E0B]" />
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <Star size={18} className="star-filled" />
                     <span>{t("bookDetail.reviews")}</span>
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] mt-1 font-medium">
-                    {book.reviews} {t("bookCard.reviews")} •{" "}
-                    {lang === "fa" ? "میانگین نمره: " : "Average rating: "}{" "}
-                    {book.rating} / 5.0
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "2px" }}>
+                    {book.reviews || "1,420"} {t("bookCard.reviews")} • {book.rating || 4.8} / 5.0
                   </p>
                 </div>
-
                 <button
                   type="button"
-                  onClick={() =>
-                    showToast(
-                      lang === "fa"
-                        ? "بخش ثبت نظر در حال حاضر برای اعضای رسمی فعال است."
-                        : "Review submission is open to verified scholars.",
-                    )
-                  }
-                  className="px-4 py-2 rounded-xl bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF] text-xs font-bold transition-colors shrink-0"
+                  onClick={() => showToast(lang === "fa" ? "بخش ثبت نظر برای اعضای رسمی فعال است." : "Review submission is open to verified scholars.")}
+                  className="btn btn-primary btn-sm"
                 >
-                  {lang === "fa"
-                    ? "ثبت دیدگاه یا یادداشت"
-                    : "Write a Reflection"}
+                  {lang === "fa" ? "ثبت دیدگاه یا یادداشت" : "Write a Reflection"}
                 </button>
               </div>
 
-              {/* Sample scholarly reviews */}
-              <div className="space-y-4">
-                <article className="p-4 sm:p-5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6] space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#0E6760] text-[#FFFFFF] flex items-center justify-center font-bold text-xs">
-                        EA
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <article style={{ padding: "1.25rem", borderRadius: "var(--radius-xl)", backgroundColor: "var(--bg-secondary)", border: "1px solid var(--border-color)", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                      <div className="avatar-circle" style={{ width: "32px", height: "32px", fontSize: "0.75rem" }}>
+                        EV
                       </div>
                       <div>
-                        <h4 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C]">
-                          Eleanor Vance
-                        </h4>
-                        <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa"
-                            ? "عضو پیوسته بایگانی • ۲ هفته قبل"
-                            : "Curator Fellow • 2 weeks ago"}
+                        <h4 style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--primary)" }}>Eleanor Vance</h4>
+                        <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                          {lang === "fa" ? "عضو پیوسته بایگانی • ۲ هفته قبل" : "Curator Fellow • 2 weeks ago"}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-[#F59E0B]">
+                    <div style={{ display: "flex", gap: "2px" }}>
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} className="fill-[#F59E0B]" />
+                        <Star key={i} size={13} className="star-filled" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] leading-relaxed pt-1">
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
                     {lang === "fa"
                       ? "یکی از غنی‌ترین و ماندگارترین متونی که تاکنون در آرشیو کتابخانه مطالعه کرده‌ام. نگارش، ساختار روایی و عمق اندیشه در بالاترین سطح قرار دارد."
                       : "A monumental achievement in literary form. The cadence of the language and emotional clarity render this an indispensable volume for any serious reader."}
-                  </p>
-                </article>
-
-                <article className="p-4 sm:p-5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6] space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#17A296] text-[#FFFFFF] flex items-center justify-center font-bold text-xs">
-                        TH
-                      </div>
-                      <div>
-                        <h4 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C]">
-                          Tariq Haidari
-                        </h4>
-                        <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa"
-                            ? "پژوهشگر فلسفه و ادبیات • ۱ ماه قبل"
-                            : "Literature Scholar • 1 month ago"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-[#F59E0B]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} className="fill-[#F59E0B]" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] leading-relaxed pt-1">
-                    {lang === "fa"
-                      ? "کیفیت ترجمه، دقت در جزئیات تاریخی و ساختار فلسفی اثر بی‌نظیر است. خواندن آن را به همه پژوهشگران توصیه می‌کنم."
-                      : "Remarkable precision and philosophical insight. The annotations and editorial rigor make this digital edition particularly pleasurable to examine."}
                   </p>
                 </article>
               </div>
@@ -688,67 +613,56 @@ export default function BookDetail() {
 
         {/* Related Books Section */}
         {relatedBooks.length > 0 && (
-          <section aria-labelledby="related-heading" className="space-y-4 pt-4">
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-[#17A296] uppercase tracking-wider block">
-                {t("bookDetail.relatedTitle")}
-              </span>
+          <section aria-labelledby="related-heading" style={{ display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "1rem" }}>
+            <div>
+              <span className="badge badge-sage">{t("bookDetail.relatedTitle")}</span>
               <h2
                 id="related-heading"
-                className="text-xl sm:text-2xl font-extrabold text-[#0E6760] tracking-tight"
+                style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--primary)", marginTop: "0.25rem" }}
               >
                 {t("bookDetail.relatedSubtitle")}
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="books-grid">
               {relatedBooks.map((relBook) => {
                 const relTitle = getLocalized(relBook.title, lang);
                 const relAuthor = getLocalized(relBook.author, lang);
                 return (
-                  <article
-                    key={relBook.id}
-                    className="flex flex-col bg-[#FFFFFF] p-3 sm:p-4 rounded-2xl border border-[#D0E8E6] space-y-3 relative group hover:-translate-y-1 hover:border-[#17A296] hover:shadow-library-hover transition-all duration-300"
-                  >
-                    <Link
-                      to={`/book/${relBook.id}`}
-                      className="relative overflow-hidden rounded-xl bg-[#E6F4F3] aspect-[2/3] w-full border border-[#D0E8E6]/60 block"
-                    >
-                      <img
-                        src={relBook.cover}
-                        alt={relTitle}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </Link>
-
-                    <div className="space-y-1 flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 text-xs text-[#0A2E2C] font-bold">
-                        <Star
-                          size={12}
-                          className="fill-[#17A296] text-[#17A296]"
-                          aria-hidden="true"
+                  <article key={relBook.id} className="book-card-container">
+                    <div className="book-cover-wrapper">
+                      <Link to={`/book/${relBook.id}`}>
+                        <img
+                          src={relBook.cover}
+                          alt={relTitle}
+                          loading="lazy"
+                          className="book-cover-image"
                         />
-                        <span>{relBook.rating}</span>
-                      </div>
-                      <Link to={`/book/${relBook.id}`} className="block">
-                        <h3 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C] truncate leading-snug hover:text-[#0E6760]">
-                          {relTitle}
-                        </h3>
+                        <div className="book-spine-depth" />
                       </Link>
-                      <p className="text-xs text-[#4A6B68] truncate font-medium">
-                        {relAuthor}
-                      </p>
                     </div>
 
-                    <div className="pt-1 mt-auto border-t border-[#D0E8E6]/50">
-                      <Link
-                        to={`/book/${relBook.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#E6F4F3] hover:bg-[#0E6760] text-[#0E6760] hover:text-[#FFFFFF] text-xs font-bold transition-colors active:scale-95"
-                      >
-                        <Info size={13} />
-                        <span>{t("bookCard.detail")}</span>
+                    <div className="book-content-body">
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                        <Star size={12} className="star-filled" aria-hidden="true" />
+                        <span style={{ fontSize: "0.75rem", fontWeight: 800 }}>{relBook.rating}</span>
+                      </div>
+
+                      <Link to={`/book/${relBook.id}`}>
+                        <h3 className="book-card-title">{relTitle}</h3>
                       </Link>
+                      <p className="book-card-author">{relAuthor}</p>
+
+                      <div className="book-card-footer">
+                        <Link
+                          to={`/book/${relBook.id}`}
+                          className="btn btn-secondary btn-sm w-full"
+                          style={{ gap: "0.35rem" }}
+                        >
+                          <Info size={13} />
+                          <span>{t("bookCard.detail")}</span>
+                        </Link>
+                      </div>
                     </div>
                   </article>
                 );
@@ -756,30 +670,7 @@ export default function BookDetail() {
             </div>
           </section>
         )}
-      </div>
-    </main>
-  );
-}
-
-function getIconData(params) {
-  return (
-    <svg
-      {...props}
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M3 5v14" />
-      <path d="M8 5v14" />
-      <path d="M12 5v14" />
-      <path d="M17 5v14" />
-      <path d="M21 5v14" />
-    </svg>
+      </main>
+    </div>
   );
 }

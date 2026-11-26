@@ -1,19 +1,17 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 export default function MobileGreeting({ name = "Clara", streakDays = 14 }) {
   const { t } = useTranslation();
 
   return (
-    <div className="md:hidden space-y-2 pt-2">
-      <span className="text-xs font-bold text-[#236D64] uppercase tracking-wider block">
-        {name} • {t("home.hero.eyebrow")}
-      </span>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-[#0E6760] leading-snug">
-          {t("home.hero.title")}
-        </h1>
+    <div className="mobile-greeting-banner">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
+        <span className="badge badge-sage">
+          {name} • {t("home.hero.eyebrow")}
+        </span>
         <span
-          className="px-3 py-1 bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-xs font-bold rounded-full flex items-center gap-1.5 shrink-0 shadow-sm"
+          className="badge badge-gold"
           role="status"
           aria-label={`${streakDays} days reading streak`}
         >
@@ -21,7 +19,12 @@ export default function MobileGreeting({ name = "Clara", streakDays = 14 }) {
           <span aria-hidden="true">🔥</span>
         </span>
       </div>
-      <p className="text-xs sm:text-sm text-[#4A6B68] font-medium leading-relaxed">
+
+      <h1 style={{ fontSize: "1.45rem", fontWeight: 800, color: "var(--primary)", lineHeight: 1.25 }}>
+        {t("home.hero.title")}
+      </h1>
+
+      <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.55 }}>
         {t("home.hero.description")}
       </p>
     </div>

@@ -3,14 +3,14 @@ import { AuthProvider } from "./context/AuthContext";
 import { AuthLayout } from "./features/auth/AuthLayout";
 import { SignInForm } from "./features/auth/SignInForm";
 import { SignUpForm } from "./features/auth/SignUpForm";
-import { HomePage } from "./pages/Home/HomePage";
-import Footer from "./component/Footer";
-import MobileBottomNav from "./component/MobileBottomNav";
-import Navbar from "./component/Navbar";
-import ExploreLibrary from "./pages/exploreBooks/ExploreLibrary.jsx";
-import Authors from "./pages/author/Authors.jsx";
-import Favorites from "./pages/favorite/Favorites.jsx";
-import BookDetail from "./pages/bookDetail/BookDetail.jsx";
+import HomePage from "./pages/Home/HomePage";
+import Footer from "./components/layout/Footer";
+import MobileBottomNav from "./components/layout/MobileBottomNav";
+import Navbar from "./components/layout/Navbar";
+import ExploreLibrary from "./pages/Explore/ExploreLibrary.jsx";
+import Authors from "./pages/Authors/Authors.jsx";
+import Favorites from "./pages/Favorites/Favorites.jsx";
+import BookDetail from "./pages/BookDetail/BookDetail.jsx";
 
 const AUTH_ROUTES = ["/signin", "/login", "/signup", "/register"];
 
@@ -18,11 +18,8 @@ function AppContent() {
   const { pathname } = useLocation();
   const isAuthPage = AUTH_ROUTES.includes(pathname.toLowerCase());
 
-
-
-  
   return (
-    <>
+    <div className="app-shell">
       {!isAuthPage && <Navbar />}
       {!isAuthPage && <MobileBottomNav />}
       <Routes>
@@ -55,8 +52,8 @@ function AppContent() {
         <Route path="/register" element={<Navigate to="/signup" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {!isAuthPage && <Footer className="hidden md:block" />}
-    </>
+      {!isAuthPage && <Footer className="hidden-mobile" />}
+    </div>
   );
 }
 

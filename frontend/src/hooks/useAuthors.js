@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { authors } from "../pages/author/authors";
+import { authors } from "../pages/Authors/authors";
 
 export const PER_PAGE = 8;
 

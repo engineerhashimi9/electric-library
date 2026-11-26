@@ -1,32 +1,56 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import AuthorCard from "./AuthorCard";
-import Eyebrow from "@/component/ui/Eyebrow";
+import Eyebrow from "@/components/ui/Eyebrow";
 
 export default function MasterCurators({ authors }) {
   const { t } = useTranslation();
 
   return (
-    <section aria-labelledby="curators-heading" className="space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-        <div className="space-y-1">
+    <section aria-labelledby="curators-heading" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
           <Eyebrow>{t("home.curators.eyebrow")}</Eyebrow>
-          <h2 id="curators-heading" className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0E6760] tracking-tight">
+          <h2
+            id="curators-heading"
+            style={{
+              fontSize: "1.75rem",
+              fontWeight: 800,
+              color: "var(--primary)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.25,
+            }}
+          >
             {t("home.curators.title")}
           </h2>
-          <p className="text-xs sm:text-sm text-[#4A6B68] font-medium">
+          <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)" }}>
             {t("home.curators.subtitle")}
           </p>
         </div>
         <Link
           to="/author"
-          className="text-xs sm:text-sm font-bold text-[#0E6760] hover:text-[#17A296] hover:underline underline-offset-4 transition-colors shrink-0 self-start sm:self-end focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
+          style={{
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            color: "var(--primary)",
+            textDecoration: "underline",
+            textUnderlineOffset: "3px",
+          }}
         >
           {t("home.curators.viewAll")}
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+      <div className="books-grid">
         {authors.map((author, idx) => (
           <AuthorCard key={idx} author={author} />
         ))}

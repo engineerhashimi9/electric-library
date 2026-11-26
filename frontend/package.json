@@ -1,7 +1,7 @@
 {
-  "name": "onlline-library",
+  "name": "online-library",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,7 +19,6 @@
     "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",

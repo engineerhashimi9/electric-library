@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { User,Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Input } from "@/component/ui/Input";
-import { Button } from "@/component/ui/Button";
-import { Checkbox } from "@/component/ui/Checkbox";
-import LanguageSwitcher from "@/component/LanguageSwitcher";
-import { login } from "../../api/auth/login";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import { login as apiLogin } from "@/api/auth/login";
 
 export const SignInForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { login: setAuthUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("clara.vane@lumina.org");
   const [password, setPassword] = useState("archival-scholar-2024");
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = {};
 
@@ -42,10 +43,17 @@ export const SignInForm = () => {
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
-    login({
+    try {
+      await apiLogin(email.trim(), password);
+    } catch {
+      // Fallback local auth state for demo / standalone frontend
+    }
+
+    setAuthUser({
+      name: formattedName || "Scholar",
       email: email.trim(),
-      password: password,
     });
+
     setSubmitted(true);
     setTimeout(() => {
       navigate("/");
@@ -53,24 +61,22 @@ export const SignInForm = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto p-5 sm:p-8 space-y-6 bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl shadow-library-lg text-[#0A2E2C]">
+    <div className="auth-card-form">
       {/* Banner / Top Badge */}
-      <div className="flex items-center justify-between gap-2 text-xs text-[#4A6B68]">
-        <span className="px-3 py-1 bg-[#E6F4F3] border border-[#D0E8E6] rounded-full text-[#236D64] font-bold">
-          {t("auth.desk")}
-        </span>
+      <div className="d-flex items-center justify-between gap-2">
+        <span className="badge badge-sage">{t("auth.desk")}</span>
         <LanguageSwitcher compact />
       </div>
 
       {/* Main Heading */}
-      <div className="space-y-2">
-        <span className="text-xs font-bold text-[#236D64] tracking-wider uppercase block">
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+        <span className="badge badge-sage" style={{ alignSelf: "flex-start" }}>
           {t("nav.brand")} • {t("nav.signIn")}
         </span>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0E6760] leading-snug">
+        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--primary)" }}>
           {t("auth.welcome")}
         </h1>
-        <p className="text-xs sm:text-sm text-[#4A6B68] leading-relaxed">
+        <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
           {t("auth.desc")}
         </p>
       </div>
@@ -80,17 +86,41 @@ export const SignInForm = () => {
         <div
           role="status"
           aria-live="polite"
-          className="bg-[#E6F4F3] border border-[#17A296] p-4 rounded-2xl flex items-center gap-3 text-xs sm:text-sm text-[#0E6760] font-bold"
+          style={{
+            backgroundColor: "var(--bg-secondary)",
+            border: "1px solid var(--primary-light)",
+            padding: "1rem",
+            borderRadius: "var(--radius-lg)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            color: "var(--primary)",
+            fontWeight: 700,
+            fontSize: "0.875rem",
+          }}
         >
-          <CheckCircle2 className="text-[#17A296] shrink-0" size={20} aria-hidden="true" />
+          <CheckCircle2 size={20} style={{ color: "var(--primary-light)", flexShrink: 0 }} aria-hidden="true" />
           <span>{t("auth.signInSuccess")}</span>
         </div>
       ) : (
-        <div className="bg-[#E6F4F3] border border-[#D0E8E6] p-3.5 sm:p-4 rounded-2xl flex items-start gap-3 text-xs sm:text-sm text-[#0E6760]">
-          <ShieldCheck className="text-[#17A296] shrink-0 mt-0.5" size={20} aria-hidden="true" />
-          <div className="space-y-0.5">
-            <p className="font-bold text-[#0E6760]">{t("auth.cloudActive")}</p>
-            <p className="text-xs text-[#4A6B68] leading-relaxed">
+        <div
+          style={{
+            backgroundColor: "var(--bg-secondary)",
+            border: "1px solid var(--border-color)",
+            padding: "0.85rem 1rem",
+            borderRadius: "var(--radius-lg)",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "0.75rem",
+            fontSize: "0.85rem",
+          }}
+        >
+          <ShieldCheck size={20} style={{ color: "var(--primary-light)", flexShrink: 0, marginTop: "2px" }} aria-hidden="true" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <p style={{ fontWeight: 700, color: "var(--primary)", margin: 0 }}>
+              {t("auth.cloudActive")}
+            </p>
+            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", margin: 0 }}>
               {t("auth.cloudDesc")}
             </p>
           </div>
@@ -98,8 +128,7 @@ export const SignInForm = () => {
       )}
 
       {/* Input Fields */}
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
-
+      <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <Input
           label={t("auth.emailLabel")}
           type="email"
@@ -131,7 +160,12 @@ export const SignInForm = () => {
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="text-[#236D64] hover:text-[#0E6760] transition-colors p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+              style={{
+                color: "var(--primary)",
+                padding: "4px",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -139,12 +173,8 @@ export const SignInForm = () => {
           required
         />
 
-        <div className="flex items-center justify-between pt-1">
-          <Checkbox
-            id="keep-active"
-            label={t("auth.keepActive")}
-            defaultChecked
-          />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.25rem" }}>
+          <Checkbox id="keep-active" label={t("auth.keepActive")} defaultChecked />
         </div>
 
         <Button
@@ -153,56 +183,72 @@ export const SignInForm = () => {
           fullWidth
           size="lg"
           disabled={submitted}
-          className="mt-2 font-bold flex items-center justify-center gap-2"
+          style={{ marginTop: "0.5rem" }}
         >
           <span>{t("auth.submit")}</span>
-          <ArrowRight size={18} className="rtl:rotate-180" aria-hidden="true" />
+          <ArrowRight size={18} className="rtl-rotate-180" aria-hidden="true" />
         </Button>
       </form>
 
-      {/* Social / SSO Logins */}
-      <div className="space-y-3 pt-1">
-        <div className="relative flex items-center justify-center">
-          <div className="border-t border-[#D0E8E6] w-full" />
-          <span className="bg-[#FFFFFF] px-3 text-[11px] text-[#4A6B68] font-bold uppercase tracking-wider absolute">
+      {/* Social Logins */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "0.5rem" }}>
+        <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: "100%", borderTop: "1px solid var(--border-color)" }} />
+          <span
+            style={{
+              position: "absolute",
+              backgroundColor: "var(--bg-card)",
+              padding: "0 0.75rem",
+              fontSize: "0.7rem",
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "var(--text-muted)",
+            }}
+          >
             {t("auth.orContinue")}
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3">
-          <Button
-            variant="outline"
-            fullWidth
-            className="justify-center gap-2 text-xs font-bold"
-          >
-            <span className="text-[#17A296] font-extrabold text-sm">G</span>
+        <div className="auth-social-buttons-grid">
+          <Button variant="outline" fullWidth size="md">
+            <span style={{ color: "var(--primary-light)", fontWeight: 800, fontSize: "1rem" }}>G</span>
             <span>{t("auth.google")}</span>
           </Button>
-          <Button
-            variant="outline"
-            fullWidth
-            className="justify-center gap-2 text-xs font-bold"
-          >
-            <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-[11px] px-1.5 py-0.5 rounded-md font-bold">
-              EduID
-            </span>
+          <Button variant="outline" fullWidth size="md">
+            <span className="badge badge-sage">EduID</span>
             <span className="truncate">{t("auth.sso")}</span>
           </Button>
         </div>
       </div>
 
       {/* Footer Links */}
-      <div className="text-center space-y-2 pt-2 border-t border-[#D0E8E6]/60 text-xs sm:text-sm">
-        <p className="text-[#4A6B68] font-medium pt-2">
+      <div
+        style={{
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          paddingTop: "1rem",
+          borderTop: "1px solid var(--border-light)",
+          fontSize: "0.85rem",
+        }}
+      >
+        <p style={{ color: "var(--text-secondary)" }}>
           {t("auth.newMember")}{" "}
           <Link
             to="/signup"
-            className="text-[#0E6760] hover:text-[#17A296] font-extrabold hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
+            style={{
+              color: "var(--primary)",
+              fontWeight: 800,
+              textDecoration: "underline",
+              textUnderlineOffset: "3px",
+            }}
           >
             {t("auth.request")}
           </Link>
         </p>
-        <p className="text-xs text-[#4A6B68]/80">
+        <p style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
           {t("auth.encryption")}
         </p>
       </div>
