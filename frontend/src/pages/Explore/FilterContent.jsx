@@ -1,3 +1,4 @@
+import React from "react";
 import { MonitorCheck, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { formatOptions, languages } from "./data";
@@ -22,39 +23,50 @@ export function FilterContent({ filters, onChange, onReset }) {
   ];
 
   return (
-    <div className="space-y-7">
-      <div className="flex items-center justify-between gap-3 pb-2 border-b border-[#D0E8E6]">
-        <h2 className="flex items-center gap-2 text-lg font-extrabold text-[#0E6760]">
-          <SlidersHorizontal size={20} className="text-[#17A296]" aria-hidden="true" />
+    <div className="filter-content">
+      <div className="filter-header">
+        <h2 className="filter-title">
+          <SlidersHorizontal size={18} style={{ color: "var(--primary-light)" }} aria-hidden="true" />
           <span>{t("explore.filters.title")}</span>
         </h2>
 
         <button
           type="button"
           onClick={onReset}
-          className="shrink-0 text-xs font-bold text-[#17A296] hover:text-[#0E6760] hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded px-1"
+          className="btn-ghost"
+          style={{
+            fontSize: "0.78rem",
+            fontWeight: 700,
+            color: "var(--primary-light)",
+            border: "none",
+            cursor: "pointer",
+            padding: "0.2rem 0.5rem",
+            borderRadius: "var(--radius-sm)",
+          }}
         >
           {t("explore.filters.reset")}
         </button>
       </div>
 
-      <fieldset className="space-y-3">
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wider text-[#236D64]">{t("explore.filters.format")}</legend>
+      <fieldset className="filter-group">
+        <legend className="filter-legend">{t("explore.filters.format")}</legend>
 
-        <div className="space-y-3">
+        <div className="d-flex flex-col gap-2">
           {formatOptions.map((option) => (
-            <label
-              key={option.value}
-              className="flex cursor-pointer items-center gap-3 text-xs sm:text-sm text-[#0A2E2C] font-semibold hover:text-[#0E6760] transition-colors"
-            >
+            <label key={option.value} className="filter-option-row">
               <input
                 type="checkbox"
                 checked={filters.formats.includes(option.value)}
                 onChange={() => toggleFormat(option.value)}
-                className="h-4 w-4 rounded accent-[#17A296] focus:ring-2 focus:ring-[#17A296]"
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  accentColor: "var(--primary-light)",
+                  cursor: "pointer",
+                }}
               />
-              <span className="flex-1">{isFa && option.labelFa ? option.labelFa : option.label}</span>
-              <span className="rounded-full bg-[#E6F4F3] border border-[#D0E8E6] px-2 py-0.5 text-[11px] font-bold text-[#4A6B68]">
+              <span style={{ flex: 1 }}>{isFa && option.labelFa ? option.labelFa : option.label}</span>
+              <span className="badge badge-sage" style={{ fontSize: "0.68rem" }}>
                 {option.count}
               </span>
             </label>
@@ -62,12 +74,12 @@ export function FilterContent({ filters, onChange, onReset }) {
         </div>
       </fieldset>
 
-      <fieldset className="space-y-3 pt-2">
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wider text-[#236D64]">
+      <fieldset className="filter-group">
+        <legend className="filter-legend">
           {t("explore.filters.circulation")}
         </legend>
 
-        <label className="flex cursor-pointer items-center gap-3 text-xs sm:text-sm text-[#0A2E2C] font-semibold hover:text-[#0E6760] transition-colors">
+        <label className="filter-option-row">
           <input
             type="checkbox"
             checked={filters.availableOnly}
@@ -77,13 +89,26 @@ export function FilterContent({ filters, onChange, onReset }) {
                 availableOnly: event.target.checked,
               })
             }
-            className="h-4 w-4 rounded accent-[#17A296] focus:ring-2 focus:ring-[#17A296]"
+            style={{
+              width: "16px",
+              height: "16px",
+              accentColor: "var(--primary-light)",
+              cursor: "pointer",
+            }}
           />
-          <span className="h-2 w-2 rounded-full bg-[#17A296]" aria-hidden="true" />
+          <span
+            style={{
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              backgroundColor: "var(--primary-light)",
+            }}
+            aria-hidden="true"
+          />
           <span>{t("explore.filters.available")}</span>
         </label>
 
-        <label className="flex cursor-pointer items-center gap-3 text-xs sm:text-sm text-[#0A2E2C] font-semibold hover:text-[#0E6760] transition-colors">
+        <label className="filter-option-row">
           <input
             type="checkbox"
             checked={filters.reserveOnly}
@@ -93,30 +118,45 @@ export function FilterContent({ filters, onChange, onReset }) {
                 reserveOnly: event.target.checked,
               })
             }
-            className="h-4 w-4 rounded accent-[#17A296] focus:ring-2 focus:ring-[#17A296]"
+            style={{
+              width: "16px",
+              height: "16px",
+              accentColor: "var(--primary)",
+              cursor: "pointer",
+            }}
           />
-          <span className="h-2 w-2 rounded-full bg-[#236D64]" aria-hidden="true" />
+          <span
+            style={{
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              backgroundColor: "var(--primary)",
+            }}
+            aria-hidden="true"
+          />
           <span>{t("explore.filters.reserve")}</span>
         </label>
       </fieldset>
 
-      <fieldset className="space-y-3 pt-2">
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wider text-[#236D64]">
+      <fieldset className="filter-group">
+        <legend className="filter-legend">
           {t("explore.filters.length")}
         </legend>
 
-        <div className="space-y-2.5">
+        <div className="d-flex flex-col gap-2">
           {lengthOptions.map((option) => (
-            <label
-              key={option.value}
-              className="flex cursor-pointer items-center gap-3 text-xs sm:text-sm text-[#0A2E2C] font-semibold hover:text-[#0E6760] transition-colors"
-            >
+            <label key={option.value} className="filter-option-row">
               <input
                 type="radio"
                 name="volume-length"
                 checked={filters.length === option.value}
                 onChange={() => onChange({ ...filters, length: option.value })}
-                className="h-4 w-4 accent-[#17A296] focus:ring-2 focus:ring-[#17A296]"
+                style={{
+                  width: "16px",
+                  height: "16px",
+                  accentColor: "var(--primary-light)",
+                  cursor: "pointer",
+                }}
               />
               <span>{option.label}</span>
             </label>
@@ -124,52 +164,67 @@ export function FilterContent({ filters, onChange, onReset }) {
         </div>
       </fieldset>
 
-      <fieldset className="space-y-3 pt-2">
-        <legend className="mb-2 text-xs font-bold uppercase tracking-wider text-[#236D64]">{t("explore.filters.languages")}</legend>
+      <fieldset className="filter-group">
+        <legend className="filter-legend">{t("explore.filters.languages")}</legend>
 
-        <div className="flex flex-wrap gap-2">
-          {languages.map(({ label, count }) => (
-            <button
-              key={label}
-              type="button"
-              aria-pressed={filters.language === label}
-              onClick={() =>
-                onChange({
-                  ...filters,
-                  language: filters.language === label ? "" : label,
-                })
-              }
-              className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
-                filters.language === label
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-sm"
-                  : "bg-[#E6F4F3] border border-[#D0E8E6] text-[#4A6B68] hover:bg-[#D0E8E6] hover:text-[#0E6760]"
-              }`}
-            >
-              {label} ({count})
-            </button>
-          ))}
+        <div className="d-flex flex-wrap gap-2">
+          {languages.map(({ label, count }) => {
+            const isSelected = filters.language === label;
+            return (
+              <button
+                key={label}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() =>
+                  onChange({
+                    ...filters,
+                    language: isSelected ? "" : label,
+                  })
+                }
+                className={`chip ${isSelected ? "active" : ""}`}
+                style={{ fontSize: "0.75rem", padding: "0.3rem 0.75rem" }}
+              >
+                <span>{label}</span>
+                <span className="chip-count">{count}</span>
+              </button>
+            );
+          })}
         </div>
       </fieldset>
 
-      <label className="flex cursor-pointer items-center gap-3 text-xs sm:text-sm text-[#0A2E2C] font-semibold hover:text-[#0E6760] transition-colors pt-2">
+      <label className="filter-option-row" style={{ paddingTop: "0.25rem" }}>
         <input
           type="checkbox"
           checked={filters.highRating}
           onChange={(event) =>
             onChange({ ...filters, highRating: event.target.checked })
           }
-          className="h-4 w-4 rounded accent-[#17A296] focus:ring-2 focus:ring-[#17A296]"
+          style={{
+            width: "16px",
+            height: "16px",
+            accentColor: "var(--primary-light)",
+            cursor: "pointer",
+          }}
         />
         <span>{t("explore.filters.highRating")}</span>
       </label>
 
-      <div className="rounded-2xl bg-[#E6F4F3] border border-[#D0E8E6] p-4 space-y-2">
-        <h3 className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0E6760]">
-          <MonitorCheck size={18} className="text-[#17A296]" aria-hidden="true" />
+      <div className="filter-info-card">
+        <h3
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.45rem",
+            fontSize: "0.82rem",
+            fontWeight: 800,
+            color: "var(--primary)",
+          }}
+        >
+          <MonitorCheck size={16} style={{ color: "var(--primary-light)" }} aria-hidden="true" />
           <span>{t("explore.filters.marginaliaSync")}</span>
         </h3>
 
-        <p className="text-xs text-[#4A6B68] leading-relaxed">
+        <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", lineHeight: 1.55 }}>
           {t("explore.filters.marginaliaSyncDesc")}
         </p>
       </div>

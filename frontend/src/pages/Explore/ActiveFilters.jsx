@@ -1,3 +1,4 @@
+import React from "react";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ViewToggle } from "./ViewToggle";
@@ -65,10 +66,18 @@ export default function ActiveFilters({
   }
 
   return (
-    <section className="flex flex-col gap-3 pb-2 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex flex-wrap items-center gap-2">
+    <section className="active-filters-bar">
+      <div className="d-flex flex-wrap items-center gap-2">
         {chips.length > 0 && (
-          <span className="me-2 hidden text-xs sm:text-sm font-bold text-[#0E6760] lg:inline">
+          <span
+            className="hidden-mobile"
+            style={{
+              marginInlineEnd: "0.5rem",
+              fontSize: "0.82rem",
+              fontWeight: 800,
+              color: "var(--primary)",
+            }}
+          >
             {t("explore.filters.active")}
           </span>
         )}
@@ -78,45 +87,53 @@ export default function ActiveFilters({
             type="button"
             onClick={chip.remove}
             aria-label={`Remove ${chip.label} filter`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#E6F4F3] border border-[#D0E8E6] hover:bg-[#D0E8E6] px-3 py-1 text-xs sm:text-sm font-bold text-[#0E6760] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+            className="active-filter-chip"
           >
             <span>{chip.label}</span>
-            <X size={14} className="text-[#4A6B68]" />
+            <X size={14} style={{ color: "var(--text-secondary)" }} />
           </button>
         ))}
         {chips.length > 0 && (
           <button
             type="button"
             onClick={onClear}
-            className="px-2 text-xs font-bold text-[#17A296] hover:text-[#0E6760] hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
+            className="btn-ghost"
+            style={{
+              padding: "0.2rem 0.5rem",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              color: "var(--primary-light)",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
             {t("explore.filters.clearAll")}
           </button>
         )}
       </div>
 
-      <div className="flex items-center justify-between lg:justify-end gap-4">
-        <p className="text-xs sm:text-sm text-[#4A6B68] font-semibold">
-          <span className="lg:hidden">
+      <div className="d-flex items-center justify-between gap-3">
+        <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+          <span className="hidden-desktop">
             {t("explore.showingMobile", { total })}
           </span>
-          <span className="hidden lg:inline">
+          <span className="hidden-mobile">
             {t("explore.showing", { start, end, total })}
           </span>
         </p>
-        <label className="hidden lg:block relative">
+        <label className="hidden-mobile relative">
           <select
             aria-label={t("explore.sort.label")}
             value={sort}
             onChange={(event) => onSortChange(event.target.value)}
-            className="rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] text-[#0A2E2C] px-4 py-2.5 text-xs sm:text-sm font-bold shadow-library-sm outline-none focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20 transition-all cursor-pointer"
+            className="select-styled"
           >
             <option value="popular">{t("explore.sort.popular")}</option>
             <option value="rating">{t("explore.sort.rating")}</option>
             <option value="title">{t("explore.sort.title")}</option>
           </select>
         </label>
-        <div className="hidden lg:block">
+        <div className="hidden-mobile">
           <ViewToggle view={view} onChange={onViewChange} />
         </div>
       </div>
