@@ -30,7 +30,7 @@ export default function AuthorCard({ author, following, onToggleFollow }) {
         />
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-          <h3 className="author-name-title">{locName}</h3>
+          <h3 className="author-name-title font-serif">{locName}</h3>
           <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", fontWeight: 600 }}>
             {formatLife(author, isFa)} • {locCountry}
           </p>

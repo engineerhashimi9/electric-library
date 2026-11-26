@@ -9,9 +9,14 @@ export default function ThemeCard({ theme }) {
 
   const name = getLocalized(theme.name, lang);
   const works = getLocalized(theme.works, lang);
+  const genreVal = typeof theme.name === "object" ? theme.name.en : theme.name;
 
   return (
-    <Link to="/explorebooks" className="theme-card-box">
+    <Link
+      to={`/explorebooks?genre=${encodeURIComponent(genreVal)}`}
+      className="theme-card-box"
+      title={`Explore ${name}`}
+    >
       <div className="theme-icon-circle">
         <img
           style={{ width: "24px", height: "24px", objectFit: "contain" }}

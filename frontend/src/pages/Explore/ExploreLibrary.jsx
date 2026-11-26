@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 import { books } from "./data";
 import { getLocalized } from "@/utils/langHelper";
+import { useFavoritesContext } from "@/context/FavoritesContext";
 
 import { BookCard } from "./BookCard";
 import CatalogControls from "./CatalogControls";
@@ -9,6 +11,7 @@ import CatalogHero from "./CatalogHero";
 import CatalogPagination from "./CatalogPagination";
 import CollectionSpotlight from "./CollectionSpotlight";
 import { ViewToggle } from "./ViewToggle";
+import BookExcerptModal from "@/components/common/BookExcerptModal";
 import { CheckCircle2 } from "lucide-react";
 
 function useDesktopLayout() {
@@ -34,20 +37,36 @@ function useDesktopLayout() {
 export default function ExploreLibrary() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { isFavorite, toggleFavorite } = useFavoritesContext();
 
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("All Genres");
+  const [query, setQuery] = useState(() => searchParams.get("q") || "");
+  const [genre, setGenre] = useState(() => searchParams.get("genre") || "All Genres");
   const [sort, setSort] = useState("popular");
   const [view, setView] = useState("grid");
-  const [favorites, setFavorites] = useState([]);
   const [page, setPage] = useState(1);
   const [desktopPerPage, setDesktopPerPage] = useState(8);
   const [notice, setNotice] = useState("");
+  const [previewBook, setPreviewBook] = useState(null);
 
   const desktop = useDesktopLayout();
   const searchRef = useRef(null);
 
   const perPage = desktop ? desktopPerPage : 6;
+
+  // Sync state if URL query parameters change (e.g., from ThemeCard click or navbar search)
+  useEffect(() => {
+    const qParam = searchParams.get("q");
+    if (qParam !== null && qParam !== query) {
+      setQuery(qParam);
+      setPage(1);
+    }
+    const genreParam = searchParams.get("genre");
+    if (genreParam !== null && genreParam !== genre) {
+      setGenre(genreParam);
+      setPage(1);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (!notice) return;
@@ -108,11 +127,21 @@ export default function ExploreLibrary() {
   function updateQuery(value) {
     setQuery(value);
     setPage(1);
+    if (value) {
+      setSearchParams({ q: value, ...(genre !== "All Genres" ? { genre } : {}) });
+    } else {
+      setSearchParams(genre !== "All Genres" ? { genre } : {});
+    }
   }
 
   function updateGenre(nextGenre) {
     setGenre(nextGenre);
     setPage(1);
+    if (nextGenre !== "All Genres") {
+      setSearchParams({ ...(query ? { q: query } : {}), genre: nextGenre });
+    } else {
+      setSearchParams(query ? { q: query } : {});
+    }
   }
 
   function updateSort(nextSort) {
@@ -120,30 +149,15 @@ export default function ExploreLibrary() {
     setPage(1);
   }
 
-  function toggleFavorite(id) {
-    setFavorites((prev) => {
-      const isFav = prev.includes(id);
-      const next = isFav ? prev.filter((item) => item !== id) : [...prev, id];
-      const targetBook = books.find((b) => b.id === id);
-      const title = targetBook ? getLocalized(targetBook.title, lang) : "";
-
-      setNotice(
-        isFav
-          ? (lang === "fa" ? `«${title}» از علاقه‌مندی‌ها حذف شد.` : `Removed "${title}" from favorites.`)
-          : (lang === "fa" ? `«${title}» به علاقه‌مندی‌ها اضافه شد.` : `Added "${title}" to favorites.`),
-      );
-
-      return next;
-    });
+  function handleFavoriteToggle(bookId) {
+    const targetBook = books.find((b) => b.id === bookId);
+    if (targetBook) {
+      toggleFavorite(targetBook);
+    }
   }
 
   function handleBookAction(book) {
-    const title = getLocalized(book.title, lang);
-    setNotice(
-      lang === "fa"
-        ? `دانلود «${title}» آغاز شد.`
-        : `Download started for "${title}".`,
-    );
+    setPreviewBook(book);
   }
 
   function handlePageChange(nextPage) {
@@ -152,6 +166,12 @@ export default function ExploreLibrary() {
 
   return (
     <div className="page-container">
+      <BookExcerptModal
+        book={previewBook}
+        isOpen={Boolean(previewBook)}
+        onClose={() => setPreviewBook(null)}
+      />
+
       <main id="catalog" className="content-container" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
         <CatalogHero />
 
@@ -214,8 +234,8 @@ export default function ExploreLibrary() {
                 <BookCard
                   key={book.id}
                   book={book}
-                  favorite={favorites.includes(book.id)}
-                  onToggleFavorite={toggleFavorite}
+                  favorite={isFavorite(book.id)}
+                  onToggleFavorite={handleFavoriteToggle}
                   onAction={handleBookAction}
                   view={view}
                 />

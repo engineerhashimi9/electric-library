@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Heart, LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
+import { useFavoritesContext } from "@/context/FavoritesContext";
 import Avatar from "../ui/Avatar";
 import LanguageSwitcher from "../common/LanguageSwitcher";
 import BrandLogo from "../ui/BrandLogo";
+import QuickSearchModal from "../common/QuickSearchModal";
 
 export default function Navbar() {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
+  const { favoritesCount } = useFavoritesContext();
   const navigate = useNavigate();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    function handleOpenSearch() {
+      setIsSearchOpen(true);
+    }
+    window.addEventListener("open-quick-search", handleOpenSearch);
+    return () => window.removeEventListener("open-quick-search", handleOpenSearch);
+  }, []);
 
   const handleLogout = () => {
     logout();
     navigate("/signin");
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/explorebooks?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    } else {
+      setIsSearchOpen(true);
+    }
   };
 
   const navItems = [
@@ -26,6 +49,8 @@ export default function Navbar() {
 
   return (
     <>
+      <QuickSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
       {/* Desktop & Tablet Header */}
       <header className="app-header">
         <div className="nav-brand-group">
@@ -51,22 +76,34 @@ export default function Navbar() {
         </div>
 
         <div className="nav-actions-group">
-          <div className="nav-search-wrapper">
+          <form onSubmit={handleSearchSubmit} className="nav-search-wrapper">
             <Search className="nav-search-icon" size={16} aria-hidden="true" />
             <input
               type="search"
               aria-label={t("nav.searchPlaceholder")}
               placeholder={t("nav.searchPlaceholder")}
               className="nav-search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onClick={() => setIsSearchOpen(true)}
             />
-          </div>
+            <kbd className="nav-search-shortcut" onClick={() => setIsSearchOpen(true)}>
+              ⌘K
+            </kbd>
+          </form>
 
           <NavLink
             to="/favorite"
             aria-label={t("nav.favorite")}
             className="nav-icon-button"
+            title={t("nav.favorite")}
           >
             <Heart size={18} />
+            {favoritesCount > 0 && (
+              <span className="nav-fav-badge" aria-label={`${favoritesCount} favorites`}>
+                {favoritesCount > 99 ? "99+" : favoritesCount}
+              </span>
+            )}
           </NavLink>
 
           <LanguageSwitcher compact />
@@ -129,13 +166,27 @@ export default function Navbar() {
 
         <div className="mobile-header-actions">
           <LanguageSwitcher compact />
-          <NavLink
-            to="/explorebooks"
+          <button
+            type="button"
+            onClick={() => setIsSearchOpen(true)}
             className="btn btn-outline btn-sm"
             style={{ padding: "0.4rem 0.6rem" }}
             aria-label={t("nav.explore")}
           >
             <Search size={16} />
+          </button>
+          <NavLink
+            to="/favorite"
+            className="btn btn-outline btn-sm"
+            style={{ padding: "0.4rem 0.6rem", position: "relative" }}
+            aria-label={t("nav.favorite")}
+          >
+            <Heart size={16} />
+            {favoritesCount > 0 && (
+              <span className="nav-fav-badge" style={{ top: "-4px", right: "-4px" }}>
+                {favoritesCount}
+              </span>
+            )}
           </NavLink>
           {user ? (
             <div className="d-flex items-center gap-2">

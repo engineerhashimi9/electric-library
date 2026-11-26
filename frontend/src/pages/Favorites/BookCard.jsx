@@ -64,7 +64,7 @@ export default function BookCard({ book, onRemove, onDownload }) {
         </div>
 
         <Link to={bookDetailUrl}>
-          <h3 className="book-card-title">{locTitle}</h3>
+          <h3 className="book-card-title font-serif">{locTitle}</h3>
         </Link>
         <p className="book-card-author">{locAuthor}</p>
 

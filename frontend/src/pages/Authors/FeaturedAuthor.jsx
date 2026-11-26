@@ -62,7 +62,7 @@ export default function FeaturedAuthor({ author, following, onToggleFollow }) {
               <Sparkles size={13} aria-hidden="true" />
               <span>{t("authors.featured.eyebrow")}</span>
             </div>
-            <h2 style={{ fontSize: "1.85rem", fontWeight: 800, color: "var(--text-inverse)" }}>
+            <h2 className="font-serif" style={{ fontSize: "1.95rem", fontWeight: 800, color: "var(--text-inverse)" }}>
               {locName}
             </h2>
             <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#9EEFE8" }}>

@@ -74,15 +74,27 @@
 
   /* Typography */
   --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Newsreader", "Playfair Display", Georgia, "Times New Roman", serif;
   --font-rtl: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
+
+  /* Glassmorphism & Ambient Lighting */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-dark: rgba(14, 103, 96, 0.85);
+  --glass-border: rgba(208, 232, 230, 0.7);
+  --glass-border-dark: rgba(23, 162, 150, 0.35);
+  --glass-blur: blur(16px);
+  --ambient-gold-glow: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 70%);
+  --ambient-teal-glow: radial-gradient(circle at 50% 0%, rgba(23, 162, 150, 0.2), transparent 70%);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Layout Widths */
   --max-width-content: 1440px;
   --max-width-page: 1280px;
   --max-width-form: 520px;
+  --max-width-reader: 780px;
 }

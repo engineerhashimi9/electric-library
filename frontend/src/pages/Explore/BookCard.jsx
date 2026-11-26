@@ -72,7 +72,7 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
           </div>
 
           <Link to={bookDetailUrl}>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-primary)" }}>
+            <h3 className="font-serif" style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--text-primary)" }}>
               {localizedTitle}
             </h3>
           </Link>
@@ -94,9 +94,10 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
               onClick={() => onAction(book)}
               className="btn btn-primary btn-sm"
               style={{ gap: "0.35rem" }}
+              title="Preview and read excerpt"
             >
-              <Download size={14} />
-              <span>{t("bookCard.download", "Download")}</span>
+              <BookOpen size={14} />
+              <span>{t("bookCard.borrow")}</span>
             </button>
           </div>
         </div>
@@ -176,7 +177,7 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
         </div>
 
         <Link to={bookDetailUrl}>
-          <h3 className="book-card-title">{localizedTitle}</h3>
+          <h3 className="book-card-title font-serif">{localizedTitle}</h3>
         </Link>
 
         <p className="book-card-author">{localizedAuthor}</p>
@@ -195,9 +196,10 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
             onClick={() => onAction(book)}
             className="btn btn-primary btn-sm"
             style={{ gap: "0.35rem" }}
+            title="Preview and read volume"
           >
-            <Download size={13} aria-hidden="true" />
-            <span>{t("bookCard.download", "Download")}</span>
+            <BookOpen size={13} aria-hidden="true" />
+            <span>{t("bookCard.borrow")}</span>
           </button>
         </div>
       </div>

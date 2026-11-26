@@ -47,7 +47,7 @@ export default function BookListItem({ book, onRemove, onDownload }) {
         </div>
 
         <Link to={bookDetailUrl}>
-          <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-primary)" }}>
+          <h3 className="font-serif" style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--text-primary)" }}>
             {locTitle}
           </h3>
         </Link>

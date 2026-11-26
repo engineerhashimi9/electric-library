@@ -45,7 +45,8 @@ class Book(models.Model):
     downloads = models.IntegerField(default=0)
     pages = models.IntegerField()
     description = models.TextField(blank=True, null=True)
-
+    def __str__(self):
+        return self.title
 
 class UserBook(models.Model):
     id = models.AutoField(primary_key=True)
@@ -67,6 +68,8 @@ class CategoryFa(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return self.name
 
 class AuthorFa(models.Model):
     id = models.AutoField(primary_key=True)
@@ -75,6 +78,9 @@ class AuthorFa(models.Model):
     email = models.EmailField(unique=True)
     job = models.CharField(max_length=200, default="")
     description = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return self.name
+
 class BookFa(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
@@ -91,6 +97,8 @@ class BookFa(models.Model):
     downloads = models.IntegerField(default=0)
     pages = models.IntegerField()
     description = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return self.title
 
 class UserBookFa(models.Model):
     id = models.AutoField(primary_key=True)

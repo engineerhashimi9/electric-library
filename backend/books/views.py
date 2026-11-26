@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from books.models import Author, Book,Category,BookFa,CategoryFa,AuthorFa
-from books.serializers import BookSerializer, AuthorSerializer,CategorySerializer,AuthorSerializerFa,BookSerializerFa,CategorySerializerFa
+from books.models import Author, Book, Category, BookFa, CategoryFa, AuthorFa
+from books.serializers import BookSerializer, AuthorSerializer, CategorySerializer, AuthorSerializerFa, BookSerializerFa, CategorySerializerFa
 from rest_framework import viewsets
 from users.models import User
 
@@ -16,6 +16,7 @@ from api.permissons import CustomPermisson
 from rest_framework.decorators import action
 
 # Create your views here.
+
 
 class BookViewset(viewsets.ModelViewSet):
     permission_classes = [CustomPermisson]
@@ -35,17 +36,18 @@ class BookViewset(viewsets.ModelViewSet):
     }
     search_fields = ["title", "description"]
     ordering_fields = ["id", "title", "price", "publication_date"]
-    @action(detail=False,methods=['get'])
-    def get_best_20_books(self,request) :
-        books=Book.objects.all().order_by("-downloads")[:20]
-        serializer=self.serializer_class(books,many=True)
-        return Response(serializer.data,status=200)
-    @action(detail=False,methods=['get'])
-    def get_best_book(self,request) :
-        books=Book.objects.all().order_by("-score").first()
-        serializer=self.serializer_class(books)
-        return Response(serializer.data,status=200)
-        
+
+    @action(detail=False, methods=['get'])
+    def get_best_20_books(self, request):
+        books = Book.objects.all().order_by("-downloads")[:20]
+        serializer = self.serializer_class(books, many=True, context={'request': request})
+        return Response(serializer.data, status=200)
+
+    @action(detail=False, methods=['get'])
+    def get_best_book(self, request):
+        books = Book.objects.all().order_by("-score").first()
+        serializer = self.serializer_class(books, context={'request': request})
+        return Response(serializer.data, status=200)
 
 
 class AuthorViewset(viewsets.ModelViewSet):
@@ -140,10 +142,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomPermisson]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    
-    
+
+
 # -------------------------------------------
-             #     Fa section
+    #     Fa section
 # -------------------------------------------
 
 class BookViewsetFa(viewsets.ModelViewSet):
@@ -164,17 +166,18 @@ class BookViewsetFa(viewsets.ModelViewSet):
     }
     search_fields = ["title", "description"]
     ordering_fields = ["id", "title", "price", "publication_date"]
-    @action(detail=False,methods=['get'])
-    def get_best_20_books(self,request) :
-        books=BookFa.objects.all().order_by("-downloads")[:20]
-        serializer=self.serializer_class(books,many=True)
-        return Response(serializer.data,status=200)
-    @action(detail=False,methods=['get'])
-    def get_best_book(self,request) :
-        books=BookFa.objects.all().order_by("-score").first()
-        serializer=self.serializer_class(books)
-        return Response(serializer.data,status=200)
-        
+
+    @action(detail=False, methods=['get'])
+    def get_best_20_books(self, request):
+        books = BookFa.objects.all().order_by("-downloads")[:20]
+        serializer = self.serializer_class(books, many=True)
+        return Response(serializer.data, status=200)
+
+    @action(detail=False, methods=['get'])
+    def get_best_book(self, request):
+        books = BookFa.objects.all().order_by("-score").first()
+        serializer = self.serializer_class(books, context={'request': request})
+        return Response(serializer.data, status=200)
 
 
 class AuthorViewsetFa(viewsets.ModelViewSet):
@@ -190,9 +193,8 @@ class AuthorViewsetFa(viewsets.ModelViewSet):
     search_fields = ["name", "last_name"]
     ordering_fields = ["id"]
 
+
 class CategoryViewSetFa(viewsets.ModelViewSet):
     permission_classes = [CustomPermisson]
     queryset = CategoryFa.objects.all()
     serializer_class = CategorySerializerFa
-    
-    

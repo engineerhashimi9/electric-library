@@ -43,12 +43,13 @@ export default function QuoteBanner() {
               <span>{t("favorites.quote.eyebrow")}</span>
             </div>
             <blockquote
+              className="font-serif"
               style={{
-                fontSize: "1.5rem",
+                fontSize: "1.65rem",
                 fontStyle: "italic",
                 lineHeight: 1.5,
                 color: "var(--text-inverse)",
-                fontWeight: 800,
+                fontWeight: 700,
               }}
             >
               "{t("favorites.quote.text")}"

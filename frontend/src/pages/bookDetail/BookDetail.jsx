@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { getBookById, getRelatedBooks } from "@/data/booksRepository";
 import { getLocalized } from "@/utils/langHelper";
+import { useFavoritesContext } from "@/context/FavoritesContext";
+import BookExcerptModal from "@/components/common/BookExcerptModal";
 
 export default function BookDetail() {
   const { id } = useParams();
@@ -33,12 +35,14 @@ export default function BookDetail() {
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
+  const { isFavorite: checkFavorite, toggleFavorite } = useFavoritesContext();
+
   const baseBook = getBookById(id);
   const [apiBook, setApiBook] = useState(null);
 
   const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isBorrowed, setIsBorrowed] = useState(false);
+  const [isExcerptOpen, setIsExcerptOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -77,20 +81,12 @@ export default function BookDetail() {
     }, 3200);
   };
 
+  const isFavorite = checkFavorite(book?.id || book?.numericId);
+
   const handleToggleFavorite = () => {
-    setIsFavorite((prev) => {
-      const next = !prev;
-      showToast(
-        next
-          ? lang === "fa"
-            ? "به علاقه‌مندی‌ها افزوده شد"
-            : "Added to your favorites"
-          : lang === "fa"
-            ? "از علاقه‌مندی‌ها حذف شد"
-            : "Removed from favorites",
-      );
-      return next;
-    });
+    if (book) {
+      toggleFavorite(book);
+    }
   };
 
   const handleBorrow = () => {
@@ -143,6 +139,12 @@ export default function BookDetail() {
           <span>{toastMessage}</span>
         </aside>
       )}
+
+      <BookExcerptModal
+        book={book}
+        isOpen={isExcerptOpen}
+        onClose={() => setIsExcerptOpen(false)}
+      />
 
       <main className="content-container" style={{ display: "flex", flexDirection: "column", gap: "2rem", paddingTop: "1.5rem" }}>
         {/* Navigation & Breadcrumbs */}
@@ -305,8 +307,9 @@ export default function BookDetail() {
               <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
                 <h1
                   id="book-detail-title"
+                  className="font-serif"
                   style={{
-                    fontSize: "2.25rem",
+                    fontSize: "2.35rem",
                     fontWeight: 800,
                     color: "var(--primary)",
                     lineHeight: 1.25,
@@ -428,6 +431,17 @@ export default function BookDetail() {
                       <span>{t("bookDetail.borrow")}</span>
                     </>
                   )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsExcerptOpen(true)}
+                  className="btn btn-outline btn-lg"
+                  style={{ gap: "0.5rem" }}
+                  title="Read online excerpt"
+                >
+                  <BookOpen size={18} />
+                  <span>{lang === "fa" ? "مطالعه نمونه" : "Sample Reader"}</span>
                 </button>
 
                 <button

@@ -18,8 +18,9 @@ export default function FavoritesHero({ total, actions, tabs }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <h1
+              className="font-serif"
               style={{
-                fontSize: "2.25rem",
+                fontSize: "2.35rem",
                 fontWeight: 800,
                 color: "var(--primary)",
                 lineHeight: 1.25,

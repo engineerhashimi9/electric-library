@@ -15,8 +15,9 @@ export default function CatalogHero() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
         <h1
           id="catalog-hero-title"
+          className="font-serif"
           style={{
-            fontSize: "2rem",
+            fontSize: "2.25rem",
             fontWeight: 800,
             color: "var(--primary)",
             lineHeight: 1.25,
