@@ -9,6 +9,7 @@ export function LanguageSwitcher({ compact = false }) {
 
   const toggleLanguage = () => {
     const nextLang = currentLanguage === "en" ? "fa" : "en";
+    setCurrentLanguage(nextLang);
     i18n.changeLanguage(nextLang);
   };
 
@@ -16,7 +17,9 @@ export function LanguageSwitcher({ compact = false }) {
     return (
       <button
         onClick={toggleLanguage}
-        title={currentLanguage === "en" ? "تغییر به زبان دری" : "Switch to English"}
+        title={
+          currentLanguage === "en" ? "تغییر به زبان دری" : "Switch to English"
+        }
         className="btn btn-outline btn-sm"
         style={{
           borderRadius: "var(--radius-md)",
@@ -25,8 +28,14 @@ export function LanguageSwitcher({ compact = false }) {
         }}
         aria-label={t("nav.language", "Language")}
       >
-        <Globe size={15} style={{ color: "var(--primary-light)", flexShrink: 0 }} aria-hidden="true" />
-        <span style={{ fontWeight: 800 }}>{currentLanguage === "en" ? "دری" : "EN"}</span>
+        <Globe
+          size={15}
+          style={{ color: "var(--primary-light)", flexShrink: 0 }}
+          aria-hidden="true"
+        />
+        <span style={{ fontWeight: 800 }}>
+          {currentLanguage === "en" ? "دری" : "EN"}
+        </span>
       </button>
     );
   }
@@ -56,8 +65,12 @@ export function LanguageSwitcher({ compact = false }) {
           fontSize: "0.78rem",
           fontWeight: 700,
           borderRadius: "var(--radius-sm)",
-          backgroundColor: currentLang === "en" ? "var(--primary)" : "transparent",
-          color: currentLang === "en" ? "var(--text-inverse)" : "var(--text-secondary)",
+          backgroundColor:
+            currentLang === "en" ? "var(--primary)" : "transparent",
+          color:
+            currentLang === "en"
+              ? "var(--text-inverse)"
+              : "var(--text-secondary)",
           transition: "all var(--transition-fast)",
         }}
       >
@@ -74,8 +87,12 @@ export function LanguageSwitcher({ compact = false }) {
           fontSize: "0.78rem",
           fontWeight: 700,
           borderRadius: "var(--radius-sm)",
-          backgroundColor: currentLang === "fa" ? "var(--primary)" : "transparent",
-          color: currentLang === "fa" ? "var(--text-inverse)" : "var(--text-secondary)",
+          backgroundColor:
+            currentLang === "fa" ? "var(--primary)" : "transparent",
+          color:
+            currentLang === "fa"
+              ? "var(--text-inverse)"
+              : "var(--text-secondary)",
           transition: "all var(--transition-fast)",
         }}
       >
