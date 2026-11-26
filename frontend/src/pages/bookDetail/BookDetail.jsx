@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"
+import { GlobalContext } from "@/context/language_context";;
 import axios from "axios";
 import {
   ArrowLeft,
@@ -28,7 +29,6 @@ import { getLocalized } from "@/utils/langHelper";
 import { useFavoritesContext } from "@/context/FavoritesContext";
 import BookExcerptModal from "@/components/common/BookExcerptModal";
 import { useContext } from "react";
-import { GlobalContext } from "@/context/language_context";
 export default function BookDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function BookDetail() {
           // Gracefully continue using local book repository
         });
     }
-  }, [id, currentLanguage]);
+  }, [currentLanguage, id]);
 
   const book = apiBook
     ? {
@@ -108,8 +108,25 @@ export default function BookDetail() {
 
   if (!book) {
     return (
-      <main className="page-container" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "4rem 1rem", textAlign: "center" }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--primary)", marginBottom: "0.5rem" }}>
+      <main
+        className="page-container"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "4rem 1rem",
+          textAlign: "center",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "1.75rem",
+            fontWeight: 800,
+            color: "var(--primary)",
+            marginBottom: "0.5rem",
+          }}
+        >
           {t("bookDetail.notFound")}
         </h1>
         <Link to="/explorebooks" className="btn btn-primary btn-md">
@@ -128,7 +145,9 @@ export default function BookDetail() {
       : String(book.author || "");
   const description = getLocalized(book.description, lang);
   const quote = book.quote ? getLocalized(book.quote, lang) : "";
-  const curatorNote = book.curatorNote ? getLocalized(book.curatorNote, lang) : "";
+  const curatorNote = book.curatorNote
+    ? getLocalized(book.curatorNote, lang)
+    : "";
   const relatedBooks = getRelatedBooks(book.id, 4);
 
   return (
@@ -147,7 +166,15 @@ export default function BookDetail() {
         onClose={() => setIsExcerptOpen(false)}
       />
 
-      <main className="content-container" style={{ display: "flex", flexDirection: "column", gap: "2rem", paddingTop: "1.5rem" }}>
+      <main
+        className="content-container"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "2rem",
+          paddingTop: "1.5rem",
+        }}
+      >
         {/* Navigation & Breadcrumbs */}
         <nav
           aria-label="Breadcrumbs"
@@ -160,16 +187,36 @@ export default function BookDetail() {
             fontSize: "0.85rem",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <Link to="/" style={{ color: "var(--text-secondary)", fontWeight: 600 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <Link
+              to="/"
+              style={{ color: "var(--text-secondary)", fontWeight: 600 }}
+            >
               {t("bookDetail.breadcrumbHome")}
             </Link>
-            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>/</span>
-            <Link to="/explorebooks" style={{ color: "var(--text-secondary)", fontWeight: 600 }}>
+            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>
+              /
+            </span>
+            <Link
+              to="/explorebooks"
+              style={{ color: "var(--text-secondary)", fontWeight: 600 }}
+            >
               {t("bookDetail.breadcrumbExplore")}
             </Link>
-            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>/</span>
-            <span style={{ color: "var(--primary)", fontWeight: 800 }} className="truncate">
+            <span style={{ color: "var(--border-color)", fontWeight: 800 }}>
+              /
+            </span>
+            <span
+              style={{ color: "var(--primary)", fontWeight: 800 }}
+              className="truncate"
+            >
               {title}
             </span>
           </div>
@@ -186,7 +233,10 @@ export default function BookDetail() {
         </nav>
 
         {/* Hero Book Presentation */}
-        <section aria-labelledby="book-detail-title" className="book-detail-hero-card">
+        <section
+          aria-labelledby="book-detail-title"
+          className="book-detail-hero-card"
+        >
           <div className="book-detail-layout">
             {/* Left Column: Book Cover */}
             <div className="detail-cover-container">
@@ -205,8 +255,16 @@ export default function BookDetail() {
                       backgroundColor: "var(--bg-secondary)",
                     }}
                   >
-                    <BookOpen size={44} style={{ color: "var(--primary)", marginBottom: "0.5rem" }} />
-                    <span style={{ fontWeight: 800, color: "var(--primary)" }}>{title}</span>
+                    <BookOpen
+                      size={44}
+                      style={{
+                        color: "var(--primary)",
+                        marginBottom: "0.5rem",
+                      }}
+                    />
+                    <span style={{ fontWeight: 800, color: "var(--primary)" }}>
+                      {title}
+                    </span>
                   </div>
                 ) : (
                   <>
@@ -231,7 +289,11 @@ export default function BookDetail() {
                     gap: "0.4rem",
                   }}
                 >
-                  {book.format === "audio" ? <Headphones size={13} /> : <BookOpen size={13} />}
+                  {book.format === "audio" ? (
+                    <Headphones size={13} />
+                  ) : (
+                    <BookOpen size={13} />
+                  )}
                   <span>{book.format}</span>
                 </div>
 
@@ -239,7 +301,11 @@ export default function BookDetail() {
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
-                  aria-label={isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
+                  aria-label={
+                    isFavorite
+                      ? t("bookDetail.inFavorites")
+                      : t("bookDetail.addToFavorites")
+                  }
                   className={`book-fav-btn ${isFavorite ? "favorited" : ""}`}
                   style={{
                     position: "absolute",
@@ -252,23 +318,39 @@ export default function BookDetail() {
                     size={18}
                     style={{
                       fill: isFavorite ? "var(--primary-light)" : "none",
-                      color: isFavorite ? "var(--primary-light)" : "var(--text-secondary)",
+                      color: isFavorite
+                        ? "var(--primary-light)"
+                        : "var(--text-secondary)",
                     }}
                   />
                 </button>
               </div>
 
               {/* Action Buttons Below Cover */}
-              <div style={{ display: "flex", gap: "0.5rem", width: "100%", maxWidth: "320px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  width: "100%",
+                  maxWidth: "320px",
+                }}
+              >
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
                   className={`btn ${isFavorite ? "btn-secondary" : "btn-outline"} btn-sm flex-1`}
                   style={{ gap: "0.4rem" }}
                 >
-                  <Bookmark size={15} style={{ fill: isFavorite ? "var(--primary-light)" : "none" }} />
+                  <Bookmark
+                    size={15}
+                    style={{
+                      fill: isFavorite ? "var(--primary-light)" : "none",
+                    }}
+                  />
                   <span className="truncate">
-                    {isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
+                    {isFavorite
+                      ? t("bookDetail.inFavorites")
+                      : t("bookDetail.addToFavorites")}
                   </span>
                 </button>
 
@@ -285,11 +367,26 @@ export default function BookDetail() {
             </div>
 
             {/* Right Column: Book Details & Actions */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.25rem",
+              }}
+            >
               {/* Genre & Availability Badge */}
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.6rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: "0.6rem",
+                }}
+              >
                 <span className="badge badge-sage">
-                  {book.genre ? getLocalized(book.genre, lang) : "Classical Edition"}
+                  {book.genre
+                    ? getLocalized(book.genre, lang)
+                    : "Classical Edition"}
                 </span>
                 <span className="badge badge-sage" style={{ gap: "0.4rem" }}>
                   <span
@@ -305,7 +402,13 @@ export default function BookDetail() {
               </div>
 
               {/* Title & Author */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.35rem",
+                }}
+              >
                 <h1
                   id="book-detail-title"
                   className="font-serif"
@@ -319,7 +422,13 @@ export default function BookDetail() {
                 >
                   {title}
                 </h1>
-                <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                <p
+                  style={{
+                    fontSize: "1.1rem",
+                    color: "var(--text-secondary)",
+                    fontWeight: 600,
+                  }}
+                >
                   {lang === "fa" ? "اثر: " : "By "}
                   <Link
                     to="/author"
@@ -348,53 +457,120 @@ export default function BookDetail() {
                   fontSize: "0.85rem",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontWeight: 800 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    fontWeight: 800,
+                  }}
+                >
                   <Star size={16} className="star-filled" />
                   <span>{book.rating || 4.8}</span>
-                  <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>/ 5.0</span>
+                  <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>
+                    / 5.0
+                  </span>
                 </div>
                 <span style={{ color: "var(--border-color)" }}>•</span>
                 <span style={{ color: "var(--text-secondary)" }}>
                   {book.reviews || "1,420"} {t("bookCard.reviews")}
                 </span>
                 <span style={{ color: "var(--border-color)" }}>•</span>
-                <span className="badge badge-sage">{book.shelf || "Archive Folio"}</span>
+                <span className="badge badge-sage">
+                  {book.shelf || "Archive Folio"}
+                </span>
               </div>
 
               {/* Key Specs Quick Grid */}
               <div className="detail-specs-grid">
                 <div className="detail-spec-card">
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.pages")}
                   </span>
-                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }}>
-                    {book.pages ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}` : "—"}
+                  <span
+                    style={{
+                      fontSize: "0.95rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                    }}
+                  >
+                    {book.pages
+                      ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}`
+                      : "—"}
                   </span>
                 </div>
 
                 <div className="detail-spec-card">
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.format")}
                   </span>
-                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)", textTransform: "uppercase" }}>
+                  <span
+                    style={{
+                      fontSize: "0.95rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {book.format || "ebook"}
                   </span>
                 </div>
 
                 <div className="detail-spec-card">
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.published")}
                   </span>
-                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }}>
+                  <span
+                    style={{
+                      fontSize: "0.95rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                    }}
+                  >
                     {book.publishedYear || "2002"}
                   </span>
                 </div>
 
                 <div className="detail-spec-card">
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.fileSize")}
                   </span>
-                  <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)" }} className="truncate">
+                  <span
+                    style={{
+                      fontSize: "0.95rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                    }}
+                    className="truncate"
+                  >
                     {book.fileSize || "14.8 MB"}
                   </span>
                 </div>
@@ -403,18 +579,42 @@ export default function BookDetail() {
               {/* Notable Excerpt Callout */}
               {quote && (
                 <div className="curator-note-callout">
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "var(--primary-light)", fontSize: "0.75rem", fontWeight: 800 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.4rem",
+                      color: "var(--primary-light)",
+                      fontSize: "0.75rem",
+                      fontWeight: 800,
+                    }}
+                  >
                     <Quote size={15} />
                     <span>{t("bookDetail.quote", "MEMORABLE PASSAGE")}</span>
                   </div>
-                  <p style={{ fontStyle: "italic", fontSize: "0.9rem", color: "var(--primary)", lineHeight: 1.6 }}>
+                  <p
+                    style={{
+                      fontStyle: "italic",
+                      fontSize: "0.9rem",
+                      color: "var(--primary)",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     &ldquo;{quote}&rdquo;
                   </p>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem", paddingTop: "0.5rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  paddingTop: "0.5rem",
+                }}
+              >
                 <button
                   type="button"
                   onClick={handleBorrow}
@@ -424,7 +624,11 @@ export default function BookDetail() {
                   {isBorrowed ? (
                     <>
                       <CheckCircle2 size={18} />
-                      <span>{lang === "fa" ? "امانت گرفته شد" : "Borrowed (Active Loan)"}</span>
+                      <span>
+                        {lang === "fa"
+                          ? "امانت گرفته شد"
+                          : "Borrowed (Active Loan)"}
+                      </span>
                     </>
                   ) : (
                     <>
@@ -442,7 +646,9 @@ export default function BookDetail() {
                   title="Read online excerpt"
                 >
                   <BookOpen size={18} />
-                  <span>{lang === "fa" ? "مطالعه نمونه" : "Sample Reader"}</span>
+                  <span>
+                    {lang === "fa" ? "مطالعه نمونه" : "Sample Reader"}
+                  </span>
                 </button>
 
                 <button
@@ -460,7 +666,10 @@ export default function BookDetail() {
         </section>
 
         {/* Content Navigation Tabs */}
-        <section aria-label="Book In-Depth Information" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <section
+          aria-label="Book In-Depth Information"
+          style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+        >
           <div
             style={{
               display: "flex",
@@ -472,8 +681,16 @@ export default function BookDetail() {
             }}
           >
             {[
-              { id: "overview", label: t("bookDetail.overview"), icon: FileText },
-              { id: "specs", label: t("bookDetail.specifications"), icon: Layers },
+              {
+                id: "overview",
+                label: t("bookDetail.overview"),
+                icon: FileText,
+              },
+              {
+                id: "specs",
+                label: t("bookDetail.specifications"),
+                icon: Layers,
+              },
               { id: "reviews", label: t("bookDetail.reviews"), icon: Star },
             ].map(({ id: tabId, label, icon: TabIcon }) => (
               <button
@@ -491,24 +708,86 @@ export default function BookDetail() {
 
           {/* Tab 1: Overview & Synopsis */}
           {activeTab === "overview" && (
-            <div className="card-surface" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <BookOpen size={18} style={{ color: "var(--primary-light)" }} />
+            <div
+              className="card-surface"
+              style={{
+                padding: "2rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
+                <h2
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: 800,
+                    color: "var(--primary)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <BookOpen
+                    size={18}
+                    style={{ color: "var(--primary-light)" }}
+                  />
                   <span>{t("bookDetail.overview")}</span>
                 </h2>
-                <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                <p
+                  style={{
+                    fontSize: "0.95rem",
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.7,
+                  }}
+                >
                   {description}
                 </p>
               </div>
 
               {curatorNote && (
-                <div style={{ borderTop: "1px solid var(--border-light)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <h3 style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--primary)", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                    <Sparkles size={14} style={{ color: "var(--primary-light)" }} />
+                <div
+                  style={{
+                    borderTop: "1px solid var(--border-light)",
+                    paddingTop: "1.25rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                      textTransform: "uppercase",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.4rem",
+                    }}
+                  >
+                    <Sparkles
+                      size={14}
+                      style={{ color: "var(--primary-light)" }}
+                    />
                     <span>{t("bookDetail.curatorNote")}</span>
                   </h3>
-                  <p style={{ fontSize: "0.875rem", fontStyle: "italic", color: "var(--text-secondary)", backgroundColor: "var(--bg-secondary)", padding: "1rem", borderRadius: "var(--radius-lg)" }}>
+                  <p
+                    style={{
+                      fontSize: "0.875rem",
+                      fontStyle: "italic",
+                      color: "var(--text-secondary)",
+                      backgroundColor: "var(--bg-secondary)",
+                      padding: "1rem",
+                      borderRadius: "var(--radius-lg)",
+                    }}
+                  >
                     {curatorNote}
                   </p>
                 </div>
@@ -519,53 +798,138 @@ export default function BookDetail() {
           {/* Tab 2: Specifications */}
           {activeTab === "specs" && (
             <div className="card-surface" style={{ padding: "2rem" }}>
-              <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <h2
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: 800,
+                  color: "var(--primary)",
+                  marginBottom: "1.25rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
                 <Layers size={18} style={{ color: "var(--primary-light)" }} />
                 <span>{t("bookDetail.specifications")}</span>
               </h2>
 
-              <dl style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+              <dl
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                  gap: "1rem",
+                }}
+              >
                 <div className="detail-spec-card">
-                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <dt
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.isbn")}
                   </dt>
-                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                  <dd
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                      color: "var(--text-primary)",
+                    }}
+                  >
                     {book.isbn || "978-1400079278"}
                   </dd>
                 </div>
 
                 <div className="detail-spec-card">
-                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <dt
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.publisher")}
                   </dt>
-                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
-                    {book.publisher ? getLocalized(book.publisher, lang) : "Vintage Archival Press"}
+                  <dd
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                      color: "var(--text-primary)",
+                    }}
+                  >
+                    {book.publisher
+                      ? getLocalized(book.publisher, lang)
+                      : "Vintage Archival Press"}
                   </dd>
                 </div>
 
                 <div className="detail-spec-card">
-                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <dt
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.published")}
                   </dt>
-                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                  <dd
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                      color: "var(--text-primary)",
+                    }}
+                  >
                     {book.publishedYear || "2002"}
                   </dd>
                 </div>
 
                 <div className="detail-spec-card">
-                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <dt
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.language")}
                   </dt>
-                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
-                    {book.language ? getLocalized(book.language, lang) : "English"}
+                  <dd
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                      color: "var(--text-primary)",
+                    }}
+                  >
+                    {book.language
+                      ? getLocalized(book.language, lang)
+                      : "English"}
                   </dd>
                 </div>
 
                 <div className="detail-spec-card">
-                  <dt style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+                  <dt
+                    style={{
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      color: "var(--text-muted)",
+                      textTransform: "uppercase",
+                    }}
+                  >
                     {t("bookDetail.shelfLocation")}
                   </dt>
-                  <dd style={{ fontSize: "0.9rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                  <dd
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 800,
+                      color: "var(--text-primary)",
+                    }}
+                  >
                     {book.shelf || "Stack IV • Shelf 12"}
                   </dd>
                 </div>
@@ -575,37 +939,127 @@ export default function BookDetail() {
 
           {/* Tab 3: Reviews */}
           {activeTab === "reviews" && (
-            <div className="card-surface" style={{ padding: "2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+            <div
+              className="card-surface"
+              style={{
+                padding: "2rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "1rem",
+                }}
+              >
                 <div>
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--primary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <h2
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
                     <Star size={18} className="star-filled" />
                     <span>{t("bookDetail.reviews")}</span>
                   </h2>
-                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "2px" }}>
-                    {book.reviews || "1,420"} {t("bookCard.reviews")} • {book.rating || 4.8} / 5.0
+                  <p
+                    style={{
+                      fontSize: "0.85rem",
+                      color: "var(--text-secondary)",
+                      marginTop: "2px",
+                    }}
+                  >
+                    {book.reviews || "1,420"} {t("bookCard.reviews")} •{" "}
+                    {book.rating || 4.8} / 5.0
                   </p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => showToast(lang === "fa" ? "بخش ثبت نظر برای اعضای رسمی فعال است." : "Review submission is open to verified scholars.")}
+                  onClick={() =>
+                    showToast(
+                      lang === "fa"
+                        ? "بخش ثبت نظر برای اعضای رسمی فعال است."
+                        : "Review submission is open to verified scholars.",
+                    )
+                  }
                   className="btn btn-primary btn-sm"
                 >
-                  {lang === "fa" ? "ثبت دیدگاه یا یادداشت" : "Write a Reflection"}
+                  {lang === "fa"
+                    ? "ثبت دیدگاه یا یادداشت"
+                    : "Write a Reflection"}
                 </button>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                <article style={{ padding: "1.25rem", borderRadius: "var(--radius-xl)", backgroundColor: "var(--bg-secondary)", border: "1px solid var(--border-color)", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                      <div className="avatar-circle" style={{ width: "32px", height: "32px", fontSize: "0.75rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
+                <article
+                  style={{
+                    padding: "1.25rem",
+                    borderRadius: "var(--radius-xl)",
+                    backgroundColor: "var(--bg-secondary)",
+                    border: "1px solid var(--border-color)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.65rem",
+                      }}
+                    >
+                      <div
+                        className="avatar-circle"
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          fontSize: "0.75rem",
+                        }}
+                      >
                         EV
                       </div>
                       <div>
-                        <h4 style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--primary)" }}>Eleanor Vance</h4>
-                        <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                          {lang === "fa" ? "عضو پیوسته بایگانی • ۲ هفته قبل" : "Curator Fellow • 2 weeks ago"}
+                        <h4
+                          style={{
+                            fontSize: "0.85rem",
+                            fontWeight: 800,
+                            color: "var(--primary)",
+                          }}
+                        >
+                          Eleanor Vance
+                        </h4>
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--text-muted)",
+                          }}
+                        >
+                          {lang === "fa"
+                            ? "عضو پیوسته بایگانی • ۲ هفته قبل"
+                            : "Curator Fellow • 2 weeks ago"}
                         </span>
                       </div>
                     </div>
@@ -615,7 +1069,13 @@ export default function BookDetail() {
                       ))}
                     </div>
                   </div>
-                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                  <p
+                    style={{
+                      fontSize: "0.85rem",
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {lang === "fa"
                       ? "یکی از غنی‌ترین و ماندگارترین متونی که تاکنون در آرشیو کتابخانه مطالعه کرده‌ام. نگارش، ساختار روایی و عمق اندیشه در بالاترین سطح قرار دارد."
                       : "A monumental achievement in literary form. The cadence of the language and emotional clarity render this an indispensable volume for any serious reader."}
@@ -628,12 +1088,27 @@ export default function BookDetail() {
 
         {/* Related Books Section */}
         {relatedBooks.length > 0 && (
-          <section aria-labelledby="related-heading" style={{ display: "flex", flexDirection: "column", gap: "1rem", paddingTop: "1rem" }}>
+          <section
+            aria-labelledby="related-heading"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              paddingTop: "1rem",
+            }}
+          >
             <div>
-              <span className="badge badge-sage">{t("bookDetail.relatedTitle")}</span>
+              <span className="badge badge-sage">
+                {t("bookDetail.relatedTitle")}
+              </span>
               <h2
                 id="related-heading"
-                style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--primary)", marginTop: "0.25rem" }}
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 800,
+                  color: "var(--primary)",
+                  marginTop: "0.25rem",
+                }}
               >
                 {t("bookDetail.relatedSubtitle")}
               </h2>
@@ -658,9 +1133,21 @@ export default function BookDetail() {
                     </div>
 
                     <div className="book-content-body">
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                        <Star size={12} className="star-filled" aria-hidden="true" />
-                        <span style={{ fontSize: "0.75rem", fontWeight: 800 }}>{relBook.rating}</span>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.35rem",
+                        }}
+                      >
+                        <Star
+                          size={12}
+                          className="star-filled"
+                          aria-hidden="true"
+                        />
+                        <span style={{ fontSize: "0.75rem", fontWeight: 800 }}>
+                          {relBook.rating}
+                        </span>
                       </div>
 
                       <Link to={`/book/${relBook.id}`}>
