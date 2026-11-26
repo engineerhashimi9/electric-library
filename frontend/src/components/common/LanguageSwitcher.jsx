@@ -1,13 +1,14 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
-
+import { useContext } from "react";
+import { GlobalContext } from "@/context/language_context";
 export function LanguageSwitcher({ compact = false }) {
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language === "fa" ? "fa" : "en";
+  const { currentLanguage, setCurrentLanguage } = useContext(GlobalContext);
 
   const toggleLanguage = () => {
-    const nextLang = currentLang === "en" ? "fa" : "en";
+    const nextLang = currentLanguage === "en" ? "fa" : "en";
     i18n.changeLanguage(nextLang);
   };
 
@@ -15,7 +16,7 @@ export function LanguageSwitcher({ compact = false }) {
     return (
       <button
         onClick={toggleLanguage}
-        title={currentLang === "en" ? "تغییر به زبان دری" : "Switch to English"}
+        title={currentLanguage === "en" ? "تغییر به زبان دری" : "Switch to English"}
         className="btn btn-outline btn-sm"
         style={{
           borderRadius: "var(--radius-md)",
@@ -25,7 +26,7 @@ export function LanguageSwitcher({ compact = false }) {
         aria-label={t("nav.language", "Language")}
       >
         <Globe size={15} style={{ color: "var(--primary-light)", flexShrink: 0 }} aria-hidden="true" />
-        <span style={{ fontWeight: 800 }}>{currentLang === "en" ? "دری" : "EN"}</span>
+        <span style={{ fontWeight: 800 }}>{currentLanguage === "en" ? "دری" : "EN"}</span>
       </button>
     );
   }

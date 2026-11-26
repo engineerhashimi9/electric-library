@@ -27,7 +27,8 @@ import { getBookById, getRelatedBooks } from "@/data/booksRepository";
 import { getLocalized } from "@/utils/langHelper";
 import { useFavoritesContext } from "@/context/FavoritesContext";
 import BookExcerptModal from "@/components/common/BookExcerptModal";
-
+import { useContext } from "react";
+import { GlobalContext } from "@/context/language_context";
 export default function BookDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function BookDetail() {
   const isRtl = lang === "fa";
 
   const { isFavorite: checkFavorite, toggleFavorite } = useFavoritesContext();
-
+  const { currentLanguage } = useContext(GlobalContext);
   const baseBook = getBookById(id);
   const [apiBook, setApiBook] = useState(null);
 
@@ -52,7 +53,7 @@ export default function BookDetail() {
     setImageError(false);
     if (id) {
       axios
-        .get(`http://127.0.0.1:8000/api/v1/books/${id}/`)
+        .get(`http://127.0.0.1:8000/api/v1/${currentLanguage}/books/${id}/`)
         .then((response) => {
           if (response.data && response.data.id) {
             setApiBook(response.data);
@@ -62,7 +63,7 @@ export default function BookDetail() {
           // Gracefully continue using local book repository
         });
     }
-  }, [id]);
+  }, [id, currentLanguage]);
 
   const book = apiBook
     ? {
@@ -210,7 +211,7 @@ export default function BookDetail() {
                 ) : (
                   <>
                     <img
-                      src={book.cover}
+                      src={book.cover_image_url || book.cover}
                       alt={title}
                       onError={() => setImageError(true)}
                       className="detail-cover-image"

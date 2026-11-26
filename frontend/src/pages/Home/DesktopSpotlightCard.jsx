@@ -5,16 +5,17 @@ import { useTranslation } from "react-i18next";
 import { getLocalized } from "@/utils/langHelper";
 import { useFavoritesContext } from "@/context/FavoritesContext";
 import axios from "axios";
-
+import { useContext } from "react";
+import { GlobalContext } from "@/context/language_context";
 export default function DesktopSpotlightCard({ book }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const [apiBook, setApiBook] = useState(null);
   const { isFavorite, toggleFavorite } = useFavoritesContext();
-
+  const { currentLanguage } = useContext(GlobalContext);
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/v1/en/books/get_best_book/")
+      .get(`http://127.0.0.1:8000/api/v1/${currentLanguage}/books/get_best_book/`)
       .then((response) => {
         if (response.data && response.data.id) {
           console.log("Fetched spotlight book from API:", response.data);
@@ -24,7 +25,7 @@ export default function DesktopSpotlightCard({ book }) {
       .catch(() => {
         // Fallback to static spotlight book gracefully
       });
-  }, []);
+  }, [currentLanguage]);
 
   if (!book) return null;
 
