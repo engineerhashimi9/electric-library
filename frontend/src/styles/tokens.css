@@ -1,0 +1,88 @@
+/* ==========================================================================
+   Design Tokens & CSS Variables
+   Electric Library / Bargin Curated Digital Sanctuary
+   ========================================================================== */
+
+:root {
+  /* Color Palette: Teal Sanctuary & Sea Green */
+  --bg-primary: #F4FAFA;
+  --bg-secondary: #E6F4F3;
+  --bg-tertiary: #D8ECE9;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F8FCFB;
+  --bg-card-hover: #F2F9F8;
+  
+  /* Dark Teal Theme Tokens */
+  --bg-dark: #0E6760;
+  --bg-dark-surface: #0A4B46;
+  --bg-dark-accent: #156B6B;
+  --bg-dark-hover: #125751;
+  --bg-dark-glass: rgba(14, 103, 96, 0.88);
+
+  /* Primary Brand Accents */
+  --primary: #0E6760;
+  --primary-light: #17A296;
+  --primary-hover: #128379;
+  --primary-dark: #0A3E3A;
+  --primary-soft: rgba(23, 162, 150, 0.12);
+  --primary-glow: rgba(23, 162, 150, 0.25);
+
+  /* Warm Gold / Amber Accent for Ratings & Honors */
+  --accent-gold: #F59E0B;
+  --accent-gold-hover: #D97706;
+  --accent-gold-bg: #FEF3C7;
+  --accent-gold-border: #FDE68A;
+  --accent-gold-text: #92400E;
+
+  /* Text & Content Tokens */
+  --text-primary: #0A2E2C;
+  --text-secondary: #4A6B68;
+  --text-muted: #789592;
+  --text-disabled: #A5BCBA;
+  --text-inverse: #FFFFFF;
+  --text-inverse-muted: #B8E2DF;
+  --text-inverse-dim: #8BBDB9;
+  --text-link: #0E6760;
+  --text-link-hover: #17A296;
+
+  /* Border Tokens */
+  --border-color: #D0E8E6;
+  --border-light: #E5F3F1;
+  --border-subtle: rgba(14, 103, 96, 0.1);
+  --border-dark: #156B6B;
+  --border-dark-subtle: rgba(23, 162, 150, 0.28);
+  --border-focus: #17A296;
+
+  /* Elevation Shadows */
+  --shadow-xs: 0 1px 2px rgba(14, 103, 96, 0.04);
+  --shadow-sm: 0 2px 4px rgba(14, 103, 96, 0.05), 0 1px 2px rgba(14, 103, 96, 0.03);
+  --shadow-md: 0 4px 16px -2px rgba(14, 103, 96, 0.08), 0 2px 6px -1px rgba(14, 103, 96, 0.04);
+  --shadow-lg: 0 12px 30px -6px rgba(14, 103, 96, 0.14), 0 4px 12px -2px rgba(14, 103, 96, 0.06);
+  --shadow-xl: 0 20px 42px -10px rgba(14, 103, 96, 0.2), 0 8px 18px -4px rgba(14, 103, 96, 0.08);
+  --shadow-book: -4px 8px 20px -3px rgba(10, 46, 44, 0.28), 0 2px 8px rgba(10, 46, 44, 0.12);
+  --shadow-book-hover: -6px 12px 28px -4px rgba(10, 46, 44, 0.35), 0 4px 12px rgba(10, 46, 44, 0.16);
+
+  /* Border Radii */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-3xl: 36px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-rtl: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 320ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout Widths */
+  --max-width-content: 1440px;
+  --max-width-page: 1280px;
+  --max-width-form: 520px;
+}
