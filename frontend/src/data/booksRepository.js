@@ -553,10 +553,17 @@ export const allBooks = [
   },
 ];
 
+/**
+ * Returns every book entry stored in the local repository.
+ */
 export function getAllBooks() {
   return allBooks;
 }
 
+/**
+ * Resolves a single book by string ID, numeric ID, or normalized title slug.
+ * Falls back to the first catalog item if no exact match exists.
+ */
 export function getBookById(id) {
   if (!id) return allBooks[0];
   const query = String(id).toLowerCase().trim();
@@ -565,7 +572,7 @@ export function getBookById(id) {
   const foundById = allBooks.find((b) => b.id.toLowerCase() === query);
   if (foundById) return foundById;
 
-  // 2. Numeric ID match
+  // 2. Numeric ID match (used by Favorites list)
   const numericVal = Number(query);
   if (!Number.isNaN(numericVal)) {
     const foundByNum = allBooks.find((b) => b.numericId === numericVal);
@@ -573,10 +580,11 @@ export function getBookById(id) {
   }
 
   // 3. Partial title slug match
+  const normalizedQuery = query.replace(/[^a-z0-9]/g, "");
   const foundByTitle = allBooks.find(
     (b) =>
-      b.title.en.toLowerCase().replace(/[^a-z0-9]/g, "").includes(query.replace(/[^a-z0-9]/g, "")) ||
-      query.replace(/[^a-z0-9]/g, "").includes(b.id.replace(/[^a-z0-9]/g, ""))
+      b.title.en.toLowerCase().replace(/[^a-z0-9]/g, "").includes(normalizedQuery) ||
+      normalizedQuery.includes(b.id.replace(/[^a-z0-9]/g, ""))
   );
   if (foundByTitle) return foundByTitle;
 
@@ -584,6 +592,9 @@ export function getBookById(id) {
   return allBooks[0];
 }
 
+/**
+ * Returns up to `limit` other books excluding the currently viewed book.
+ */
 export function getRelatedBooks(currentId, limit = 4) {
   const current = getBookById(currentId);
   return allBooks

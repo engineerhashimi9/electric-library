@@ -15,7 +15,8 @@
     "langEn": "English",
     "langFa": "دری",
     "signIn": "Sign In",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "signOut": "Sign Out"
   },
   "bottomNav": {
     "home": "Home",
@@ -349,12 +350,12 @@
     "cloudDesc": "Last session marginalia saved from your Cambridge folio.",
     "emailLabel": "Email or Lumina Patron ID",
     "passLabel": "Password",
-    "forgotKey": "Forgot key?",
+    "forgotKey": "Forgot password?",
     "keepActive": "Keep reading session active",
     "submit": "Enter Library",
     "orContinue": "or continue with",
-    "sso": "University & National Library SSO",
-    "google": "Continue with Google",
+    "sso": "University SSO",
+    "google": "Google Account",
     "apple": "Continue with Apple ID",
     "quote": "\"A library is not a luxury, but one of the necessities of life.\"",
     "quoteAuthor": "— Henry Ward Beecher",
@@ -383,12 +384,24 @@
     "benefit2": "Synchronized highlights & personal reading shelves",
     "benefit3": "Bilingual archive in English & Dari (دری)",
     "errors": {
-      "nameRequired": "Please enter your full name.",
+      "nameRequired": "Please enter your first name.",
       "emailRequired": "Please enter a valid email address.",
       "passwordLength": "Passphrase must be at least 8 characters.",
       "passwordMismatch": "Passphrases do not match.",
-      "termsRequired": "You must agree to the terms to continue."
-    }
+      "termsRequired": "You must agree to the terms to continue.",
+      "lastNameRequired": "Please enter your last name.",
+      "loginFailed": "Invalid email or password. Please try again.",
+      "signUpFailed": "Could not create account. Please check your details and try again."
+    },
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "e.g. Vane",
+    "birthDateLabel": "Date of Birth",
+    "birthDatePlaceholder": "YYYY-MM-DD",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "e.g. Clara",
+    "emailPlaceholder": "e.g. clara.vane@lumina.org",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassPlaceholder": "Re-enter your password"
   },
   "bookCard": {
     "ebook": "E-BOOK",
@@ -446,6 +459,8 @@
     "breadcrumbExplore": "Explore Books",
     "borrow": "Borrow Book",
     "download": "Download Edition",
+    "downloadBook": "Download Book",
+    "downloaded": "Downloaded",
     "readOnline": "Read Online",
     "addToFavorites": "Add to Favorites",
     "inFavorites": "In Favorites",

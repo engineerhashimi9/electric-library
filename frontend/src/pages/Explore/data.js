@@ -1,3 +1,6 @@
+/**
+ * Catalog items and filter metadata (genres, formats, languages) for ExploreLibrary.
+ */
 export const books = [
   {
     id: "kafka",
