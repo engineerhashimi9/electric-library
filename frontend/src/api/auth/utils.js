@@ -1,5 +1,9 @@
 import { API_URL } from "./login";
 
+
+export const AUTH_USER_KEY = "auth_user";
+export const HAS_ACCOUNT_KEY = "has_account";
+
 export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refresh");
 
@@ -66,4 +70,10 @@ export async function apiFetch(path, options = {}) {
 export function logout() {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
+}
+
+export function clearAuthStorage() {
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem(AUTH_USER_KEY);
 }
