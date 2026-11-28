@@ -1,5 +1,8 @@
 import { Grid2X2, List } from "lucide-react";
 
+/**
+ * Accessible toggle switch for alternating between Grid and List book views.
+ */
 export function ViewToggle({ view, onChange }) {
   return (
     <div

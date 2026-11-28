@@ -1,11 +1,16 @@
 import { ArrowRight, BookMarked, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Avatar from "@/component/ui/Avatar";
 import FollowButton from "./FollowButton";
 import { formatLife } from "./authors";
-import { getLocalized } from "../../utils/langHelper";
-import { formatFollowers } from "../../utils/formatters";
+import { getLocalized } from "@/utils/langHelper";
+import { formatFollowers } from "@/utils/formatters";
 
+/**
+ * Grid card representing a canon author with portrait, lifespan, discipline tags,
+ * follower count, Follow toggle, and a direct link to explore works.
+ */
 export default function AuthorCard({ author, following, onToggleFollow }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -29,18 +34,22 @@ export default function AuthorCard({ author, following, onToggleFollow }) {
       </div>
 
       <div className="space-y-0.5">
+        {/* AUTHOR NAME */}
         <h3 className="text-base sm:text-lg text-[#0E6760] font-extrabold leading-snug">
           {locName}
         </h3>
+        {/* AUTHOR COUNTRY - DATE OF BIRTH */}
         <p className="text-xs text-[#4A6B68] font-medium">
           {formatLife(author, isFa)} • {locCountry}
         </p>
       </div>
 
+    {/*  چه رقمی داستان ها نوشته می کنه */}
       <p className="min-h-[28px] text-xs font-bold leading-normal text-[#17A296] sm:text-sm">
         {locRole}
       </p>
 
+    {/* AUTHOR BIO */}
       <p className="line-clamp-3 hidden text-xs leading-relaxed text-[#4A6B68] sm:block">
         {locBio}
       </p>
@@ -73,13 +82,13 @@ export default function AuthorCard({ author, following, onToggleFollow }) {
         className="w-full mt-1"
       />
 
-      <a
-        href="#explore"
+      <Link
+        to="/explorebooks"
         className="hidden items-center gap-1 text-xs font-bold text-[#0E6760] transition-colors hover:text-[#17A296] sm:flex pt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
       >
         <span>{t("authors.card.explore")}</span>
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
-      </a>
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 rtl:rotate-180" aria-hidden="true" />
+      </Link>
     </article>
   );
 }

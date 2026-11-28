@@ -3,19 +3,28 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getLocalized } from "@/utils/langHelper";
 
+/**
+ * MobileSpotlightCard
+ * Featured book card shown only on mobile screens.
+ */
 export default function MobileSpotlightCard({ book }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
+  // Do not render anything if no book data is passed
   if (!book) return null;
+
   const bookId = book.id || "shadow-of-the-wind";
   const title = getLocalized(book.title, lang);
+  const genre = getLocalized(book.genre, lang);
+  const author = getLocalized(book.author, lang);
 
   return (
     <article
       aria-label={t("home.spotlight.badge")}
       className="md:hidden bg-[#0E6760] border border-[#156B6B] text-[#FFFFFF] p-4 sm:p-5 rounded-2xl space-y-4 shadow-library-lg relative overflow-hidden"
     >
+      {/* Top row: spotlight badge and star rating */}
       <div className="flex items-center justify-between text-xs text-[#B8E2DF]">
         <span className="bg-[#156B6B] border border-[#17A296]/30 text-[#9EEFE8] px-2.5 py-0.5 rounded-md uppercase font-extrabold text-[10px]">
           {t("home.spotlight.badge")}
@@ -27,6 +36,7 @@ export default function MobileSpotlightCard({ book }) {
         </span>
       </div>
 
+      {/* Middle row: book cover on the left, book info on the right */}
       <div className="flex gap-3.5">
         <Link to={`/book/${bookId}`} className="shrink-0">
           <img
@@ -35,22 +45,25 @@ export default function MobileSpotlightCard({ book }) {
             className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md border border-[#156B6B]"
           />
         </Link>
+
+        {/* Book genre, title, author, and short description */}
         <div className="space-y-1 min-w-0 flex-1">
           <span className="text-[10px] text-[#9EEFE8] uppercase font-bold tracking-wider block">
-            {getLocalized(book.genre, lang)}
+            {genre}
           </span>
           <Link to={`/book/${bookId}`} className="block">
             <h3 className="text-base sm:text-lg leading-tight text-[#FFFFFF] font-extrabold line-clamp-2 hover:text-[#9EEFE8] transition-colors">
               {title}
             </h3>
           </Link>
-          <p className="text-xs text-[#B8E2DF] truncate">{getLocalized(book.author, lang)}</p>
+          <p className="text-xs text-[#B8E2DF] truncate">{author}</p>
           <p className="text-xs text-[#B8E2DF]/90 line-clamp-2 pt-0.5 leading-relaxed">
             {t("home.spotlight.desc")}
           </p>
         </div>
       </div>
 
+      {/* Bottom row: Detail link and Bookmark button */}
       <div className="flex items-center gap-2 pt-1">
         <Link
           to={`/book/${bookId}`}
@@ -68,6 +81,5 @@ export default function MobileSpotlightCard({ book }) {
         </button>
       </div>
     </article>
-  
   );
 }

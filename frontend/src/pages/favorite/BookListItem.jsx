@@ -2,11 +2,14 @@ import { Heart, Star, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BookCover from "./BookCover";
-import StatusLine from "./StatusLine";
-import ActionButton from "./ActionButton";
-import { formatVotes } from "../../utils/formatters";
-import { getLocalized } from "../../utils/langHelper";
 
+import ActionButton from "./ActionButton";
+import { formatVotes } from "@/utils/formatters";
+import { getLocalized } from "@/utils/langHelper";
+
+/**
+ * Horizontal list-row card for a favorited book with Detail link and download CTA.
+ */
 export default function BookListItem({ book, onRemove, onDownload }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;

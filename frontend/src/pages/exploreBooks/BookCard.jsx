@@ -1,15 +1,13 @@
-import {
-  BookOpen,
-  Download,
-  Heart,
-  Star,
-  Info,
-} from "lucide-react";
+import { BookOpen, Download, Heart, Star, Info } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getLocalized } from "../../utils/langHelper";
+import { getLocalized } from "@/utils/langHelper";
 
+/**
+ * Catalog book card supporting both Grid and List layouts, favorite toggling,
+ * image fallback, Detail page navigation, and direct download action.
+ */
 export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
   const [imageFailed, setImageFailed] = useState(false);
   const { t, i18n } = useTranslation();
@@ -19,7 +17,7 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
   const localizedAuthor = getLocalized(book.author, lang);
   const localizedMobileTitle = getLocalized(
     book.mobileTitle || book.title,
-    lang
+    lang,
   );
 
   const desktopLabel =
@@ -46,15 +44,17 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
     >
       <div
         className={`relative shrink-0 overflow-hidden rounded-xl bg-[#E6F4F3] border border-[#D0E8E6] ${
-          view === "list"
-            ? "w-28 sm:w-36 md:w-40"
-            : "w-full"
+          view === "list" ? "w-28 sm:w-36 md:w-40" : "w-full"
         }`}
       >
         <Link to={bookDetailUrl} className="block w-full h-full">
           {imageFailed ? (
             <div className="flex aspect-[2/3] h-full w-full flex-col items-center justify-center gap-3 bg-[#E6F4F3] p-3 text-center">
-              <BookOpen size={28} className="text-[#236D64]" aria-hidden="true" />
+              <BookOpen
+                size={28}
+                className="text-[#236D64]"
+                aria-hidden="true"
+              />
               <span className="text-xs sm:text-sm font-bold text-[#0E6760] line-clamp-2">
                 {localizedTitle}
               </span>
@@ -109,43 +109,49 @@ export function BookCard({ book, favorite, onToggleFavorite, onAction, view }) {
         }`}
       >
         <div className="mb-1.5 hidden items-center gap-1.5 text-xs sm:text-sm lg:flex">
-          <Star size={14} className="fill-[#17A296] text-[#17A296]" aria-hidden="true" />
+          <Star
+            size={14}
+            className="fill-[#17A296] text-[#17A296]"
+            aria-hidden="true"
+          />
+          {/* book rating */}
           <span className="font-extrabold text-[#0A2E2C]">{book.rating}</span>
+          {/* book review */}
           <span className="text-[#4A6B68]">({book.reviews})</span>
         </div>
 
         <Link to={bookDetailUrl} className="block group/title">
           <h3 className="truncate text-sm sm:text-base font-extrabold leading-snug text-[#0A2E2C] group-hover/title:text-[#0E6760] transition-colors">
+            {/* book title in mobile */}
             <span className="lg:hidden">{localizedMobileTitle}</span>
+            {/* book title */}
             <span className="hidden lg:inline">{localizedTitle}</span>
           </h3>
         </Link>
 
         <p className="mt-1 truncate text-xs sm:text-sm text-[#4A6B68] font-medium">
+          {/* author book  */}
           {localizedAuthor}
         </p>
 
         <div className="mt-1.5 flex items-center gap-1 text-xs lg:hidden">
-          <Star size={13} className="fill-[#17A296] text-[#17A296]" aria-hidden="true" />
+          <Star
+            size={13}
+            className="fill-[#17A296] text-[#17A296]"
+            aria-hidden="true"
+          />
           <span className="font-extrabold text-[#0A2E2C]">
             {book.mobileRating || book.rating}
           </span>
-          <span className="text-[#4A6B68]">
-            ({book.mobileReviews})
-          </span>
+          <span className="text-[#4A6B68]">({book.mobileReviews})</span>
         </div>
 
+        {/* book Pages */}
         <p className="mt-1.5 hidden min-h-[38px] text-xs font-medium leading-relaxed text-[#4A6B68] lg:block">
-          {book.duration ||
-            (book.pages
-              ? `${book.pages} ${lang === "fa" ? "صفحه" : "pages"}`
-              : "")}{" "}
-          {book.detail && (
-            <>
-              <span className="px-1 text-[#236D64]">•</span>{" "}
-              {getLocalized(book.detail, lang)}
-            </>
-          )}
+          {book.pages
+            ? `${book.pages} ${lang === "fa" ? "صفحه" : "pages"}`
+            : ""}{" "}
+          {book.detail && <></>}
         </p>
 
         {/* Mobile action bar: Replaced available with Detail button */}

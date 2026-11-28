@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { BookOpen } from "lucide-react";
 
+/**
+ * Resilient book cover image component that falls back to a styled title placeholder
+ * when the cover image fails to load or is missing.
+ */
 export default function BookCover({ cover, title, className = "" }) {
   const [failed, setFailed] = useState(false);
   const src = cover

@@ -1,6 +1,9 @@
 import { Check, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Interactive Follow/Following toggle button supporting light and dark card themes.
+ */
 export default function FollowButton({ following, onToggle, variant = "default", className = "" }) {
   const { t } = useTranslation();
 

@@ -1,6 +1,11 @@
 import { Quote, ArrowRight, BookMarked, Highlighter } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Literary quote callout banner shown on the Favorites page with synchronization
+ * status and a direct link to browse more works in the catalog.
+ */
 export default function QuoteBanner() {
   const { t } = useTranslation();
 
@@ -41,14 +46,14 @@ export default function QuoteBanner() {
               {t("favorites.quote.syncDesc")}
             </p>
           </div>
-          <a
-            href="#highlights"
+          <Link
+            to="/explorebooks"
             className="ms-auto flex items-center gap-2 rounded-xl bg-[#17A296] hover:bg-[#FFFFFF] hover:text-[#0E6760] text-[#FFFFFF] px-4 py-2.5 text-xs sm:text-sm font-bold transition-all active:scale-95 shadow-library-sm lg:ms-0 lg:px-5 lg:py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9EEFE8]"
           >
             <Highlighter className="h-4 w-4 lg:hidden text-current" aria-hidden="true" />
             <span>{t("favorites.quote.cta")}</span>
             <ArrowRight className="hidden h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 lg:block text-current" aria-hidden="true" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

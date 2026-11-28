@@ -1,6 +1,9 @@
 import { SearchX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Empty state shown when search/filter criteria match zero authors.
+ */
 export default function EmptyState({ onReset }) {
   const { t } = useTranslation();
 

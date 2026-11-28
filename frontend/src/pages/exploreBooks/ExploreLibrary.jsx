@@ -6,11 +6,15 @@ import { getLocalized } from "@/utils/langHelper";
 import { BookCard } from "./BookCard";
 import CatalogControls from "./CatalogControls";
 import CatalogHero from "./CatalogHero";
-import CatalogPagination from "./CatalogPagination";
+
 import CollectionSpotlight from "./CollectionSpotlight";
 import { ViewToggle } from "./ViewToggle";
 import { CheckCircle2 } from "lucide-react";
 
+/**
+ * Tracks whether the viewport matches desktop (`>= 1024px`) so catalog page size
+ * and rating metadata adapt responsively.
+ */
 function useDesktopLayout() {
   const [desktop, setDesktop] = useState(() =>
     typeof window !== "undefined"
@@ -31,6 +35,10 @@ function useDesktopLayout() {
   return desktop;
 }
 
+/**
+ * Explore Library page offering live search, genre filtering, sorting,
+ * grid/list layout switching, pagination, and quick download/favorite feedback.
+ */
 export default function ExploreLibrary() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -59,9 +67,18 @@ export default function ExploreLibrary() {
     const search = query.trim().toLowerCase();
 
     const result = books.filter((book) => {
-      const titleStr = typeof book.title === "object" ? `${book.title.en} ${book.title.fa}` : book.title;
-      const authorStr = typeof book.author === "object" ? `${book.author.en} ${book.author.fa}` : book.author;
-      const detailStr = typeof book.detail === "object" ? `${book.detail.en} ${book.detail.fa}` : (book.detail || "");
+      const titleStr =
+        typeof book.title === "object"
+          ? `${book.title.en} ${book.title.fa}`
+          : book.title;
+      const authorStr =
+        typeof book.author === "object"
+          ? `${book.author.en} ${book.author.fa}`
+          : book.author;
+      const detailStr =
+        typeof book.detail === "object"
+          ? `${book.detail.en} ${book.detail.fa}`
+          : book.detail || "";
 
       const searchableText = [titleStr, authorStr, detailStr, book.genre]
         .join(" ")
@@ -76,8 +93,8 @@ export default function ExploreLibrary() {
 
     if (sort === "rating") {
       result.sort((a, b) => {
-        const aRating = desktop ? a.rating : (a.mobileRating || a.rating);
-        const bRating = desktop ? b.rating : (b.mobileRating || b.rating);
+        const aRating = desktop ? a.rating : a.mobileRating || a.rating;
+        const bRating = desktop ? b.rating : b.mobileRating || b.rating;
         return bRating - aRating;
       });
     }
@@ -129,8 +146,12 @@ export default function ExploreLibrary() {
 
       setNotice(
         isFav
-          ? (lang === "fa" ? `«${title}» از علاقه‌مندی‌ها حذف شد.` : `Removed "${title}" from favorites.`)
-          : (lang === "fa" ? `«${title}» به علاقه‌مندی‌ها اضافه شد.` : `Added "${title}" to favorites.`),
+          ? lang === "fa"
+            ? `«${title}» از علاقه‌مندی‌ها حذف شد.`
+            : `Removed "${title}" from favorites.`
+          : lang === "fa"
+            ? `«${title}» به علاقه‌مندی‌ها اضافه شد.`
+            : `Added "${title}" to favorites.`,
       );
 
       return next;
@@ -253,22 +274,6 @@ export default function ExploreLibrary() {
                   ? "مجموعه فلسفه نمایش داده شد."
                   : "Showing the philosophy collection.",
               );
-            }}
-          />
-        </div>
-
-        <div className="mt-8 lg:mt-10">
-          <CatalogPagination
-            page={currentPage}
-            pageCount={pageCount}
-            onPageChange={handlePageChange}
-            total={total}
-            start={start}
-            end={end}
-            perPage={perPage}
-            onPerPageChange={(value) => {
-              setDesktopPerPage(value);
-              setPage(1);
             }}
           />
         </div>

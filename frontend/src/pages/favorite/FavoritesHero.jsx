@@ -1,10 +1,13 @@
 import { BookMarked } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import HeroActions from "./HeroActions";
+
 import CategoryTabs from "./CategoryTabs";
 import Eyebrow from "@/component/ui/Eyebrow";
 
-export default function FavoritesHero({ total, actions, tabs }) {
+/**
+ * Hero header for the Favorites page combining summary text, shelf actions, and category tabs.
+ */
+export default function FavoritesHero({ total, tabs }) {
   const { t } = useTranslation();
 
   return (
@@ -18,7 +21,6 @@ export default function FavoritesHero({ total, actions, tabs }) {
             <BookMarked className="h-4 w-4 text-[#17A296]" />
             <span>{t("favorites.hero.badgeMobile")}</span>
           </span>
-          <HeroActions compact {...actions} />
         </div>
 
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 pb-6 lg:pb-10">
@@ -30,11 +32,9 @@ export default function FavoritesHero({ total, actions, tabs }) {
               {t("favorites.hero.title")}
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-[#4A6B68] font-medium leading-relaxed max-w-xl">
+              {/* نعداد کتاب های دلخواه */}
               {t("favorites.hero.desc", { total })}
             </p>
-          </div>
-          <div className="hidden w-full max-w-[560px] shrink lg:block">
-            <HeroActions {...actions} />
           </div>
         </div>
 

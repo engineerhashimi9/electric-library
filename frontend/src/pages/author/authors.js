@@ -2,7 +2,7 @@ export const categories = ["All Authors", "Modernist", "Magical Realism", "Philo
 
 export const regions = ["All Regions", "Europe", "Latin America", "North America", "Asia", "Persian & Afghan", "Classical World"];
 
-export const sortOptions = ["Most Works", "Most Followed", "Name A–Z", "Birth Year"];
+export const sortOptions = ["Most Works", , "Name A–Z", "Birth Year"];
 
 export const formatLife = (a, isFa = false) => {
   if (a.died) {

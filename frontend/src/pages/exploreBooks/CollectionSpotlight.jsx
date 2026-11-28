@@ -1,6 +1,10 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Curated spotlight callout banner within ExploreLibrary that filters
+ * the catalog to a featured philosophical collection when clicked.
+ */
 export default function CollectionSpotlight({ onExplore }) {
   const { t } = useTranslation();
 
@@ -21,12 +25,8 @@ export default function CollectionSpotlight({ onExplore }) {
           </h2>
 
           <p className="text-xs sm:text-sm lg:text-base leading-relaxed text-[#B8E2DF] max-w-3xl">
-            <span className="lg:hidden">
-              {t("explore.spotlight.descMobile")}
-            </span>
-            <span className="hidden lg:inline">
-              {t("explore.spotlight.desc")}
-            </span>
+            <span className="lg:hidden">{t("explore.spotlight.descMobile")}</span>
+            <span className="hidden lg:inline">{t("explore.spotlight.desc")}</span>
           </p>
 
           <button
@@ -35,7 +35,7 @@ export default function CollectionSpotlight({ onExplore }) {
             className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#17A296] text-[#FFFFFF] text-xs sm:text-sm font-bold hover:bg-[#FFFFFF] hover:text-[#0E6760] lg:hidden transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9EEFE8]"
           >
             <span>{t("explore.spotlight.ctaMobile")}</span>
-            <ArrowRight size={15} className="rtl:rotate-180" />
+            <ArrowRight size={15} className="rtl:rotate-180" aria-hidden="true" />
           </button>
         </div>
 

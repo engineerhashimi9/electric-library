@@ -4,6 +4,9 @@ import AuthorSearch from "./AuthorSearch";
 import CategoryChips from "./CategoryChips";
 import Eyebrow from "@/component/ui/Eyebrow";
 
+/**
+ * Hero header for the Authors directory showing stats, search input, and category chips.
+ */
 export default function AuthorsHero({ total, followedCount, search, chips }) {
   const { t } = useTranslation();
 
@@ -24,17 +27,6 @@ export default function AuthorsHero({ total, followedCount, search, chips }) {
             <p className="text-sm sm:text-base lg:text-lg text-[#4A6B68] font-medium leading-relaxed max-w-xl">
               {t("authors.hero.desc")}
             </p>
-          </div>
-
-          <div className="flex shrink-0 flex-wrap gap-2.5 lg:gap-3 lg:pb-2">
-            <span className="flex items-center gap-2 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2 text-xs sm:text-sm font-bold text-[#0E6760] shadow-library-sm">
-              <Users className="h-4 w-4 text-[#17A296]" aria-hidden="true" />
-              <span>{t("authors.hero.patronsArchived", { total })}</span>
-            </span>
-            <span className="flex items-center gap-2 rounded-xl bg-[#FFFFFF] border border-[#D0E8E6] px-3.5 py-2 text-xs sm:text-sm font-bold text-[#0E6760] shadow-library-sm">
-              <BellRing className="h-4 w-4 text-[#17A296]" aria-hidden="true" />
-              <span>{t("authors.hero.following", { count: followedCount })}</span>
-            </span>
           </div>
         </div>
 

@@ -1,12 +1,18 @@
+import { useTranslation } from "react-i18next";
 import AuthorsHero from "./AuthorsHero";
 import AuthorsToolbar from "./AuthorsToolbar";
 import AuthorsGrid from "./AuthorsGrid";
 import FeaturedAuthor from "./FeaturedAuthor";
-import Pagination from "./Pagination";
+import Pagination from "@/component/ui/Pagination";
 import useAuthors, { PER_PAGE } from "@/hooks/useAuthors";
 import { categories, authors } from "./authors";
 
+/**
+ * Authors directory page displaying searchable, filterable, and sortable
+ * master authors along with a featured spotlight and follow toggles.
+ */
 export default function Authors() {
+  const { t } = useTranslation();
   const a = useAuthors();
   const from = a.filtered.length === 0 ? 0 : (a.page - 1) * PER_PAGE + 1;
   const to = (a.page - 1) * PER_PAGE + a.visible.length;
@@ -50,17 +56,6 @@ export default function Authors() {
           following={a.followed.includes(a.featured.id)}
           onToggleFollow={() => a.toggleFollow(a.featured.id)}
         />
-
-        {a.filtered.length > 0 && (
-          <Pagination
-            page={a.page}
-            totalPages={a.totalPages}
-            onPage={a.setPage}
-            from={from}
-            to={to}
-            total={a.filtered.length}
-          />
-        )}
       </main>
     </div>
   );

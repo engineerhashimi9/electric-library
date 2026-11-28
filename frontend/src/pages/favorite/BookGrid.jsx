@@ -1,6 +1,9 @@
 import BookCard from "./BookCard";
 import BookListItem from "./BookListItem";
 
+/**
+ * Renders saved favorites in either Grid or List layout.
+ */
 export default function BookGrid({ books, view, onRemove, onDownload }) {
   const Item = view === "grid" ? BookCard : BookListItem;
 

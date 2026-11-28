@@ -1,5 +1,10 @@
 import { Mic, Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
+/**
+ * Search input bar for the Explore Library catalog with clear button,
+ * language-aware cursor direction, and optional keyboard shortcut hint.
+ */
 export function SearchField({
   value,
   onChange,
@@ -7,6 +12,9 @@ export function SearchField({
   placeholder = "Search titles, authors, translators...",
   compact = false,
 }) {
+  const { i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
+
   return (
     <div
       className={`flex items-center gap-3 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] focus-within:border-[#17A296] focus-within:ring-2 focus-within:ring-[#17A296]/20 shadow-library transition-all ${
@@ -18,11 +26,12 @@ export function SearchField({
       <input
         ref={inputRef}
         type="search"
+        dir={isRtl ? "rtl" : "ltr"}
         aria-label={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full min-w-0 bg-transparent text-xs sm:text-sm text-[#0A2E2C] placeholder:text-[#4A6B68]/70 font-medium focus:outline-none"
+        className="w-full min-w-0 bg-transparent text-xs sm:text-sm text-start text-[#0A2E2C] placeholder:text-[#4A6B68]/70 font-medium focus:outline-none"
       />
 
       {value && (
@@ -32,7 +41,7 @@ export function SearchField({
           aria-label="Clear search"
           className="p-1 rounded-full text-[#4A6B68] hover:text-[#0E6760] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
         >
-          <X size={16} />
+          <X size={16} aria-hidden="true" />
         </button>
       )}
 

@@ -1,14 +1,20 @@
+import { useTranslation } from "react-i18next";
 import FavoritesHero from "./FavoritesHero";
 import ShelfToolbar from "./ShelfToolbar";
 import BookGrid from "./BookGrid";
-import EmptyState from "./EmptyState";
+
 import QuoteBanner from "./QuoteBanner";
-import Pagination from "./Pagination";
+import Pagination from "@/component/ui/Pagination";
 import Toast from "@/component/ui/Toast";
 import useFavorites, { PER_PAGE } from "@/hooks/useFavorites";
 import { categories } from "./favorites";
 
+/**
+ * Favorites Shelf page displaying curated saved books with category filtering,
+ * sorting, Grid/List toggle, citation export, shareable link, and undoable removal.
+ */
 export default function Favorites() {
+  const { t } = useTranslation();
   const f = useFavorites();
   const isEmpty = f.previewEmpty || f.visible.length === 0;
   const from = f.filtered.length === 0 ? 0 : (f.page - 1) * PER_PAGE + 1;
@@ -23,7 +29,7 @@ export default function Favorites() {
           onTogglePreview: f.togglePreview,
           onShare: f.shareShelf,
           onExport: f.downloadCitations,
-          onCreateShelf: () => {},
+          onCreateShelf: f.downloadCitations,
         }}
         tabs={{
           categories,
@@ -32,6 +38,7 @@ export default function Favorites() {
           onChange: f.setCategory,
         }}
       />
+
       <main className="mx-auto flex max-w-[1440px] flex-col gap-6 px-4 sm:px-6 pb-12 pt-6 md:px-8 lg:gap-8 lg:pb-16 lg:pt-8 xl:px-12">
         <ShelfToolbar
           total={f.items.length}
@@ -42,6 +49,7 @@ export default function Favorites() {
           previewEmpty={f.previewEmpty}
           onTogglePreview={f.togglePreview}
         />
+
         {isEmpty ? (
           <EmptyState
             preview={f.previewEmpty}
@@ -55,18 +63,10 @@ export default function Favorites() {
             onDownload={f.downloadBook}
           />
         )}
+
         <QuoteBanner />
-        {!isEmpty && (
-          <Pagination
-            page={f.page}
-            totalPages={f.totalPages}
-            onPage={f.setPage}
-            from={from}
-            to={to}
-            total={f.filtered.length}
-          />
-        )}
       </main>
+
       <Toast toast={f.toast} onClose={f.closeToast} onUndo={f.undoRemove} />
     </div>
   );

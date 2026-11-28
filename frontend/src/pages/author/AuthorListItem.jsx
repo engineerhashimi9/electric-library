@@ -1,11 +1,15 @@
 import { ArrowRight, BookMarked, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Avatar from "@/component/ui/Avatar";
 import FollowButton from "./FollowButton";
 import { formatLife } from "./authors";
-import { formatFollowers } from "../../utils/formatters";
-import { getLocalized } from "../../utils/langHelper";
+import { formatFollowers } from "@/utils/formatters";
+import { getLocalized } from "@/utils/langHelper";
 
+/**
+ * Horizontal list-row layout for an author entry in the Authors directory.
+ */
 export default function AuthorListItem({ author, following, onToggleFollow }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
@@ -41,13 +45,13 @@ export default function AuthorListItem({ author, following, onToggleFollow }) {
       </div>
 
       <FollowButton following={following} onToggle={onToggleFollow} className="w-full sm:w-[130px] sm:shrink-0" />
-      <a
-        href="#explore"
+      <Link
+        to="/explorebooks"
         className="hidden shrink-0 items-center gap-1 text-xs font-bold text-[#0E6760] transition-colors hover:text-[#17A296] lg:flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded p-1"
       >
         <span>{t("authors.card.explore")}</span>
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 rtl:rotate-180" />
-      </a>
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 rtl:rotate-180" aria-hidden="true" />
+      </Link>
     </article>
   );
 }

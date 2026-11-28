@@ -105,9 +105,15 @@ body {
 
 button,
 select,
-input {
+input,
+textarea {
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea {
+  caret-color: #0E6760;
 }
 
 button:not(:disabled),

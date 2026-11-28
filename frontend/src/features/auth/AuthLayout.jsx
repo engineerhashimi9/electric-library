@@ -4,6 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import BrandLogo from "@/component/ui/BrandLogo";
 
+/**
+ * Shared split-card authentication shell used by Sign In and Sign Up screens.
+ * Renders a unified rounded container so the Deep Teal editorial panel and
+ * form pane stay perfectly aligned in both LTR (English) and RTL (Dari).
+ */
 export const AuthLayout = ({ children }) => {
   const { t } = useTranslation();
 
@@ -14,15 +19,15 @@ export const AuthLayout = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4FAFA] text-[#0A2E2C] flex items-center justify-center py-6 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+    <div className="min-h-screen bg-[#F4FAFA] text-[#0A2E2C] flex items-center justify-center py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-5xl mx-auto bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl shadow-library-lg overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         {/* Desktop Editorial Sanctuary Showcase */}
         <aside
           aria-label="Library Sanctuary Overview"
-          className="hidden lg:flex lg:col-span-5 flex-col justify-between bg-[#0E6760] border border-[#156B6B] rounded-3xl p-8 text-[#FFFFFF] shadow-library-lg relative overflow-hidden"
+          className="hidden lg:flex lg:col-span-5 flex-col justify-between bg-[#0E6760] p-8 xl:p-10 text-[#FFFFFF] relative overflow-hidden"
         >
-          <div className="pointer-events-none absolute -top-20 -right-20 w-64 h-64 bg-[#17A296]/20 rounded-full blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-16 w-64 h-64 bg-[#236D64]/30 rounded-full blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 -end-20 w-64 h-64 bg-[#17A296]/20 rounded-full blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -start-16 w-64 h-64 bg-[#236D64]/30 rounded-full blur-3xl" />
 
           <div className="relative space-y-6">
             <Link
@@ -35,7 +40,7 @@ export const AuthLayout = ({ children }) => {
               </span>
             </Link>
 
-            <div className="space-y-3 pt-2">
+            <div className="space-y-3 pt-1">
               <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9EEFE8]">
                 <Sparkles size={14} aria-hidden="true" />
                 <span>{t("auth.showcaseEyebrow")}</span>
@@ -49,8 +54,8 @@ export const AuthLayout = ({ children }) => {
             </div>
 
             <ul className="space-y-3.5 pt-2">
-              {highlights.map(({ icon: Icon, text }, idx) => (
-                <li key={idx} className="flex items-start gap-3">
+              {highlights.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-start gap-3">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#156B6B] border border-[#17A296]/30 text-[#9EEFE8]">
                     <Icon size={16} aria-hidden="true" />
                   </span>
@@ -73,7 +78,20 @@ export const AuthLayout = ({ children }) => {
         </aside>
 
         {/* Form Container */}
-        <main className="lg:col-span-7 flex items-center justify-center">
+        <main className="lg:col-span-7 flex flex-col justify-center bg-[#FFFFFF]">
+          {/* Compact Mobile Brand Bar */}
+          <div className="flex lg:hidden items-center justify-between px-5 pt-5 pb-1">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
+            >
+              <BrandLogo className="w-8 h-8 rounded-xl shadow-sm" />
+              <span className="text-lg font-extrabold text-[#0E6760]">
+                {t("nav.brand")}
+              </span>
+            </Link>
+          </div>
+
           {children}
         </main>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
@@ -12,88 +12,106 @@ import {
   Download,
   CheckCircle2,
   Bookmark,
-  Calendar,
-  Layers,
-  Globe2,
-  Building2,
-  FolderTree,
-  FileText,
   Quote,
   Sparkles,
-  Info,
   Headphones,
 } from "lucide-react";
-import { getBookById, getRelatedBooks } from "@/data/booksRepository";
+import { API_URL } from "@/api/auth/utils";
+import { getBookById } from "@/data/booksRepository";
 import { getLocalized } from "@/utils/langHelper";
 
-export default function BookDetail() {
-  const { bookId } = useParams().id;
-  console.log(useParams());
+/**
+ * Turns the author field into a plain text name.
+ * Handles 3 formats: plain string, { en, fa } object, or { name, last_name } from the API.
+ */
+function getAuthorName(author, lang) {
+  if (!author) return "";
+  if (typeof author === "string") return author;
 
+  if ("en" in author || "fa" in author) {
+    return getLocalized(author, lang);
+  }
+
+  return [author.name, author.last_name].filter(Boolean).join(" ");
+}
+
+/**
+ * BookDetail Page
+ * Shows a single book's cover, title, author, rating, quick specs, quote,
+ * and Download / Favorite / Share buttons.
+ */
+export default function BookDetail() {
+  // 1. Read the book ID from the URL (example: /book/meditations)
+  const { id: bookId } = useParams();
   const navigate = useNavigate();
+
+  // 2. Get translation helper and current language ("en" or "fa")
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
-  const [bookDetail, setBookDetail] = useState({});
 
-  const [activeTab, setActiveTab] = useState("overview"); // "overview" | "specs" | "reviews"
+  // 3. Local book data (used as a fallback if the backend API is offline)
+  const localBook = getBookById(bookId);
 
+  // 4. Component states
+  const [apiBook, setApiBook] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const [borrowedBookId, setBorrowedBookId] = useState(null);
-
+  const [downloadedBookId, setDownloadedBookId] = useState(null);
   const [failedImageId, setFailedImageId] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const isBorrowed = borrowedBookId === bookId;
+  const isDownloaded = downloadedBookId === bookId;
   const imageError = failedImageId === bookId;
 
+  // 5. Scroll to top whenever the book ID changes
   useEffect(() => {
-    console.log(bookId);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [bookId]);
-  useEffect(() => {
+
+  // 6. Try to load fresh book data from the backend API
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/v1/books/${book}/`)
+      .get(`${API_URL}/api/v1/books/${bookId}/`)
       .then((response) => {
-        setBookDetail(response.data);
+        if (response.data) {
+          setApiBook(response.data);
+        }
       })
-      .catch((error) => {
-        console.error("Error fetching book details:", error);
+      .catch(() => {
+        // If the API fails, keep using the local book data
+        setApiBook(null);
       });
-  }, []);
+  }, [bookId]);
 
-  const showToast = (msg) => {
-    setToastMessage(msg);
+  // Show a temporary notification message at the top of the screen
+  function showToast(message) {
+    setToastMessage(message);
     setTimeout(() => {
       setToastMessage("");
     }, 3200);
-  };
+  }
 
-  const handleToggleFavorite = () => {
-    setIsFavorite((prev) => {
-      const next = !prev;
-      showToast(
-        next
-          ? lang === "fa"
-            ? "به علاقه‌مندی‌ها افزوده شد"
-            : "Added to your favorites"
-          : lang === "fa"
-            ? "از علاقه‌مندی‌ها حذف شد"
-            : "Removed from favorites",
-      );
-      return next;
-    });
-  };
+  // Add or remove the book from favorites
+  function handleToggleFavorite() {
+    const nextFavorite = !isFavorite;
+    setIsFavorite(nextFavorite);
 
-  const handleBorrow = () => {
-    setBorrowedBookId(id);
-    showToast(t("bookDetail.borrowSuccess"));
-  };
+    if (nextFavorite) {
+      showToast(lang === "fa" ? "به علاقه‌مندی‌ها افزوده شد" : "Added to your favorites");
+    } else {
+      showToast(lang === "fa" ? "از علاقه‌مندی‌ها حذف شد" : "Removed from favorites");
+    }
+  }
 
-  const handleShare = async () => {
+  // Mark the book as downloaded and notify the user
+  function handleDownload() {
+    setDownloadedBookId(bookId);
+    showToast(t("bookDetail.downloadSuccess"));
+  }
+
+  // Copy the current page link to the clipboard
+  async function handleShare() {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setIsCopied(true);
@@ -102,9 +120,13 @@ export default function BookDetail() {
     } catch {
       showToast(window.location.href);
     }
-  };
+  }
 
-  if (!bookDetail) {
+  // Combine local book data with API data (API data overrides local fields)
+  const book = apiBook ? { ...localBook, ...apiBook } : localBook;
+
+  // If no book is found, show a simple "Not Found" message
+  if (!book) {
     return (
       <main className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
         <h1 className="text-xl sm:text-2xl font-extrabold text-[#0E6760] mb-2">
@@ -120,13 +142,22 @@ export default function BookDetail() {
     );
   }
 
+  // Prepare localized text values for the UI
+  const title = getLocalized(book.title, lang);
+  const authorName = getAuthorName(book.author, lang);
+  const quote = getLocalized(book.quote, lang);
 
- 
-  const relatedBooks = getRelatedBooks(book.id, 4);
+  const genreLabel = Array.isArray(book.category)
+    ? book.category.map((c) => c.name).join(" • ")
+    : getLocalized(book.genre, lang);
+
+  const pagesText = book.pages
+    ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}`
+    : book.duration || "—";
 
   return (
     <main className="min-h-screen bg-[#F6FBFA] text-[#0A2E2C] pb-24 pt-4 sm:pt-6">
-      {/* Toast notification banner */}
+      {/* Floating toast notification banner */}
       {toastMessage && (
         <div
           role="status"
@@ -138,29 +169,25 @@ export default function BookDetail() {
         </div>
       )}
 
+      {/* Main centered page container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-        {/* Navigation & Breadcrumbs */}
+        {/* Top navigation bar with breadcrumbs and Back button */}
         <nav
           aria-label="Breadcrumbs"
           className="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm text-[#4A6B68]"
         >
+          {/* Breadcrumb links (Home / Explore / Book Title) */}
           <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              to="/"
-              className="hover:text-[#0E6760] transition-colors font-medium"
-            >
+            <Link to="/" className="hover:text-[#0E6760] transition-colors font-medium">
               {t("bookDetail.breadcrumbHome")}
             </Link>
             <span className="text-[#D0E8E6] font-bold">/</span>
-            <Link
-              to="/explorebooks"
-              className="hover:text-[#0E6760] transition-colors font-medium"
-            >
+            <Link to="/explorebooks" className="hover:text-[#0E6760] transition-colors font-medium">
               {t("bookDetail.breadcrumbExplore")}
             </Link>
             <span className="text-[#D0E8E6] font-bold">/</span>
             <span className="text-[#0E6760] font-bold truncate max-w-[200px] sm:max-w-xs">
-              {bookDetail.title }
+              {title}
             </span>
           </div>
 
@@ -169,68 +196,55 @@ export default function BookDetail() {
             onClick={() => navigate(-1)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D0E8E6] bg-[#FFFFFF] hover:bg-[#E6F4F3] text-[#0E6760] font-bold text-xs transition-colors shadow-library-sm active:scale-95"
           >
-            {isRtl ? (
-              <ArrowRight size={14} aria-hidden="true" />
-            ) : (
-              <ArrowLeft size={14} aria-hidden="true" />
-            )}
+            {isRtl ? <ArrowRight size={14} aria-hidden="true" /> : <ArrowLeft size={14} aria-hidden="true" />}
             <span>{t("bookDetail.back")}</span>
           </button>
         </nav>
 
-        {/* Hero Book Section */}
+        {/* Main book details card */}
         <section
           aria-labelledby="book-detail-title"
           className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-5 sm:p-8 lg:p-10 shadow-library-md relative overflow-hidden"
         >
-          {/* Subtle decorative glow */}
+          {/* Decorative soft background glow */}
           <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#17A296]/10 rounded-full blur-3xl" />
 
+          {/* Two-column layout: left side = cover, right side = book info */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
-            {/* Left Column: Book Cover & Quick Meta */}
+            {/* Left column: book cover image and Favorite / Share buttons */}
             <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center">
+              {/* Book cover frame */}
               <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[2/3] rounded-2xl overflow-hidden shadow-library-lg border border-[#D0E8E6] bg-[#E6F4F3] group">
                 {imageError ? (
+                  /* Fallback box shown if the cover image fails to load */
                   <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#E6F4F3] text-[#0E6760]">
-                    <BookOpen
-                      size={48}
-                      className="text-[#17A296] mb-3 opacity-80"
-                    />
-                    <span className="font-extrabold text-base leading-snug">
-                      {bookDetail.title}
-                    </span>
-                    <span className="text-xs text-[#4A6B68] mt-1 font-medium">
-                      {bookDetail.author}
-                    </span>
+                    <BookOpen size={48} className="text-[#17A296] mb-3 opacity-80" />
+                    <span className="font-extrabold text-base leading-snug">{title}</span>
+                    <span className="text-xs text-[#4A6B68] mt-1 font-medium">{authorName}</span>
                   </div>
                 ) : (
                   <img
-                    src={bookDetail.cover}
-                    alt={bookDetail.title}
-                    onError={() => setFailedImageId(bookDetail.id)}
+                    src={book.cover}
+                    alt={title}
+                    onError={() => setFailedImageId(bookId)}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 )}
 
-                {/* Format pill badge */}
+                {/* Book format badge (ebook / audio) on top-left of cover */}
                 <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 bg-[#0E6760]/90 border border-[#156B6B] text-[#FFFFFF] text-xs font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider backdrop-blur shadow-sm flex items-center gap-1.5">
-                  {bookDetail.format === "audio" ? (
+                  {book.format === "audio" ? (
                     <Headphones size={13} className="text-[#9EEFE8]" />
                   ) : (
                     <BookOpen size={13} className="text-[#9EEFE8]" />
                   )}
-                  <span>{bookDetail.format}</span>
+                  <span>{book.format || "ebook"}</span>
                 </div>
 
-                {/* Favorite Heart Button */}
                 <button
                   type="button"
                   onClick={handleToggleFavorite}
-                  aria-label={
-                    isFavorite
-                      ? t("bookDetail.inFavorites")
-                      : t("bookDetail.addToFavorites")
-                  }
+                  aria-label={isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
                   aria-pressed={isFavorite}
                   className="absolute top-3 right-3 rtl:right-auto rtl:left-3 p-2.5 rounded-full bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] text-[#0E6760] border border-[#D0E8E6] shadow-library-sm backdrop-blur transition-all active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
                 >
@@ -243,11 +257,9 @@ export default function BookDetail() {
                     }
                   />
                 </button>
-
-                
               </div>
 
-              {/* Action Buttons Below Cover */}
+              {/* Action row below cover: Favorite button and Share button */}
               <div className="w-full max-w-[280px] sm:max-w-[320px] flex items-center gap-2 mt-4">
                 <button
                   type="button"
@@ -258,16 +270,9 @@ export default function BookDetail() {
                       : "bg-[#FFFFFF] border-[#D0E8E6] text-[#4A6B68] hover:bg-[#F6FBFA] hover:text-[#0E6760]"
                   }`}
                 >
-                  <Bookmark
-                    size={15}
-                    className={
-                      isFavorite ? "fill-[#17A296] text-[#17A296]" : ""
-                    }
-                  />
+                  <Bookmark size={15} className={isFavorite ? "fill-[#17A296] text-[#17A296]" : ""} />
                   <span className="truncate">
-                    {isFavorite
-                      ? t("bookDetail.inFavorites")
-                      : t("bookDetail.addToFavorites")}
+                    {isFavorite ? t("bookDetail.inFavorites") : t("bookDetail.addToFavorites")}
                   </span>
                 </button>
 
@@ -287,28 +292,28 @@ export default function BookDetail() {
               </div>
             </div>
 
-            {/* Right Column: Book Details & Actions */}
+            {/* Right column: genre, title, rating, info cards, quote, and Borrow / Download */}
             <div className="md:col-span-7 lg:col-span-8 space-y-5 sm:space-y-6">
-              {/* Genre & Availability Badge */}
+              {/* Genre and availability badges */}
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] text-xs font-extrabold px-3 py-1 rounded-full">
-                  {bookDetail.category?.map((category) => (
-                    <span key={category.id}>{category.name}</span>
-                  ))}
-                </span>
+                {genreLabel && (
+                  <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#0E6760] text-xs font-extrabold px-3 py-1 rounded-full">
+                    {genreLabel}
+                  </span>
+                )}
                 <span className="inline-flex items-center gap-1.5 bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-xs font-bold px-3 py-1 rounded-full">
                   <span className="h-2 w-2 rounded-full bg-[#17A296] animate-pulse" />
                   <span>{t("bookDetail.available")}</span>
                 </span>
               </div>
 
-              {/* Title & Author */}
+              {/* Book title and author link */}
               <div className="space-y-2">
                 <h1
                   id="book-detail-title"
                   className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0E6760] tracking-tight leading-tight"
                 >
-                  {bookDetail.title }
+                  {title}
                 </h1>
                 <p className="text-base sm:text-lg text-[#4A6B68] font-semibold">
                   {lang === "fa" ? "اثر: " : "By "}
@@ -316,19 +321,18 @@ export default function BookDetail() {
                     to="/author"
                     className="text-[#0E6760] hover:text-[#17A296] hover:underline underline-offset-4 transition-colors"
                   >
-                    {bookDetail.author?.name} {bookDetail.author?.last_name}
+                    {authorName}
                   </Link>
                 </p>
               </div>
 
-              {/* Rating & Reviews Bar */}
+              {/* Rating, review count, and shelf location */}
               <div className="flex flex-wrap items-center gap-3 py-2 border-y border-[#D0E8E6]/60">
+                {/* Star rating value */}
                 <div className="flex items-center gap-1 text-sm font-extrabold text-[#0A2E2C]">
                   <Star size={16} className="fill-[#F59E0B] text-[#F59E0B]" />
                   <span>{book.rating}</span>
-                  <span className="text-xs text-[#4A6B68] font-medium">
-                    / 5.0
-                  </span>
+                  <span className="text-xs text-[#4A6B68] font-medium">/ 5.0</span>
                 </div>
                 <span className="text-[#D0E8E6] font-bold">•</span>
                 <span className="text-xs sm:text-sm text-[#4A6B68] font-medium">
@@ -340,28 +344,29 @@ export default function BookDetail() {
                 </span>
               </div>
 
-              {/* Key Specs Quick Grid */}
+              {/* 4 quick info boxes: Pages, Format, Published Year, File Size */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {/* Pages count box */}
                 <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
                   <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
                     {t("bookDetail.pages")}
                   </span>
                   <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block">
-                    {book.pages
-                      ? `${book.pages} ${lang === "fa" ? "صفحه" : "pp"}`
-                      : book.duration || "—"}
+                    {pagesText}
                   </span>
                 </div>
 
+                {/* Format box */}
                 <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
                   <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
                     {t("bookDetail.format")}
                   </span>
                   <span className="text-sm sm:text-base font-extrabold text-[#0E6760] mt-0.5 block uppercase">
-                    {book.format}
+                    {book.format || "ebook"}
                   </span>
                 </div>
 
+                {/* Published year box */}
                 <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
                   <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
                     {t("bookDetail.published")}
@@ -371,6 +376,7 @@ export default function BookDetail() {
                   </span>
                 </div>
 
+                {/* File size box */}
                 <div className="bg-[#F6FBFA] border border-[#D0E8E6] rounded-2xl p-3 text-center sm:text-start">
                   <span className="text-[11px] font-bold text-[#4A6B68] uppercase tracking-wider block">
                     {t("bookDetail.fileSize")}
@@ -381,8 +387,8 @@ export default function BookDetail() {
                 </div>
               </div>
 
-              {/* Notable Excerpt Callout */}
-              {bookDetail.quote && (
+              {/* Highlighted book quote box */}
+              {quote && (
                 <div className="relative rounded-2xl bg-[#E6F4F3]/70 border border-[#D0E8E6] p-4 sm:p-5">
                   <Quote
                     size={22}
@@ -390,401 +396,39 @@ export default function BookDetail() {
                     aria-hidden="true"
                   />
                   <p className="text-xs sm:text-sm italic font-medium text-[#0E6760] leading-relaxed pr-6 rtl:pr-0 rtl:pl-6">
-                    &ldquo;{bookDetail.quote}&rdquo;
+                    &ldquo;{quote}&rdquo;
                   </p>
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              {/* Primary action button: Download Book */}
+              <div className="flex items-center pt-2">
                 <button
                   type="button"
-                  onClick={handleBorrow}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-extrabold text-sm sm:text-base transition-all shadow-library-md active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
-                    isBorrowed
+                  onClick={handleDownload}
+                  className={`w-full sm:w-auto sm:min-w-[240px] flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-extrabold text-sm sm:text-base transition-all shadow-library-md active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] ${
+                    isDownloaded
                       ? "bg-[#236D64] text-[#FFFFFF]"
                       : "bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF]"
                   }`}
                 >
-                  {isBorrowed ? (
+                  {isDownloaded ? (
                     <>
-                      <CheckCircle2 size={18} />
-                      <span>
-                        {lang === "fa"
-                          ? "امانت گرفته شد"
-                          : "Borrowed (Active Loan)"}
-                      </span>
+                      <CheckCircle2 size={18} aria-hidden="true" />
+                      <span>{t("bookDetail.downloaded")}</span>
                     </>
                   ) : (
                     <>
-                      <BookOpen size={18} />
-                      <span>{t("bookDetail.borrow")}</span>
+                      <Download size={18} aria-hidden="true" />
+                      <span>{t("bookDetail.downloadBook")}</span>
                     </>
                   )}
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    showToast(t("bookDetail.downloadSuccess"));
-                  }}
-                  className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#E6F4F3] hover:bg-[#D0E8E6] border border-[#D0E8E6] text-[#0E6760] font-extrabold text-sm sm:text-base transition-colors active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-                >
-                  <Download size={18} />
-                  <span>{t("bookDetail.download")}</span>
-                </button>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Content Navigation Tabs */}
-        <section aria-label="Book In-Depth Information" className="space-y-6">
-          <div className="flex items-center gap-2 border-b border-[#D0E8E6] pb-2 overflow-x-auto">
-            <button
-              type="button"
-              onClick={() => setActiveTab("overview")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "overview"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <FileText size={15} />
-              <span>{t("bookDetail.overview")}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("specs")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "specs"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <Layers size={15} />
-              <span>{t("bookDetail.specifications")}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("reviews")}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all shrink-0 flex items-center gap-2 ${
-                activeTab === "reviews"
-                  ? "bg-[#0E6760] text-[#FFFFFF] shadow-library-sm"
-                  : "bg-transparent text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3]"
-              }`}
-            >
-              <Star size={15} />
-              <span>{t("bookDetail.reviews")}</span>
-            </button>
-          </div>
-
-          {/* Tab 1: Overview & Synopsis */}
-          {activeTab === "overview" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 space-y-6 shadow-library-sm animate-fade-in">
-              <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] flex items-center gap-2">
-                  <BookOpen size={18} className="text-[#17A296]" />
-                  <span>{t("bookDetail.overview")}</span>
-                </h2>
-                <p className="text-sm sm:text-base text-[#4A6B68] leading-relaxed font-normal">
-                  {bookDetail.description}
-                </p>
-              </div>
-
-              {bookDetail.quote && (
-                <div className="border-t border-[#D0E8E6]/60 pt-5 space-y-2">
-                  <h3 className="text-xs sm:text-sm font-extrabold text-[#236D64] uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles size={14} className="text-[#17A296]" />
-                    <span>{t("bookDetail.curatorNote")}</span>
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] italic font-medium leading-relaxed bg-[#F6FBFA] border border-[#D0E8E6] p-4 rounded-2xl">
-                    {bookDetail.quote }
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Tab 2: Specifications & Archival Info */}
-          {activeTab === "specs" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 shadow-library-sm animate-fade-in">
-              <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] mb-5 flex items-center gap-2">
-                <Layers size={18} className="text-[#17A296]" />
-                <span>{t("bookDetail.specifications")}</span>
-              </h2>
-
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <BarcodeIcon className="text-[#17A296] shrink-0" />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.isbn")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.isbn}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Building2 className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.publisher")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {bookDetail.publisher}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Calendar className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.published")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.publishedYear}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Globe2 className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.language")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {getLocalized(book.language, lang)}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <FolderTree className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.shelfLocation")}
-                    </dt>
-                    <dd className="font-extrabold text-[#0A2E2C] mt-0.5">
-                      {book.shelf}
-                    </dd>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6]">
-                  <Info className="text-[#17A296] shrink-0" size={18} />
-                  <div>
-                    <dt className="text-[#4A6B68] font-bold text-[11px] uppercase tracking-wider">
-                      {t("bookDetail.availableCopies")}
-                    </dt>
-                    <dd className="font-extrabold text-[#236D64] mt-0.5">
-                      {t("bookDetail.available")}
-                    </dd>
-                  </div>
-                </div>
-              </dl>
-            </div>
-          )}
-
-          {/* Tab 3: Reader Reviews */}
-          {activeTab === "reviews" && (
-            <div className="bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl p-6 sm:p-8 space-y-6 shadow-library-sm animate-fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D0E8E6]/60 pb-6">
-                <div>
-                  <h2 className="text-lg sm:text-xl font-extrabold text-[#0E6760] flex items-center gap-2">
-                    <Star size={18} className="text-[#F59E0B] fill-[#F59E0B]" />
-                    <span>{t("bookDetail.reviews")}</span>
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] mt-1 font-medium">
-                    {book.reviews} {t("bookCard.reviews")} •{" "}
-                    {lang === "fa" ? "میانگین نمره: " : "Average rating: "}{" "}
-                    {book.rating} / 5.0
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    showToast(
-                      lang === "fa"
-                        ? "بخش ثبت نظر در حال حاضر برای اعضای رسمی فعال است."
-                        : "Review submission is open to verified scholars.",
-                    )
-                  }
-                  className="px-4 py-2 rounded-xl bg-[#0E6760] hover:bg-[#17A296] text-[#FFFFFF] text-xs font-bold transition-colors shrink-0"
-                >
-                  {lang === "fa"
-                    ? "ثبت دیدگاه یا یادداشت"
-                    : "Write a Reflection"}
-                </button>
-              </div>
-
-              {/* Sample scholarly reviews */}
-              <div className="space-y-4">
-                <article className="p-4 sm:p-5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6] space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#0E6760] text-[#FFFFFF] flex items-center justify-center font-bold text-xs">
-                        EA
-                      </div>
-                      <div>
-                        <h4 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C]">
-                          Eleanor Vance
-                        </h4>
-                        <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa"
-                            ? "عضو پیوسته بایگانی • ۲ هفته قبل"
-                            : "Curator Fellow • 2 weeks ago"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-[#F59E0B]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} className="fill-[#F59E0B]" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] leading-relaxed pt-1">
-                    {lang === "fa"
-                      ? "یکی از غنی‌ترین و ماندگارترین متونی که تاکنون در آرشیو کتابخانه مطالعه کرده‌ام. نگارش، ساختار روایی و عمق اندیشه در بالاترین سطح قرار دارد."
-                      : "A monumental achievement in literary form. The cadence of the language and emotional clarity render this an indispensable volume for any serious reader."}
-                  </p>
-                </article>
-
-                <article className="p-4 sm:p-5 rounded-2xl bg-[#F6FBFA] border border-[#D0E8E6] space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-[#17A296] text-[#FFFFFF] flex items-center justify-center font-bold text-xs">
-                        TH
-                      </div>
-                      <div>
-                        <h4 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C]">
-                          Tariq Haidari
-                        </h4>
-                        <span className="text-[11px] text-[#4A6B68]">
-                          {lang === "fa"
-                            ? "پژوهشگر فلسفه و ادبیات • ۱ ماه قبل"
-                            : "Literature Scholar • 1 month ago"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-[#F59E0B]">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} className="fill-[#F59E0B]" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs sm:text-sm text-[#4A6B68] leading-relaxed pt-1">
-                    {lang === "fa"
-                      ? "کیفیت ترجمه، دقت در جزئیات تاریخی و ساختار فلسفی اثر بی‌نظیر است. خواندن آن را به همه پژوهشگران توصیه می‌کنم."
-                      : "Remarkable precision and philosophical insight. The annotations and editorial rigor make this digital edition particularly pleasurable to examine."}
-                  </p>
-                </article>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Related Books Section */}
-        {relatedBooks.length > 0 && (
-          <section aria-labelledby="related-heading" className="space-y-4 pt-4">
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-[#17A296] uppercase tracking-wider block">
-                {t("bookDetail.relatedTitle")}
-              </span>
-              <h2
-                id="related-heading"
-                className="text-xl sm:text-2xl font-extrabold text-[#0E6760] tracking-tight"
-              >
-                {t("bookDetail.relatedSubtitle")}
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              {relatedBooks.map((relBook) => {
-                const relTitle = getLocalized(relBook.title, lang);
-                const relAuthor = getLocalized(relBook.author, lang);
-                return (
-                  <article
-                    key={relBook.id}
-                    className="flex flex-col bg-[#FFFFFF] p-3 sm:p-4 rounded-2xl border border-[#D0E8E6] space-y-3 relative group hover:-translate-y-1 hover:border-[#17A296] hover:shadow-library-hover transition-all duration-300"
-                  >
-                    <Link
-                      to={`/book/${relBook.id}`}
-                      className="relative overflow-hidden rounded-xl bg-[#E6F4F3] aspect-[2/3] w-full border border-[#D0E8E6]/60 block"
-                    >
-                      <img
-                        src={relBook.cover}
-                        alt={relTitle}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </Link>
-
-                    <div className="space-y-1 flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 text-xs text-[#0A2E2C] font-bold">
-                        <Star
-                          size={12}
-                          className="fill-[#17A296] text-[#17A296]"
-                          aria-hidden="true"
-                        />
-                        <span>{relBook.rating}</span>
-                      </div>
-                      <Link to={`/book/${relBook.id}`} className="block">
-                        <h3 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C] truncate leading-snug hover:text-[#0E6760]">
-                          {relTitle}
-                        </h3>
-                      </Link>
-                      <p className="text-xs text-[#4A6B68] truncate font-medium">
-                        {relAuthor}
-                      </p>
-                    </div>
-
-                    <div className="pt-1 mt-auto border-t border-[#D0E8E6]/50">
-                      <Link
-                        to={`/book/${relBook.id}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-[#E6F4F3] hover:bg-[#0E6760] text-[#0E6760] hover:text-[#FFFFFF] text-xs font-bold transition-colors active:scale-95"
-                      >
-                        <Info size={13} />
-                        <span>{t("bookCard.detail")}</span>
-                      </Link>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-        )}
       </div>
     </main>
-  );
-}
-
-function BarcodeIcon(props) {
-  return (
-    <svg
-      {...props}
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M3 5v14" />
-      <path d="M8 5v14" />
-      <path d="M12 5v14" />
-      <path d="M17 5v14" />
-      <path d="M21 5v14" />
-    </svg>
   );
 }

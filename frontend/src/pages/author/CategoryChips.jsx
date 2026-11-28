@@ -9,6 +9,9 @@ const categoryNamesFa = {
   "Poetry & Drama": "شعر و نمایشنامه",
 };
 
+/**
+ * Filterable category pills with dynamic per-category author counts.
+ */
 export default function CategoryChips({ categories, counts, active, onChange }) {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";

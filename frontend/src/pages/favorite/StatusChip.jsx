@@ -6,6 +6,9 @@ const tones = {
   audio: { box: "bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64]", icon: Clock },
 };
 
+/**
+ * Mobile status pill displaying availability or audio duration for a saved book.
+ */
 export default function StatusChip({ status, badge }) {
   const { box, icon: Icon } = (status && tones[status.type]) || tones.available;
   const label = status?.type === "audio" ? `${badge || ""} • ${status?.label || ""}` : (status?.label || "");

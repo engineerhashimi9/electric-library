@@ -3,6 +3,9 @@ import { Cloud, ChevronDown, LayoutGrid, Rows3, ArrowDownWideNarrow } from "luci
 import { useTranslation } from "react-i18next";
 import { sortOptions } from "./favorites";
 
+/**
+ * Responsive sorting and grid/list layout toolbar for the Favorites shelf.
+ */
 export default function ShelfToolbar({
   total,
   sort,
@@ -68,6 +71,7 @@ export default function ShelfToolbar({
       {/* Tablet & Desktop Toolbar */}
       <div className="hidden items-center justify-between gap-4 rounded-2xl bg-[#FFFFFF] border border-[#D0E8E6] px-5 py-3.5 shadow-library-sm md:flex">
         <div className="flex min-w-0 items-center gap-3">
+          {/*  favroite books تعدادا */}
           <h2 className="whitespace-nowrap text-base lg:text-lg font-extrabold text-[#0E6760]">
             {t("favorites.toolbar.worksCataloged", { total, defaultValue: `${total} Works Cataloged` })}
           </h2>

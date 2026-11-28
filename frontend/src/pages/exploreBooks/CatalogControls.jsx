@@ -1,9 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { SearchField } from "./SearchFeild";
+import { SearchField } from "./SearchField";
 import { ViewToggle } from "./ViewToggle";
 import { genres } from "./data";
 import { getLocalized } from "@/utils/langHelper";
 
+/**
+ * Search bar, mobile sort/layout bar, and horizontal genre chip selector
+ * controlling the Explore Library catalog view.
+ */
 export default function CatalogControls({
   query,
   onQueryChange,
@@ -27,6 +31,7 @@ export default function CatalogControls({
         placeholder={t("explore.search.placeholder")}
       />
 
+      {/* Mobile-only sort selector and grid/list toggle */}
       <div className="flex flex-wrap items-center justify-between gap-3 lg:hidden">
         <label className="relative min-w-0 flex-1 sm:flex-none">
           <select
@@ -43,18 +48,19 @@ export default function CatalogControls({
         <ViewToggle view={view} onChange={onViewChange} />
       </div>
 
+      {/* Scrollable/wrapping genre filter chips */}
       <div
         className="flex gap-2 sm:gap-2.5 overflow-x-auto pb-1.5 lg:flex-wrap no-scrollbar"
         aria-label="Genre filters"
       >
-        {genres.map((item, idx) => {
+        {genres.map((item) => {
           const itemVal = typeof item === "object" ? item.en : item;
           const label = getLocalized(item, lang);
           const isSelected = genre === itemVal || genre === label;
 
           return (
             <button
-              key={idx}
+              key={itemVal}
               type="button"
               aria-pressed={isSelected}
               onClick={() => onGenreChange(itemVal)}

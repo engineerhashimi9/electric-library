@@ -7,9 +7,15 @@ import Avatar from "./ui/Avatar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import BrandLogo from "./ui/BrandLogo";
 
+/**
+ * Primary responsive navigation bar (Desktop/Tablet top header + Mobile compact header).
+ * Automatically hides Sign In / Sign Up actions once a user is authenticated
+ * and displays the patron's avatar, name, and Sign Out button instead.
+ */
 export default function Navbar() {
-  const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
+  const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -17,6 +23,7 @@ export default function Navbar() {
     navigate("/signin");
   };
 
+  // Top-level catalog navigation routes
   const navItems = [
     { label: t("nav.home"), to: "/" },
     { label: t("nav.explore"), to: "/explorebooks" },
@@ -64,17 +71,18 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3 lg:gap-4 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="relative w-40 lg:w-60 xl:w-72">
+            <div className="flex items-center gap-2 w-40 lg:w-60 xl:w-72 bg-[#FFFFFF] border border-[#D0E8E6] px-3 py-2 rounded-xl focus-within:border-[#17A296] focus-within:ring-2 focus-within:ring-[#17A296]/20 shadow-library-sm transition-all">
               <Search
-                className="absolute left-3.5 rtl:left-auto rtl:right-3.5 top-1/2 -translate-y-1/2 text-[#236D64] pointer-events-none"
+                className="text-[#236D64] pointer-events-none shrink-0"
                 size={16}
                 aria-hidden="true"
               />
               <input
                 type="search"
+                dir={isRtl ? "rtl" : "ltr"}
                 aria-label={t("nav.searchPlaceholder")}
                 placeholder={t("nav.searchPlaceholder")}
-                className="w-full bg-[#FFFFFF] border border-[#D0E8E6] text-[#0A2E2C] placeholder-[#4A6B68]/70 text-xs sm:text-sm pl-10 pr-3 rtl:pl-3 rtl:pr-10 py-2 rounded-xl focus-visible:outline-none focus:border-[#17A296] focus:ring-2 focus:ring-[#17A296]/20 shadow-library-sm transition-all"
+                className="w-full min-w-0 flex-1 bg-transparent text-[#0A2E2C] placeholder-[#4A6B68]/70 text-xs sm:text-sm text-start outline-none"
               />
             </div>
 
@@ -93,7 +101,7 @@ export default function Navbar() {
             >
               <img
                 className="w-4 h-4 opacity-80"
-                src="./noticification.png"
+                src="/noticification.png"
                 alt=""
                 aria-hidden="true"
               />
@@ -102,25 +110,21 @@ export default function Navbar() {
 
           <LanguageSwitcher compact />
 
-          {user ? (
+          {/* Show user account controls when logged in; otherwise show Sign In / Sign Up */}
+          {isAuthenticated ? (
             <div className="flex items-center gap-2.5 border-l rtl:border-l-0 rtl:border-r border-[#D0E8E6] pl-3 rtl:pl-0 rtl:pr-3">
               <Avatar
                 name={user.name}
                 className="w-9 h-9 text-xs border-2 border-[#D0E8E6] shrink-0 shadow-library-sm"
               />
-              <div className="hidden xl:block text-start max-w-[140px]">
-                <p className="text-xs font-bold text-[#0E6760] leading-tight truncate">
-                  {user.name}
-                </p>
-                <p className="text-[11px] text-[#4A6B68] font-medium truncate">
-                  {t("nav.userRole")}
-                </p>
-              </div>
+              <p className="hidden xl:block text-start max-w-[160px] text-xs font-bold text-[#0E6760] leading-tight truncate">
+                {user.name}
+              </p>
               <button
                 type="button"
                 onClick={handleLogout}
-                title={t("nav.signIn")}
-                aria-label="Sign out"
+                title={t("nav.signOut")}
+                aria-label={t("nav.signOut")}
                 className="p-2 rounded-xl text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
               >
                 <LogOut size={16} aria-hidden="true" />
@@ -178,7 +182,7 @@ export default function Navbar() {
           >
             <Search size={18} />
           </NavLink>
-          {user ? (
+          {isAuthenticated ? (
             <div className="flex items-center gap-1.5">
               <Avatar
                 name={user.name}
@@ -187,7 +191,8 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleLogout}
-                aria-label="Sign out"
+                title={t("nav.signOut")}
+                aria-label={t("nav.signOut")}
                 className="p-2 bg-[#FFFFFF] border border-[#D0E8E6] rounded-xl text-[#4A6B68] hover:text-[#0E6760] hover:bg-[#E6F4F3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
               >
                 <LogOut size={16} aria-hidden="true" />

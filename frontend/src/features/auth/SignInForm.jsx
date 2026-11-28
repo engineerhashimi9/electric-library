@@ -1,24 +1,40 @@
 import React, { useState } from "react";
-import { User,Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { loginRequest } from "@/api/auth/login";
 import { Input } from "@/component/ui/Input";
 import { Button } from "@/component/ui/Button";
 import { Checkbox } from "@/component/ui/Checkbox";
 import LanguageSwitcher from "@/component/LanguageSwitcher";
-import { login } from "../../api/auth/login";
 
+/**
+ * Sign-In form component handling client-side validation, backend authentication,
+ * and synchronization with AuthContext upon successful login.
+ */
 export const SignInForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { login: setAuthUser } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("clara.vane@lumina.org");
-  const [password, setPassword] = useState("archival-scholar-2024");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = {};
 
@@ -35,26 +51,27 @@ export const SignInForm = () => {
     }
 
     setErrors({});
-    const rawName = email.split("@")[0].replace(/[._-]+/g, " ");
-    const formattedName = rawName
-      .split(" ")
-      .filter(Boolean)
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
+    setIsSubmitting(true);
 
-    login({
-      email: email.trim(),
-      password: password,
-    });
-    setSubmitted(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 800);
+    try {
+      const result = await loginRequest(email.trim(), password);
+      setSubmitted(true);
+      setAuthUser(result.user);
+      navigate("/", { replace: true });
+    } catch (error) {
+      const apiMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        t("auth.errors.loginFailed");
+      setErrors({ form: apiMessage });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto p-5 sm:p-8 space-y-6 bg-[#FFFFFF] border border-[#D0E8E6] rounded-3xl shadow-library-lg text-[#0A2E2C]">
-      {/* Banner / Top Badge */}
+    <div className="w-full p-5 sm:p-8 lg:p-10 space-y-5 text-[#0A2E2C]">
+      {/* Top Desk Badge & Language Switcher */}
       <div className="flex items-center justify-between gap-2 text-xs text-[#4A6B68]">
         <span className="px-3 py-1 bg-[#E6F4F3] border border-[#D0E8E6] rounded-full text-[#236D64] font-bold">
           {t("auth.desk")}
@@ -63,7 +80,7 @@ export const SignInForm = () => {
       </div>
 
       {/* Main Heading */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <span className="text-xs font-bold text-[#236D64] tracking-wider uppercase block">
           {t("nav.brand")} • {t("nav.signIn")}
         </span>
@@ -75,18 +92,26 @@ export const SignInForm = () => {
         </p>
       </div>
 
-      {/* Status Alert Card */}
-      {submitted ? (
+      {/* Status / Error Banner */}
+      {errors.form ? (
+        <div
+          role="alert"
+          className="bg-red-50 border border-red-200 p-3.5 rounded-2xl flex items-center gap-3 text-xs sm:text-sm text-red-700 font-bold"
+        >
+          <AlertCircle className="text-red-600 shrink-0" size={20} aria-hidden="true" />
+          <span>{errors.form}</span>
+        </div>
+      ) : submitted ? (
         <div
           role="status"
           aria-live="polite"
-          className="bg-[#E6F4F3] border border-[#17A296] p-4 rounded-2xl flex items-center gap-3 text-xs sm:text-sm text-[#0E6760] font-bold"
+          className="bg-[#E6F4F3] border border-[#17A296] p-3.5 rounded-2xl flex items-center gap-3 text-xs sm:text-sm text-[#0E6760] font-bold"
         >
           <CheckCircle2 className="text-[#17A296] shrink-0" size={20} aria-hidden="true" />
           <span>{t("auth.signInSuccess")}</span>
         </div>
       ) : (
-        <div className="bg-[#E6F4F3] border border-[#D0E8E6] p-3.5 sm:p-4 rounded-2xl flex items-start gap-3 text-xs sm:text-sm text-[#0E6760]">
+        <div className="bg-[#E6F4F3]/80 border border-[#D0E8E6] p-3.5 rounded-2xl flex items-start gap-3 text-xs sm:text-sm text-[#0E6760]">
           <ShieldCheck className="text-[#17A296] shrink-0 mt-0.5" size={20} aria-hidden="true" />
           <div className="space-y-0.5">
             <p className="font-bold text-[#0E6760]">{t("auth.cloudActive")}</p>
@@ -97,18 +122,20 @@ export const SignInForm = () => {
         </div>
       )}
 
-      {/* Input Fields */}
+      {/* Credential Form */}
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
-
         <Input
           label={t("auth.emailLabel")}
           type="email"
-          placeholder="clara.vane@lumina.org"
+          placeholder={t("auth.emailPlaceholder")}
+          autoComplete="email"
           icon={Mail}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
-            if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+            if (errors.email || errors.form) {
+              setErrors((prev) => ({ ...prev, email: "", form: "" }));
+            }
           }}
           error={errors.email}
           required
@@ -118,12 +145,15 @@ export const SignInForm = () => {
           label={t("auth.passLabel")}
           helperText={t("auth.forgotKey")}
           type={showPassword ? "text" : "password"}
-          placeholder="••••••••••••"
+          placeholder={t("auth.passwordPlaceholder")}
+          autoComplete="current-password"
           icon={Lock}
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+            if (errors.password || errors.form) {
+              setErrors((prev) => ({ ...prev, password: "", form: "" }));
+            }
           }}
           error={errors.password}
           rightElement={
@@ -139,7 +169,7 @@ export const SignInForm = () => {
           required
         />
 
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center justify-between pt-0.5">
           <Checkbox
             id="keep-active"
             label={t("auth.keepActive")}
@@ -152,10 +182,10 @@ export const SignInForm = () => {
           variant="primary"
           fullWidth
           size="lg"
-          disabled={submitted}
-          className="mt-2 font-bold flex items-center justify-center gap-2"
+          disabled={isSubmitting || submitted}
+          className="font-bold flex items-center justify-center gap-2"
         >
-          <span>{t("auth.submit")}</span>
+          <span>{isSubmitting ? t("common.loading") : t("auth.submit")}</span>
           <ArrowRight size={18} className="rtl:rotate-180" aria-hidden="true" />
         </Button>
       </form>
@@ -164,13 +194,14 @@ export const SignInForm = () => {
       <div className="space-y-3 pt-1">
         <div className="relative flex items-center justify-center">
           <div className="border-t border-[#D0E8E6] w-full" />
-          <span className="bg-[#FFFFFF] px-3 text-[11px] text-[#4A6B68] font-bold uppercase tracking-wider absolute">
+          <span className="bg-[#FFFFFF] px-3 text-[11px] text-[#4A6B68] font-bold uppercase tracking-wider relative">
             {t("auth.orContinue")}
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <Button
+            type="button"
             variant="outline"
             fullWidth
             className="justify-center gap-2 text-xs font-bold"
@@ -179,21 +210,22 @@ export const SignInForm = () => {
             <span>{t("auth.google")}</span>
           </Button>
           <Button
+            type="button"
             variant="outline"
             fullWidth
             className="justify-center gap-2 text-xs font-bold"
           >
-            <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-[11px] px-1.5 py-0.5 rounded-md font-bold">
+            <span className="bg-[#E6F4F3] border border-[#D0E8E6] text-[#236D64] text-[11px] px-1.5 py-0.5 rounded-md font-bold shrink-0">
               EduID
             </span>
-            <span className="truncate">{t("auth.sso")}</span>
+            <span>{t("auth.sso")}</span>
           </Button>
         </div>
       </div>
 
       {/* Footer Links */}
-      <div className="text-center space-y-2 pt-2 border-t border-[#D0E8E6]/60 text-xs sm:text-sm">
-        <p className="text-[#4A6B68] font-medium pt-2">
+      <div className="text-center space-y-1.5 pt-3 border-t border-[#D0E8E6]/60 text-xs sm:text-sm">
+        <p className="text-[#4A6B68] font-medium">
           {t("auth.newMember")}{" "}
           <Link
             to="/signup"

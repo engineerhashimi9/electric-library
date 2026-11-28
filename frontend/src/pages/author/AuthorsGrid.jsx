@@ -2,6 +2,9 @@ import AuthorCard from "./AuthorCard";
 import AuthorListItem from "./AuthorListItem";
 import EmptyState from "./EmptyState";
 
+/**
+ * Renders either Grid cards or List rows of filtered authors, or EmptyState when empty.
+ */
 export default function AuthorsGrid({ authors, view, followed, onToggleFollow, onReset }) {
   if (authors.length === 0) return <EmptyState onReset={onReset} />;
 

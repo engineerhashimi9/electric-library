@@ -8,6 +8,9 @@ const categoryNamesFa = {
   "Rare First Editions": "چاپ اول‌های کمیاب",
 };
 
+/**
+ * Category filter tabs displaying localized collection names and item counts.
+ */
 export default function CategoryTabs({ categories, counts, active, onChange }) {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";

@@ -2,6 +2,9 @@ import { BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Eyebrow from "@/component/ui/Eyebrow";
 
+/**
+ * Hero header for the Explore Books catalog introducing the archival collection.
+ */
 export default function CatalogHero() {
   const { t } = useTranslation();
 

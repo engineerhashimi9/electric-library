@@ -1,6 +1,9 @@
 import { Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Primary download action button used in Favorites book cards and list items.
+ */
 export default function ActionButton({ onClick, className = "" }) {
   const { i18n, t } = useTranslation();
   const isFa = i18n.language === "fa";

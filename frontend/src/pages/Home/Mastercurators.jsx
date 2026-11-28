@@ -3,12 +3,18 @@ import { Link } from "react-router-dom";
 import AuthorCard from "./AuthorCard";
 import Eyebrow from "@/component/ui/Eyebrow";
 
+/**
+ * MasterCurators
+ * Displays a 2-to-4 column grid of featured authors on the Home page.
+ */
 export default function MasterCurators({ authors }) {
   const { t } = useTranslation();
 
   return (
     <section aria-labelledby="curators-heading" className="space-y-5">
+      {/* Section header row: title on the left, "View All" link on the right */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        {/* Section eyebrow, title, and subtitle */}
         <div className="space-y-1">
           <Eyebrow>{t("home.curators.eyebrow")}</Eyebrow>
           <h2 id="curators-heading" className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0E6760] tracking-tight">
@@ -18,6 +24,7 @@ export default function MasterCurators({ authors }) {
             {t("home.curators.subtitle")}
           </p>
         </div>
+
         <Link
           to="/author"
           className="text-xs sm:text-sm font-bold text-[#0E6760] hover:text-[#17A296] hover:underline underline-offset-4 transition-colors shrink-0 self-start sm:self-end focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296] rounded"
@@ -26,9 +33,10 @@ export default function MasterCurators({ authors }) {
         </Link>
       </div>
 
+      {/* Responsive grid of AuthorCard items */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-        {authors.map((author, idx) => (
-          <AuthorCard key={idx} author={author} />
+        {authors.map((author) => (
+          <AuthorCard key={author.name.en} author={author} />
         ))}
       </div>
     </section>

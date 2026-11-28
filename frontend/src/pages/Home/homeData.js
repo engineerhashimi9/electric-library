@@ -1,3 +1,7 @@
+/**
+ * Default fallback user profile and curated static dataset for the Home page.
+ * All titles, labels, and descriptions support English (`en`) and Dari (`fa`).
+ */
 export const user = { name: "Clara", streakDays: 14 };
 
 export const spotlightBook = {
@@ -46,20 +50,20 @@ export const popularBooks = [
 ];
 
 export const themes = [
-  { name: { en: "Literary Fiction", fa: "ادبیات داستانی" }, works: { en: "18,400 works", fa: "۱۸٬۴۰۰ اثر" }, icon: "./litrary.png" },
+  { name: { en: "Literary Fiction", fa: "ادبیات داستانی" }, works: { en: "18,400 works", fa: "۱۸٬۴۰۰ اثر" }, icon: "/litrary.png" },
   {
     name: { en: "Philosophy & Ethics", fa: "فلسفه و اخلاق" },
     works: { en: "12,150 works", fa: "۱۲٬۱۵۰ اثر" },
-    icon: "./philosophy.png",
+    icon: "/philosophy.png",
   },
   {
     name: { en: "Historical Chronicles", fa: "وقایع‌نگاری تاریخی" },
     works: { en: "15,800 works", fa: "۱۵٬۸۰۰ اثر" },
-    icon: "./historical.png",
+    icon: "/historical.png",
   },
-  { name: { en: "Speculative & Sci-Fi", fa: "علمی تخیلی و نظری" }, works: { en: "9,420 works", fa: "۹٬۴۲۰ اثر" }, icon: "./sci-fi.png" },
-  { name: { en: "Classics & Poetry", fa: "کلاسیک و شعر" }, works: { en: "21,050 works", fa: "۲۱٬۰۵۰ اثر" }, icon: "./poetry.png" },
-  { name: { en: "Art & Architecture", fa: "هنر و معماری" }, works: { en: "7,300 works", fa: "۷٬۳۰۰ اثر" }, icon: "./art.png" },
+  { name: { en: "Speculative & Sci-Fi", fa: "علمی تخیلی و نظری" }, works: { en: "9,420 works", fa: "۹٬۴۲۰ اثر" }, icon: "/sci-fi.png" },
+  { name: { en: "Classics & Poetry", fa: "کلاسیک و شعر" }, works: { en: "21,050 works", fa: "۲۱٬۰۵۰ اثر" }, icon: "/poetry.png" },
+  { name: { en: "Art & Architecture", fa: "هنر و معماری" }, works: { en: "7,300 works", fa: "۷٬۳۰۰ اثر" }, icon: "/art.png" },
 ];
 
 export const authors = [
@@ -68,39 +72,39 @@ export const authors = [
     title: { en: "Modernist & Bloomsbury", fa: "پیشگام مدرنیسم و حلقه بلومزبری" },
     description: {
       en: "Pioneered stream of consciousness, exploring structural interiority and temporal perception.",
-      fa: "پیشگام تکنیک جریان سیال ذهن و واکاوی ژرف درونیات روانی و زمان."
+      fa: "پیشگام تکنیک جریان سیال ذهن و واکاوی ژرف درونیات روانی و زمان.",
     },
     works: { en: "18 Works Preserved", fa: "۱۸ اثر در بایگانی" },
-    image: "./virginia-woolf.png",
+    image: "/virginia-woolf.png",
   },
   {
     name: { en: "Jorge Luis Borges", fa: "خورخه لوئیس بورخس" },
     title: { en: "Philosophical Fantasist", fa: "استاد داستان‌های فلسفی و معماگون" },
     description: {
       en: "Explored infinity, infinite libraries, labyrinths, mirrors, and metaphysical riddles.",
-      fa: "کاوشگر بی‌نهایت، کتابخانه‌های بی‌پایان، هزارتوها، آینه‌ها و معماهای متافیزیکی."
+      fa: "کاوشگر بی‌نهایت، کتابخانه‌های بی‌پایان، هزارتوها، آینه‌ها و معماهای متافیزیکی.",
     },
     works: { en: "24 Works Preserved", fa: "۲۴ اثر در بایگانی" },
-    image: "./jorge-luis-borges.png",
+    image: "/jorge-luis-borges.png",
   },
   {
     name: { en: "Gabriel García Márquez", fa: "گابریل گارسیا مارکز" },
     title: { en: "Magical Realism Titan", fa: "ستون استوار رئالیسم جادویی" },
     description: {
       en: "Wove mythic generational epics set against the vibrant landscapes of Latin America.",
-      fa: "آفریننده حماسه‌های نسلی اساطیری در بستر پرشور آمریکای لاتین."
+      fa: "آفریننده حماسه‌های نسلی اساطیری در بستر پرشور آمریکای لاتین.",
     },
     works: { en: "14 Works Preserved", fa: "۱۴ اثر در بایگانی" },
-    image: "./gabriel-garcia-marquez.png",
+    image: "/gabriel-garcia-marquez.png",
   },
   {
     name: { en: "Umberto Eco", fa: "اومبرتو اکو" },
     title: { en: "Semiotician & Novelist", fa: "نشانه‌شناس و رمان‌نویس برجسته" },
     description: {
       en: "Master of medieval scholastic mysteries, literary cryptography, and philosophical satire.",
-      fa: "استاد رازورزی‌های سده‌های میانه، رمزنگاری ادبی و طنز فلسفی."
+      fa: "استاد رازورزی‌های سده‌های میانه، رمزنگاری ادبی و طنز فلسفی.",
     },
     works: { en: "16 Works Preserved", fa: "۱۶ اثر در بایگانی" },
-    image: "./umberto-eco.png",
+    image: "/umberto-eco.png",
   },
 ];
