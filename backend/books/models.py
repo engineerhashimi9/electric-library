@@ -14,7 +14,8 @@ class Author(models.Model):
     email = models.EmailField(unique=True)
     job = models.CharField(max_length=200, default="")
     description = models.TextField(blank=True, null=True)
-
+    def __str__(self):
+        return f'{self.name}-{self.last_name}'
 
 
 # multi category for books
@@ -25,7 +26,8 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
-
+    def __str__(self):
+        return self.name
 
 
 
