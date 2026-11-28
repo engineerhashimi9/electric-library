@@ -1,0 +1,25 @@
+# Logs
+*.log
+logs/
+debug.log
+
+# Node & Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python & Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+.env
+venv/
+env/
+
+# Editor & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

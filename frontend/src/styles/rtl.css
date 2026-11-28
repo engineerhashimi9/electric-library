@@ -1,0 +1,48 @@
+/* ==========================================================================
+   RTL & Persian / Dari Typography Styles
+   ========================================================================== */
+
+[dir="rtl"],
+[dir="rtl"] body,
+[dir="rtl"] button,
+[dir="rtl"] select,
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  font-family: var(--font-rtl);
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] button,
+[dir="rtl"] a,
+[dir="rtl"] label {
+  /* Prevent letter-spacing from breaking Arabic script ligatures */
+  letter-spacing: 0 !important;
+  word-spacing: normal;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4 {
+  line-height: 1.4 !important;
+}
+
+[dir="rtl"] p {
+  line-height: 1.7 !important;
+}
+
+/* Mirror icons that point forward/backward */
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .rtl-rotate-180 {
+  transform: rotate(180deg);
+}

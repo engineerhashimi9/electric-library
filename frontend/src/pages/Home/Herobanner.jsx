@@ -1,57 +1,76 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import DesktopSpotlightCard from "./DesktopSpotlighttCard";
-import Eyebrow from "@/component/ui/Eyebrow";
+import { Sparkles, BookOpen, Users, ShieldCheck } from "lucide-react";
+import DesktopSpotlightCard from "./DesktopSpotlightCard";
+import Eyebrow from "@/components/ui/Eyebrow";
 
-/**
- * HeroBanner
- * Shown on tablet and desktop screens.
- * Displays the welcome headline, action buttons, and the featured book card.
- */
 export default function HeroBanner({ spotlightBook, name }) {
-  const { t } = useTranslation();
-
-  // Build the top eyebrow text with the user's name if available
-  const eyebrowText = name
-    ? `${name} • ${t("home.hero.eyebrow")}`
-    : t("home.hero.eyebrow");
+  const { t, i18n } = useTranslation();
+  const isFa = i18n.language === "fa";
 
   return (
-    <section
-      aria-label="Hero Spotlight"
-      className="hidden md:grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center bg-gradient-to-b from-[#E6F4F3] to-[#F4FAFA] p-6 lg:p-10 rounded-3xl border border-[#D0E8E6] shadow-library transition-all"
-    >
-      {/* Left side: welcome text and action buttons */}
-      <div className="lg:col-span-7 space-y-5 lg:space-y-6">
-        <Eyebrow>{eyebrowText}</Eyebrow>
+    <section aria-label="Hero Spotlight" className="hero-spotlight-banner">
+      <div className="hero-text-content">
+        <Eyebrow>
+          <Sparkles size={13} style={{ color: "var(--accent-gold)" }} />
+          <span>{name ? `${name} • ${t("home.hero.eyebrow")}` : t("home.hero.eyebrow")}</span>
+        </Eyebrow>
 
-        <h1 className="font-extrabold text-3xl lg:text-4xl xl:text-5xl text-[#0E6760] leading-tight tracking-tight">
-          {t("home.hero.title")}
-        </h1>
+        <h1 className="hero-title font-serif">{t("home.hero.title")}</h1>
 
-        <p className="text-sm lg:text-base text-[#4A6B68] leading-relaxed max-w-xl font-medium">
-          {t("home.hero.description")}
-        </p>
+        <p className="hero-description">{t("home.hero.description")}</p>
 
-        {/* Action buttons: Explore Catalog & Reading List */}
-        <div className="flex flex-wrap items-center gap-3.5 pt-2">
-          <Link
-            to="/explorebooks"
-            className="px-6 py-3 bg-[#17A296] text-[#FFFFFF] hover:bg-[#0E6760] text-sm font-bold rounded-xl transition-all shadow-library-sm hover:shadow-library active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-          >
+        <div className="hero-actions-row">
+          <Link to="/explorebooks" className="btn btn-primary btn-lg">
             {t("home.hero.exploreBtn")}
           </Link>
-          <Link
-            to="/favorite"
-            className="px-6 py-3 bg-[#FFFFFF] border border-[#D0E8E6] text-[#0E6760] hover:bg-[#E6F4F3] hover:border-[#17A296] text-sm font-bold rounded-xl transition-all shadow-library-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-          >
+          <Link to="/favorite" className="btn btn-outline btn-lg">
             {t("home.hero.readingListBtn")}
           </Link>
         </div>
+
+        {/* Live Library Archival Stats Bar */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1rem",
+            paddingTop: "1.25rem",
+            marginTop: "0.5rem",
+            borderTop: "1px solid var(--border-color)",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--primary)" }}>
+              14,200+
+            </span>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+              {isFa ? "آثار خطی و دیجیتال" : "Curated Volumes"}
+            </span>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--primary)" }}>
+              850+
+            </span>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+              {isFa ? "نویسندگان برجسته" : "Master Authors"}
+            </span>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--primary)" }}>
+              100%
+            </span>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+              {isFa ? "دسترسی آزاد و عمومی" : "Open Access"}
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Right side: featured book spotlight card */}
-      <div className="lg:col-span-5">
+      <div className="hero-card-column">
         <DesktopSpotlightCard book={spotlightBook} />
       </div>
     </section>

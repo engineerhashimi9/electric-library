@@ -1,97 +1,100 @@
 import React, { useState } from "react";
-import { Star, Heart, Info } from "lucide-react";
+import { Star, Heart, Info, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getLocalized } from "@/utils/langHelper";
+import { useFavoritesContext } from "@/context/FavoritesContext";
+import BookExcerptModal from "@/components/common/BookExcerptModal";
 
-/**
- * BookCard
- * Displays a single book in the PopularBooks grid with a favorite button,
- * cover image, rating, title, author, Detail link, and Borrow button.
- */
 export default function BookCard({ book }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
-
-  // Track whether this book is marked as favorite
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavoritesContext();
+  const [isExcerptOpen, setIsExcerptOpen] = useState(false);
 
   const title = getLocalized(book.title, lang);
   const author = getLocalized(book.author, lang);
+  const tag = getLocalized(book.tag, lang);
   const bookId = book.id || "meditations";
-
-  // Toggle the favorite heart state
-  function handleToggleFavorite() {
-    setIsFavorite(!isFavorite);
-  }
+  const favoriteActive = isFavorite(bookId);
 
   return (
-    <article className="flex flex-col bg-[#FFFFFF] p-3 sm:p-4 rounded-2xl border border-[#D0E8E6] space-y-3 relative group hover:-translate-y-1 hover:border-[#17A296] hover:shadow-library-hover transition-all duration-300">
-      <button
-        type="button"
-        onClick={handleToggleFavorite}
-        aria-label={isFavorite ? `Remove ${title} from favorites` : `Add ${title} to favorites`}
-        aria-pressed={isFavorite}
-        className="absolute top-4 right-4 rtl:right-auto rtl:left-4 p-2 bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] border border-[#D0E8E6] backdrop-blur rounded-full text-[#236D64] hover:text-[#17A296] z-10 transition-all shadow-library-sm active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-      >
-        <Heart
-          size={16}
-          className={isFavorite ? "fill-[#17A296] text-[#17A296]" : "text-[#4A6B68]"}
-        />
-      </button>
+    <>
+      <BookExcerptModal
+        book={book}
+        isOpen={isExcerptOpen}
+        onClose={() => setIsExcerptOpen(false)}
+      />
 
-      <Link
-        to={`/book/${bookId}`}
-        aria-label={`${title} ${t("bookCard.detail")}`}
-        className="relative overflow-hidden rounded-xl bg-[#E6F4F3] aspect-[2/3] w-full border border-[#D0E8E6]/60 block"
-      >
-        <img
-          src={book.img}
-          alt={title}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </Link>
+      <article className="book-card-container">
+        <div className="book-cover-wrapper">
+          <Link to={`/book/${bookId}`} aria-label={`${title} ${t("bookCard.detail")}`}>
+            <img
+              src={book.img || book.cover}
+              alt={title}
+              loading="lazy"
+              className="book-cover-image"
+            />
+            {/* Real book spine effect */}
+            <div className="book-spine-depth" />
+          </Link>
 
-      {/* Book rating, title, and author */}
-      <div className="space-y-1 flex-1 min-w-0">
-      
-        <div className="flex items-center gap-1.5 text-xs text-[#0A2E2C] font-bold">
-          <Star size={12} className="fill-[#17A296] text-[#17A296]" aria-hidden="true" />
-          {/* Rating */}
-          <span>{book.rating}</span>
+          {tag && <span className="book-tag-pill">{tag}</span>}
+
+          <button
+            type="button"
+            onClick={() => toggleFavorite(book)}
+            aria-label={favoriteActive ? `Remove ${title} from favorites` : `Add ${title} to favorites`}
+            aria-pressed={favoriteActive}
+            className={`book-fav-btn ${favoriteActive ? "favorited" : ""}`}
+            title={favoriteActive ? "Remove from shelf" : "Add to shelf"}
+          >
+            <Heart
+              size={16}
+              style={{
+                fill: favoriteActive ? "var(--primary-light)" : "none",
+                color: favoriteActive ? "var(--primary-light)" : "var(--text-secondary)",
+              }}
+            />
+          </button>
         </div>
 
-        <Link to={`/book/${bookId}`} className="block">
-          <h3 className="text-xs sm:text-sm font-extrabold text-[#0A2E2C] hover:text-[#0E6760] transition-colors truncate leading-snug">
-            {/* BOOK NAME */}
-            {title}
-          </h3>
-        </Link>
+        <div className="book-content-body">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+            <Star size={13} className="star-filled" aria-hidden="true" />
+            <span style={{ fontSize: "0.78rem", fontWeight: 800, color: "var(--text-primary)" }}>
+              {book.rating}
+            </span>
+          </div>
 
-        <p className="text-xs text-[#4A6B68] truncate font-medium">
-          {/* BOOK AUTHOR */}
-          {author}
-        </p>
-      </div>
+          <Link to={`/book/${bookId}`}>
+            <h3 className="book-card-title font-serif">{title}</h3>
+          </Link>
 
-      {/* Card footer: Detail link and Borrow button */}
-      <div className="flex justify-between items-center gap-2 pt-1 mt-auto border-t border-[#D0E8E6]/50">
-        <Link
-          to={`/book/${bookId}`}
-          className="inline-flex items-center gap-1 text-xs px-2.5 py-1.5 bg-[#E6F4F3] text-[#0E6760] hover:bg-[#17A296] hover:text-[#FFFFFF] font-bold rounded-lg transition-colors shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-        >
-          <Info size={13} aria-hidden="true" />
-          <span>{t("bookCard.detail")}</span>
-        </Link>
+          <p className="book-card-author">{author}</p>
 
-        <button
-          type="button"
-          className="text-xs px-3 py-1.5 bg-[#0E6760] text-[#FFFFFF] hover:bg-[#17A296] font-bold rounded-lg transition-colors shrink-0 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17A296]"
-        >
-          {t("bookCard.borrow")}
-        </button>
-      </div>
-    </article>
+          <div className="book-card-footer">
+            <Link
+              to={`/book/${bookId}`}
+              className="btn btn-secondary btn-sm"
+              style={{ gap: "0.35rem" }}
+            >
+              <Info size={13} aria-hidden="true" />
+              <span>{t("bookCard.detail")}</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsExcerptOpen(true)}
+              className="btn btn-primary btn-sm"
+              style={{ gap: "0.3rem" }}
+              title="Preview volume"
+            >
+              <BookOpen size={13} />
+              <span>{t("bookCard.borrow")}</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </>
   );
 }

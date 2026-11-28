@@ -1,161 +1,99 @@
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { useAuth } from "./hooks/useAuth";
+import { FavoritesProvider, useFavoritesContext } from "./context/FavoritesContext";
 import { AuthLayout } from "./features/auth/AuthLayout";
-import { SignInForm } from "./features/auth/SignInForm";
-import { SignUpForm } from "./features/auth/SignUpForm";
-import { HomePage } from "./pages/Home/HomePage";
-import Footer from "./component/Footer";
-import MobileBottomNav from "./component/MobileBottomNav";
-import Navbar from "./component/Navbar";
-import ExploreLibrary from "./pages/exploreBooks/ExploreLibrary.jsx";
-import Authors from "./pages/author/Authors.jsx";
-import Favorites from "./pages/favorite/Favorites.jsx";
-import BookDetail from "./pages/bookDetail/BookDetail.jsx";
+import Navbar from "./components/layout/Navbar";
+import MobileBottomNav from "./components/layout/MobileBottomNav";
+import Footer from "./components/layout/Footer";
+import LiteraryLoader from "./components/common/LiteraryLoader";
+import Toast from "./components/ui/Toast";
 
-// Authentication routes where the global header, mobile bottom bar, and footer stay hidden
+// Route-level code splitting for optimized bundle performance
+const HomePage = lazy(() => import("./pages/Home/HomePage"));
+const ExploreLibrary = lazy(() => import("./pages/Explore/ExploreLibrary"));
+const Favorites = lazy(() => import("./pages/Favorites/Favorites"));
+const Authors = lazy(() => import("./pages/Authors/Authors"));
+const BookDetail = lazy(() => import("./pages/BookDetail/BookDetail"));
+const SignInForm = lazy(() =>
+  import("./features/auth/SignInForm").then((m) => ({ default: m.SignInForm }))
+);
+const SignUpForm = lazy(() =>
+  import("./features/auth/SignUpForm").then((m) => ({ default: m.SignUpForm }))
+);
+
 const AUTH_ROUTES = ["/signin", "/login", "/signup", "/register"];
 
-/**
- * Route guard for authenticated pages.
- * Unauthenticated visitors are sent to `/signin` if they previously accessed the site,
- * or `/signup` on a first-time visit before entering HomePage.
- */
-function ProtectedRoute({ children }) {
-  const { isAuthenticated, hasAccount } = useAuth();
-  if (!isAuthenticated) {
-    return <Navigate to={hasAccount ? "/signin" : "/signup"} replace />;
-  }
-  return children;
-}
-
-/**
- * Route guard for guest-only pages (Sign In / Sign Up).
- * Redirects authenticated users directly to Home so they do not re-enter auth flows.
- */
-function GuestRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-  return <AuthLayout>{children}</AuthLayout>;
-}
-
-/**
- * Inner router shell that enforces authentication on app pages and conditionally
- * hides global navigation chrome on authentication screens.
- */
-function AppContent() {
-  const { pathname } = useLocation();
-  const { isAuthenticated } = useAuth();
-  const isAuthPage = AUTH_ROUTES.includes(pathname.toLowerCase()) || !isAuthenticated;
+function GlobalToast() {
+  const { toast, closeToast, undoRemove } = useFavoritesContext();
+  if (!toast) return null;
 
   return (
-    <>
-      {!isAuthPage && <Navbar />}
-      {!isAuthPage && <MobileBottomNav />}
-
-      <Routes>
-        {/* Protected Main Landing Page */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Protected Book Catalog & Search */}
-        <Route
-          path="/explorebooks"
-          element={
-            <ProtectedRoute>
-              <ExploreLibrary />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/explore" element={<Navigate to="/explorebooks" replace />} />
-
-        {/* Protected Saved Favorites Shelf */}
-        <Route
-          path="/favorite"
-          element={
-            <ProtectedRoute>
-              <Favorites />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/favorites" element={<Navigate to="/favorite" replace />} />
-
-        {/* Protected Authors & Curators Directory */}
-        <Route
-          path="/author"
-          element={
-            <ProtectedRoute>
-              <Authors />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/authors" element={<Navigate to="/author" replace />} />
-
-        {/* Protected Dynamic Book Detail Page */}
-        <Route
-          path="/book/:id"
-          element={
-            <ProtectedRoute>
-              <BookDetail />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/books/:id"
-          element={
-            <ProtectedRoute>
-              <BookDetail />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Guest-Only Authentication Pages (aliases normalize to /signin and /signup) */}
-        <Route
-          path="/signin"
-          element={
-            <GuestRoute>
-              <SignInForm />
-            </GuestRoute>
-          }
-        />
-        <Route path="/login" element={<Navigate to="/signin" replace />} />
-
-        <Route
-          path="/signup"
-          element={
-            <GuestRoute>
-              <SignUpForm />
-            </GuestRoute>
-          }
-        />
-        <Route path="/register" element={<Navigate to="/signup" replace />} />
-
-        {/* Catch-all fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-
-      {!isAuthPage && <Footer className="hidden md:block" />}
-    </>
+    <Toast
+      message={toast.message}
+      undo={Boolean(toast.action)}
+      onUndo={undoRemove}
+      onClose={closeToast}
+    />
   );
 }
 
-/**
- * Root application component wrapping the router with global AuthProvider state.
- */
+function AppContent() {
+  const { pathname } = useLocation();
+  const isAuthPage = AUTH_ROUTES.includes(pathname.toLowerCase());
+
+  return (
+    <div className="app-shell">
+      {!isAuthPage && <Navbar />}
+      {!isAuthPage && <MobileBottomNav />}
+
+      <Suspense fallback={<LiteraryLoader />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/explorebooks" element={<ExploreLibrary />} />
+          <Route path="/explore" element={<Navigate to="/explorebooks" replace />} />
+          <Route path="/favorite" element={<Favorites />} />
+          <Route path="/favorites" element={<Navigate to="/favorite" replace />} />
+          <Route path="/author" element={<Authors />} />
+          <Route path="/authors" element={<Navigate to="/author" replace />} />
+          <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="/books/:id" element={<BookDetail />} />
+          <Route
+            path="/signin"
+            element={
+              <AuthLayout>
+                <SignInForm />
+              </AuthLayout>
+            }
+          />
+          <Route path="/login" element={<Navigate to="/signin" replace />} />
+          <Route
+            path="/signup"
+            element={
+              <AuthLayout>
+                <SignUpForm />
+              </AuthLayout>
+            }
+          />
+          <Route path="/register" element={<Navigate to="/signup" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+
+      {!isAuthPage && <Footer className="hidden-mobile" />}
+      <GlobalToast />
+    </div>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <FavoritesProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }

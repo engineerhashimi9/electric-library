@@ -1,14 +1,10 @@
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Bookmark, BookOpen, Mic } from "lucide-react";
 
-/**
- * BenefitsBanner
- * Bottom banner on the Home page showing 3 key library membership benefits.
- */
 export default function BenefitsBanner() {
   const { t } = useTranslation();
 
-  // List of 3 benefit cards to render inside the grid
   const benefits = [
     {
       id: "marginalia",
@@ -31,38 +27,67 @@ export default function BenefitsBanner() {
   ];
 
   return (
-    <section
-      aria-label="Member Advantages"
-      className="bg-[#0E6760] border border-[#156B6B] p-6 sm:p-8 lg:p-10 rounded-3xl space-y-6 shadow-library-lg text-[#FFFFFF] relative overflow-hidden"
-    >
-      {/* Decorative soft background glow */}
-      <div className="pointer-events-none absolute -top-24 -left-24 w-64 h-64 bg-[#17A296]/20 rounded-full blur-3xl" />
-
-      {/* Top eyebrow label */}
-      <div className="flex items-center gap-2 text-xs font-bold text-[#9EEFE8] uppercase tracking-wider">
-        <span className="w-2 h-2 rounded-full bg-[#17A296]" aria-hidden="true" />
+    <section aria-label="Member Advantages" className="benefit-banner-box">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          fontSize: "0.75rem",
+          fontWeight: 800,
+          color: "#9EEFE8",
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <span
+          style={{
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            backgroundColor: "var(--primary-light)",
+          }}
+          aria-hidden="true"
+        />
         <span>{t("home.benefits.eyebrow")}</span>
       </div>
 
-      {/* 3-column grid of benefit cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="benefit-items-grid">
         {benefits.map(({ id, icon: IconComponent, title, text }) => (
-          /* Single benefit card */
           <div
             key={id}
-            className="flex items-start gap-4 p-4 rounded-2xl bg-[#0A4B46]/60 border border-[#17A296]/20 hover:border-[#17A296]/40 transition-colors"
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "1rem",
+              padding: "1.25rem",
+              borderRadius: "var(--radius-xl)",
+              backgroundColor: "rgba(10, 75, 70, 0.6)",
+              border: "1px solid rgba(23, 162, 150, 0.25)",
+            }}
           >
-            {/* Benefit icon box */}
-            <div className="flex justify-center items-center rounded-xl bg-[#156B6B] border border-[#17A296]/30 h-11 w-11 shrink-0 text-[#9EEFE8] shadow-sm">
+            <div
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "var(--radius-lg)",
+                backgroundColor: "var(--bg-dark-accent)",
+                border: "1px solid rgba(23, 162, 150, 0.35)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#9EEFE8",
+                flexShrink: 0,
+              }}
+            >
               <IconComponent size={20} aria-hidden="true" />
             </div>
-
-            {/* Benefit title and description */}
-            <div className="space-y-1 min-w-0">
-              <h3 className="font-bold text-sm sm:text-base text-[#FFFFFF] leading-snug">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+              <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--text-inverse)", lineHeight: 1.3 }}>
                 {title}
               </h3>
-              <p className="text-xs text-[#B8E2DF] leading-relaxed">
+              <p style={{ fontSize: "0.8rem", color: "var(--text-inverse-muted)", lineHeight: 1.5 }}>
                 {text}
               </p>
             </div>
